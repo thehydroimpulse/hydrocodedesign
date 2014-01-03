@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>HydroCode Design</title>
+ <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
+ <link href="http://hydrocodedesign.com/"/>
+ <updated>2014-01-02T17:48:19-07:00</updated>
+ <id>http://hydrocodedesign.com</id>
+ <author>
+   <name>Daniel Fagnan</name>
+   <email></email>
+ </author>
+
+ 
+ <entry>
+   <title>Hello World</title>
+   <link href="http://hydrocodedesign.com/2014/01/01/hello-world/"/>
+   <updated>2014-01-01T00:00:00-07:00</updated>
+   <id>http://hydrocodedesign.com/2014/01/01/hello-world</id>
+   <content type="html">&lt;p&gt;Hello World!&lt;/p&gt;
+</content>
+ </entry>
+ 
+
+</feed>
