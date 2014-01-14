@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-01-02T17:55:18-07:00</updated>
+ <updated>2014-01-14T16:08:42-07:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -13,12 +13,12 @@
 
  
  <entry>
-   <title>Hello World</title>
+   <title>Coming Soon</title>
    <link href="http://hydrocodedesign.com/2014/01/01/hello-world/"/>
    <updated>2014-01-01T00:00:00-07:00</updated>
    <id>http://hydrocodedesign.com/2014/01/01/hello-world</id>
-   <content type="html">&lt;p&gt;Hello World!&lt;/p&gt;
-</content>
+   <content type="html">&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;n&quot;&gt;Coming&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Soon&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
  </entry>
  
 

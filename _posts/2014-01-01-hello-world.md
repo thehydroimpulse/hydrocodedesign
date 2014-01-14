@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Hello World
+title: Coming Soon
 ---
 
-
-Hello World!
+```rust
+Coming Soon
+```
