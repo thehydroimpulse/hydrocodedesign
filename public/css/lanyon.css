@@ -41,7 +41,7 @@ body {
 }
 
 html {
-  font-family: "PT Serif", Georgia, "Times New Roman", serif;
+  font-family: "freight-sans-pro", Georgia, "Times New Roman", serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -51,6 +51,13 @@ h1, h2, h3, h4, h5, h6 {
   text-rendering: optimizelegibility;
   afont-weight: 400;
   aletter-spacing: -.025rem;
+}
+
+.post h2, .post h3, .post h4 {
+  margin-top: 2.4rem;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed #eee;
 }
 
 a {
@@ -333,13 +340,18 @@ a.sidebar-nav-item:focus {
 .post {
   margin-bottom: 4em;
   padding-top: 10px;
-  font: 19px "abril-text", "Bitstream Charter", serif;
+  line-height: 1.7;
+  p {
+    line-height: 1.7;
+  }
+  font-family: "ff-tisa-web-pro";
+  font-size: 18px;
 }
 
 /* Blog post or page title */
 .page-title,
 .post-title,
-.post-title a {
+.post-title a, .post h1, .post h2 {
   font-size: 30px;
   letter-spacing: 0;
   line-height: 1.4;
@@ -348,6 +360,64 @@ a.sidebar-nav-item:focus {
   color: #303030;
   text-decoration: none;
 }
+
+.post h2 {
+  font-size: 32px;
+}
+
+.post .ref {
+  font-size: 13px;
+  position: relative;
+  top: -9px;
+}
+
+.post .ref a {
+  text-decoration: none;
+}
+
+.post .message {
+  width: 90%;
+  margin: 30px auto;
+  padding: 20px 35px;
+  text-align: left;
+  background: #444;
+  color: #fff;
+  position: relative;
+}
+
+.post .message div {
+  display: inline-block;
+  width: 95%;
+  position: relative;
+  left: 8%;
+  font-size: 17px;
+  font-family: "ff-tisa-web-pro";
+}
+
+.post .message span {
+  position: absolute;
+  top: 36%;
+  display: block;
+  margin-right: 10px;
+}
+
+.post .message.blue {
+  background-color: #5871b2;
+  font-size: 18px;
+}
+
+.post h1 {
+  font-size: 30px;
+}
+
+.post h2 {
+  font-size: 30px;
+}
+
+.comments {
+  margin-top: 50px;
+}
+
 .page-title,
 .post-title {
   margin-top: 0;

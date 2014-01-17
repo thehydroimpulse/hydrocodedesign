@@ -2,9 +2,9 @@
  /*{ background: #f0f3f3; }*/
 .c { color: #999; } /* Comment */
 .err { color: #AA0000; background-color: #FFAAAA } /* Error */
-.k { color: #006699; } /* Keyword */
+.k { color: #8876d5; } /* Keyword */
 .o { color: #555555 } /* Operator */
-.n { color: #2fb496;} /* Variable */
+.n { color: #6c6c6c;} /* Variable */
 .cm { color: #999; font-style: italic } /* Comment.Multiline */
 .cp { color: #4b6688 } /* Comment.Preproc */
 .c1 { color: #999; } /* Comment.Single */

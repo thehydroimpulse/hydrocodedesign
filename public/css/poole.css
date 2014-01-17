@@ -103,7 +103,9 @@ h4, h5, h6 {
 /* Body text */
 p {
   margin-top: 0;
-  margin-bottom: 1rem;
+  line-height: 1.7;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 strong {
@@ -150,7 +152,7 @@ pre {
   font-family: Menlo, Monaco, "Courier New", monospace;
 }
 code {
-  padding: .25em .5em;
+  padding: .18em .09em;
   font-size: 85%;
   color: #bf616a;
   background-color: #f9f9f9;
@@ -176,7 +178,7 @@ pre code {
   background-color: transparent;
 }
 .highlight {
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   border-radius: 4px;
 }
