@@ -535,9 +535,15 @@ addFn(4);
 
 This would include having instruction encoding for various architectures and such.
 
-Or, you could just use LLVM or LibJit. But, it's a good educational experience learning, understanding, and implementing a JIT compiler.
+Or, you could just use LLVM or LibJit. But, it's a good educational experience to learning, understanding, and implementing a JIT compiler.
 
 You can view the [full source code on Github.](https://github.com/TheHydroImpulse/jiter)
+
+---
+
+[Follow me on Twitter](http://twitter.com/TheHydroImpulse)
+
+[Github](http://github.com/TheHydroImpulse)
 
 [1]: http://eli.thegreenplace.net/2013/10/17/getting-started-with-libjit-part-1/
 [2]: http://llvm.org/

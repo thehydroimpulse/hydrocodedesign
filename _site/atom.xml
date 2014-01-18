@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-01-17T05:25:21-07:00</updated>
+ <updated>2014-01-17T18:21:01-07:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>A Just-in-time Compiler In Rust</title>
-   <link href="http://hydrocodedesign.com/2014/01/14/jit-just-in-time-compiler-rust/"/>
-   <updated>2014-01-14T00:00:00-07:00</updated>
-   <id>http://hydrocodedesign.com/2014/01/14/jit-just-in-time-compiler-rust</id>
+   <link href="http://hydrocodedesign.com/2014/01/17/jit-just-in-time-compiler-rust/"/>
+   <updated>2014-01-17T00:00:00-07:00</updated>
+   <id>http://hydrocodedesign.com/2014/01/17/jit-just-in-time-compiler-rust</id>
    <content type="html">&lt;p&gt;Today, we&amp;#39;re going to build a simple, very simple, JIT compiler in &lt;a href=&quot;www.rust-lang.org&quot;&gt;Rust&lt;/a&gt;. Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language. &lt;/p&gt;
 
 &lt;p&gt;Now, this is only the actual just-in-time compiler that we&amp;#39;ll be implementing, not a language compiler, nor the encoding of machine instructions; the latter requires a lot of knowledge about the CPU instruction specification, such as x86.&lt;/p&gt;
@@ -471,9 +471,15 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This would include having instruction encoding for various architectures and such.&lt;/p&gt;
 
-&lt;p&gt;Or, you could just use LLVM or LibJit. But, it&amp;#39;s a good educational experience learning, understanding, and implementing a JIT compiler.&lt;/p&gt;
+&lt;p&gt;Or, you could just use LLVM or LibJit. But, it&amp;#39;s a good educational experience to learning, understanding, and implementing a JIT compiler.&lt;/p&gt;
 
 &lt;p&gt;You can view the &lt;a href=&quot;https://github.com/TheHydroImpulse/jiter&quot;&gt;full source code on Github.&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://twitter.com/TheHydroImpulse&quot;&gt;Follow me on Twitter&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://github.com/TheHydroImpulse&quot;&gt;Github&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
