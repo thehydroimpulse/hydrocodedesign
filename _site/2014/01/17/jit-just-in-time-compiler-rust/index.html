@@ -124,7 +124,7 @@
 
 <p>Before we get started, you&#39;ll need to get yourself a copy of the <a href="https://github.com/mozilla/rust">Rust compiler</a>. The current version, as of this writing &mdash; is 0.9. I&#39;ll be updating this article to be applicable to future versions. But, if I don&#39;t get to it in time, let me know.</p>
 
-<p>Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&#39;s a <a href="https://en.wikipedia.org/wiki/Bootstrapping_(compilers">bootstrapped compiler</a>. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&#39;m aware, the Rust compiler must <a href="https://github.com/mozilla/rust/blob/master/Makefile.in#L13">compile itself 3 times</a>, including, but not limited to: <a href="http://llvm.org/">LLVM</a>, <a href="https://github.com/joyent/libuv">libuv</a>.</p>
+<p>Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&#39;s a <a href="https://en.wikipedia.org/wiki/Bootstrapping_(compilers">bootstrapped compiler</a>. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&#39;m aware, the Rust compiler must <a href="https://github.com/mozilla/rust/blob/master/Makefile.in#L13">compile itself 3 times</a>. It also has to compile it&#39;s dependencies, such as <a href="http://llvm.org/">LLVM</a>, <a href="https://github.com/joyent/libuv">libuv</a>, only once.</p>
 
 <div class="message blue">
   <span><i class="fa fa-exclamation-circle"></i></span>
@@ -210,7 +210,7 @@
 </code></pre></div>
 <div class="message blue">
   <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Tip: A <b><em>*</em></b> defines a raw pointer. Thus, it's equivalent to C pointers.</div>
+  <div>Tip: A <b><em>*</em></b> defines a raw pointer. This is equivalent to <em>const T*</em> in C. <em>*mut T</em> is equivalent to <em>T*</em> &emdash; a normal C pointer.</div>
 </div>
 
 <p>We don&#39;t need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.</p>

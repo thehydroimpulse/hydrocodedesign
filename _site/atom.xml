@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-01-17T19:31:37-07:00</updated>
+ <updated>2014-01-18T14:42:13-07:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -35,7 +35,7 @@
 
 &lt;p&gt;Before we get started, you&amp;#39;ll need to get yourself a copy of the &lt;a href=&quot;https://github.com/mozilla/rust&quot;&gt;Rust compiler&lt;/a&gt;. The current version, as of this writing &amp;mdash; is 0.9. I&amp;#39;ll be updating this article to be applicable to future versions. But, if I don&amp;#39;t get to it in time, let me know.&lt;/p&gt;
 
-&lt;p&gt;Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Bootstrapping_(compilers&quot;&gt;bootstrapped compiler&lt;/a&gt;. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&amp;#39;m aware, the Rust compiler must &lt;a href=&quot;https://github.com/mozilla/rust/blob/master/Makefile.in#L13&quot;&gt;compile itself 3 times&lt;/a&gt;, including, but not limited to: &lt;a href=&quot;http://llvm.org/&quot;&gt;LLVM&lt;/a&gt;, &lt;a href=&quot;https://github.com/joyent/libuv&quot;&gt;libuv&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Bootstrapping_(compilers&quot;&gt;bootstrapped compiler&lt;/a&gt;. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&amp;#39;m aware, the Rust compiler must &lt;a href=&quot;https://github.com/mozilla/rust/blob/master/Makefile.in#L13&quot;&gt;compile itself 3 times&lt;/a&gt;. It also has to compile it&amp;#39;s dependencies, such as &lt;a href=&quot;http://llvm.org/&quot;&gt;LLVM&lt;/a&gt;, &lt;a href=&quot;https://github.com/joyent/libuv&quot;&gt;libuv&lt;/a&gt;, only once.&lt;/p&gt;
 
 &lt;div class=&quot;message blue&quot;&gt;
   &lt;span&gt;&lt;i class=&quot;fa fa-exclamation-circle&quot;&gt;&lt;/i&gt;&lt;/span&gt;
@@ -121,7 +121,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div class=&quot;message blue&quot;&gt;
   &lt;span&gt;&lt;i class=&quot;fa fa-exclamation-circle&quot;&gt;&lt;/i&gt;&lt;/span&gt;
-  &lt;div&gt;Tip: A &lt;b&gt;&lt;em&gt;*&lt;/em&gt;&lt;/b&gt; defines a raw pointer. Thus, it&#39;s equivalent to C pointers.&lt;/div&gt;
+  &lt;div&gt;Tip: A &lt;b&gt;&lt;em&gt;*&lt;/em&gt;&lt;/b&gt; defines a raw pointer. This is equivalent to &lt;em&gt;const T*&lt;/em&gt; in C. &lt;em&gt;*mut T&lt;/em&gt; is equivalent to &lt;em&gt;T*&lt;/em&gt; &amp;emdash; a normal C pointer.&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;p&gt;We don&amp;#39;t need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.&lt;/p&gt;
