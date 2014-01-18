@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-01-18T14:42:13-07:00</updated>
+ <updated>2014-01-18T14:47:25-07:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -121,7 +121,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;div class=&quot;message blue&quot;&gt;
   &lt;span&gt;&lt;i class=&quot;fa fa-exclamation-circle&quot;&gt;&lt;/i&gt;&lt;/span&gt;
-  &lt;div&gt;Tip: A &lt;b&gt;&lt;em&gt;*&lt;/em&gt;&lt;/b&gt; defines a raw pointer. This is equivalent to &lt;em&gt;const T*&lt;/em&gt; in C. &lt;em&gt;*mut T&lt;/em&gt; is equivalent to &lt;em&gt;T*&lt;/em&gt; &amp;emdash; a normal C pointer.&lt;/div&gt;
+  &lt;div&gt;Tip: A &lt;b&gt;&lt;code&gt;*&lt;/code&gt;&lt;/b&gt; defines a raw pointer. This is equivalent to &lt;code&gt;const T*&lt;/code&gt; in C. &lt;code&gt;*mut T&lt;/code&gt; is equivalent to &lt;code&gt;T*&lt;/code&gt; &amp;mdash; a normal C pointer.&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;p&gt;We don&amp;#39;t need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.&lt;/p&gt;
