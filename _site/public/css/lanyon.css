@@ -41,7 +41,7 @@ body {
 }
 
 html {
-  font-family: "freight-sans-pro", Georgia, "Times New Roman", serif;
+  font-family: "abril-display", Georgia, "Times New Roman", serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -341,12 +341,10 @@ a.sidebar-nav-item:focus {
   margin-bottom: 4em;
   padding-top: 10px;
   line-height: 1.7;
-  p {
-    line-height: 1.7;
-  }
-  font-family: "ff-tisa-web-pro";
+  font-family: "abril-display", "Helvetica Neue", sans-serif;
   font-size: 18px;
 }
+
 
 /* Blog post or page title */
 .page-title,
