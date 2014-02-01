@@ -107,6 +107,109 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2014/01/31/llvm-with-rust/">
+        Using LLVM From Within Rust
+      </a>
+    </h1>
+
+    <span class="post-date">31 Jan 2014</span>
+
+    <p>Continuing with my previous writing theme about lower-level concepts from within Rust; we&#39;re going to get start using LLVM with Rust.</p>
+
+<p>As I stated in my previous blog post, Rust is amazing with interoping with C and even C++, which is hard to come by. However, because LLVM is written in C++, it introduces the need to link against libc++ and create wrappers around C++&#39;s classes and types.</p>
+
+<p>Luckily &mdash; or maybe not, considering Rust&#39;s compiler is built using LLVM &mdash; we already have usable Rust bindings in-place. However, there&#39;s roughly no documentation on these bindings, except the source, and Rust&#39;s compiler, which has a lot more stuff going on than simple LLVM usage.</p>
+
+<hr>
+
+<p>Now, the first order of operations is to link against <code>rustc</code>, the Rust compiler library. I&#39;ll also note that Rust is very good at handling this type of stuff, without adding any arguments to <code>rustc</code> &mdash; the compiler executable.</p>
+
+<p>Let&#39;s begin to define our program. We&#39;ll create a new file called <code>main.rs</code> and it&#39;s full path being <code>src/main.rs</code>. This is standard Rust operations.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>Because <code>rustc</code> (the library) is a dynamic library, sitting somewhere in your Rust installation directories, we&#39;ll need to tell Rust to find it.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{}</span>
+</code></pre></div>
+<p>This tells Rust that we want to link against an external module. However, depending on your installation, you might have multiple versions of Rust installed, or previous versions having leftover files on your system. We&#39;ll need to be explicit about which version we should link against.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span> <span class="o">=</span>  <span class="o">=</span> <span class="s">&quot;rustc#0.10-pre&quot;</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{}</span>
+</code></pre></div>
+<p>I&#39;m currently building against the master branch of Rust, so you can replace the version accordingly.</p>
+
+<hr>
+
+<p>The main LLVM wrapping types are under <code>rustc::lib::llvm</code>. This include <code>ModuleRef</code>, <code>ContextRef</code>, etc... However, all the functions are defined under <code>rustc::lib::llvm::llvm</code>. Let&#39;s include some of those modules which will make things less verbose when calling any LLVM functions.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span> <span class="o">=</span>  <span class="o">=</span> <span class="s">&quot;rustc#0.10-pre&quot;</span><span class="p">;</span>
+<span class="k">use</span> <span class="n">rustc</span><span class="o">::</span><span class="n">lib</span><span class="o">::</span><span class="n">llvm</span><span class="o">::</span><span class="n">llvm</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{}</span>
+</code></pre></div>
+<p>Great! Now we&#39;ll need to fill out our <code>main</code> function. We&#39;ll first need to wrap everything under an <code>unsafe</code> block.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="p">...</span>
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">unsafe</span> <span class="p">{</span>
+    <span class="p">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This isn&#39;t going to be an LLVM tutorial. You can find out how to use LLVM itself in it&#39;s respective documentation. All the docs will be using C++, so you&#39;ll have to do some work getting that translated over to Rust land.</p>
+
+<hr>
+
+<p>We&#39;ll need three things created:</p>
+
+<ul>
+<li>Module</li>
+<li>Context</li>
+<li>Builder</li>
+</ul>
+
+<p>We&#39;ll only create a single, global context, but you&#39;d typically want to create multiple contexts if you&#39;d need isolation between, say, multiple threads.</p>
+
+<p>We won&#39;t be using the builder, so it&#39;s optional at this stage, unless you want to emit some useful LLVM IR.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span> <span class="o">=</span> <span class="s">&quot;rustc#0.10-pre&quot;</span><span class="p">;</span>
+
+<span class="k">use</span> <span class="n">rustc</span><span class="o">::</span><span class="n">lib</span><span class="o">::</span><span class="n">llvm</span><span class="o">::</span><span class="n">llvm</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">unsafe</span> <span class="p">{</span>
+        <span class="c1">// Create our first global context.</span>
+        <span class="k">let</span> <span class="n">llvm_context</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMContextCreate</span><span class="p">();</span>
+
+        <span class="c1">// Create our module `module1` and attach our context.</span>
+        <span class="k">let</span> <span class="n">llvm_module</span> <span class="o">=</span> <span class="s">&quot;mod1&quot;</span><span class="p">.</span><span class="n">with_c_str</span><span class="p">(</span><span class="o">|</span><span class="n">buf</span><span class="o">|</span> <span class="p">{</span>
+            <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMModuleCreateWithNameInContext</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">llvm_context</span><span class="p">)</span>
+        <span class="p">});</span>
+
+        <span class="c1">// Create a useless builder.</span>
+        <span class="k">let</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMCreateBuilderInContext</span><span class="p">(</span><span class="n">llvm_context</span><span class="p">);</span>
+
+        <span class="c1">// Dump the output of the LLVM module in IR format.</span>
+        <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMDumpModule</span><span class="p">(</span><span class="n">llvm_module</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>That&#39;s it. We can build the program with:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">rustc src/main.rs -o bin/rustllvm
+</code></pre></div>
+<p>Once running, you should have gotten the following output:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">; ModuleID = &#39;mod1&#39;
+</code></pre></div>
+<hr>
+
+<p>That&#39;s it! Pretty simple, eh?</p>
+
+<p>You can check out <a href="https://github.com/TheHydroImpulse/rust-llvm-example">the full source code on github.</a></p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/01/17/jit-just-in-time-compiler-rust/">
         A Just-in-time Compiler In Rust
       </a>
