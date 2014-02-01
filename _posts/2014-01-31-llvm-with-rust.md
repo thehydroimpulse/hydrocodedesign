@@ -14,7 +14,7 @@ Luckily &mdash; or maybe not, considering Rust's compiler is built using LLVM &m
 
 Now, the first order of operations is to link against `rustc`, the Rust compiler library. I'll also note that Rust is very good at handling this type of stuff, without adding any arguments to `rustc` &mdash; the compiler executable.
 
-Let's begin to define our program. We'll create a new file called `main.rs` and it's full path being `src/main.rs`. This is standard Rust operations.
+Let's begin to define our program. We'll create a new file called `bin.rs` and it's full path being `src/bin.rs`. This is standard Rust operations.
 
 ```rust
 fn main() {
@@ -103,7 +103,7 @@ fn main() {
 That's it. We can build the program with:
 
 ```
-rustc src/main.rs -o bin/rustllvm
+rustc src/bin.rs -o bin/rustllvm
 ```
 
 Once running, you should have gotten the following output:

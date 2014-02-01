@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-01-31T19:49:52-07:00</updated>
+ <updated>2014-01-31T19:54:36-07:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -27,7 +27,7 @@
 
 &lt;p&gt;Now, the first order of operations is to link against &lt;code&gt;rustc&lt;/code&gt;, the Rust compiler library. I&amp;#39;ll also note that Rust is very good at handling this type of stuff, without adding any arguments to &lt;code&gt;rustc&lt;/code&gt; &amp;mdash; the compiler executable.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;#39;s begin to define our program. We&amp;#39;ll create a new file called &lt;code&gt;main.rs&lt;/code&gt; and it&amp;#39;s full path being &lt;code&gt;src/main.rs&lt;/code&gt;. This is standard Rust operations.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s begin to define our program. We&amp;#39;ll create a new file called &lt;code&gt;bin.rs&lt;/code&gt; and it&amp;#39;s full path being &lt;code&gt;src/bin.rs&lt;/code&gt;. This is standard Rust operations.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -98,7 +98,7 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;That&amp;#39;s it. We can build the program with:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;rustc src/main.rs -o bin/rustllvm
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;rustc src/bin.rs -o bin/rustllvm
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Once running, you should have gotten the following output:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;; ModuleID = &amp;#39;mod1&amp;#39;

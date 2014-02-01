@@ -124,7 +124,7 @@
 
 <p>Now, the first order of operations is to link against <code>rustc</code>, the Rust compiler library. I&#39;ll also note that Rust is very good at handling this type of stuff, without adding any arguments to <code>rustc</code> &mdash; the compiler executable.</p>
 
-<p>Let&#39;s begin to define our program. We&#39;ll create a new file called <code>main.rs</code> and it&#39;s full path being <code>src/main.rs</code>. This is standard Rust operations.</p>
+<p>Let&#39;s begin to define our program. We&#39;ll create a new file called <code>bin.rs</code> and it&#39;s full path being <code>src/bin.rs</code>. This is standard Rust operations.</p>
 <div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
 
 <span class="p">}</span>
@@ -195,7 +195,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>That&#39;s it. We can build the program with:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">rustc src/main.rs -o bin/rustllvm
+<div class="highlight"><pre><code class="text language-text" data-lang="text">rustc src/bin.rs -o bin/rustllvm
 </code></pre></div>
 <p>Once running, you should have gotten the following output:</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">; ModuleID = &#39;mod1&#39;
