@@ -41,7 +41,7 @@ body {
 }
 
 html {
-  font-family: "abril-display", Georgia, "Times New Roman", serif;
+  font-family: "proxima-nova", Georgia, "Times New Roman", serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -341,8 +341,8 @@ a.sidebar-nav-item:focus {
   margin-bottom: 4em;
   padding-top: 10px;
   line-height: 1.7;
-  font-family: "abril-display", "Helvetica Neue", sans-serif;
-  font-size: 18px;
+  font-family: "proxima-nova", "Helvetica Neue", sans-serif;
+  font-size: 19px;
 }
 
 
@@ -389,7 +389,7 @@ a.sidebar-nav-item:focus {
   position: relative;
   left: 8%;
   font-size: 17px;
-  font-family: "ff-tisa-web-pro";
+  font-family: "proxima-nova";
 }
 
 .post .message span {

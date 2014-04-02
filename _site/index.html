@@ -107,6 +107,85 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2014/04/02/higher-kinded-types/">
+        Higher-Kinded Polymorphism
+      </a>
+    </h1>
+
+    <span class="post-date">02 Apr 2014</span>
+
+    <p>Today I&#39;m going to go through higher-kinded polymorphism, what it&#39;s uses are, and what it is (briefly). It&#39;s extremely fascinating, at least for me, to go through these relatively complex, highly-abstracted subjects.</p>
+
+<hr>
+
+<p>Let&#39;s talk about types first, and specifically types that people are used to, for example <code>Int</code>, <code>String</code>, <code>Boolean</code>, etc... These are types we can use right away, they&#39;re values. These are also more formally called proper types.</p>
+
+<p>Now that we can work with proper types, let&#39;s go further. Many (but not all) statically-typed languages have a form of generics. For example, <code>List&lt;T&gt;</code>, <code>Map&lt;K,V&gt;</code>, etc... Generics or type parameters, and type constructors (functions that construct other types) form the basis for further abstraction on-top of proper types.</p>
+
+<p>Let&#39;s go through what <code>List&lt;T&gt;</code> <em>really</em> is. <code>List</code> is a type abstracting over a type <code>T</code>. This is called a type constructor; given a type <code>T</code>, we construct type <code>List&lt;T&gt;</code>. Moreover, it should be clear that <code>List&lt;T&gt;</code> is <em>not</em> a proper type. That is, it&#39;s not a concrete type &mdash; it needs a parameter to be passed before the useable type can be formed. That&#39;s the type constructor&#39;s job. <code>List&lt;Int&gt;</code>, however, <em>is</em> a concrete type; it&#39;s finished &mdash; we&#39;ve passed the appropriate type parameters.</p>
+
+<p>How can we distinguish this type constructor from proper types? Because it&#39;s a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.</p>
+
+<p>Using a more formal syntax for defining kinds of types, we can say a proper type is of <code>*</code>; whereas a first-ordered type is of <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code>.</p>
+
+<p>Let&#39;s go through <code>* -&gt; *</code>. It means, given a type, produce another type. That&#39;s exactly what the type constructor is. We can further visualize it as: <code>T -&gt; List&lt;Int&gt;</code>. The next form <code>* -&gt; * -&gt; *</code> is almost the same thing. You can think of it as: given two pairs of types, produce a third type. Thus, <code>* -&gt; * ...</code> in the context of <code>* -&gt; * -&gt; *</code> is the pair of types. A common example is a simple key-value map: <code>Map&lt;K,V&gt;</code> is of the form <code>* -&gt; * -&gt; *</code>.</p>
+
+<p>This is all great. We&#39;re able to express more abstract types, such as <code>Map&lt;K,V&gt;</code>, <code>List&lt;T&gt;</code>, etc... and void repetition. But, what if we could abstract further. Imagine a type <code>Foo</code> that takes type <code>M</code> &mdash; <code>Foo&lt;M&gt;</code>. But, what if <code>M</code> is a type constructor?</p>
+
+<hr>
+
+<p>That&#39;s where higher-kinded polymorphism come into play. Instead of having a type parameter that&#39;s of a proper type (like in the case of <code>List&lt;T&gt;</code>; where <code>T</code> is a proper type.), we have the type parameter be a type constructor. Thus, we require a type that will itself produce another type. Alternatively, we can say: a type that abstracts over a type that abstracts over a type. Very much abstracted. That&#39;s a higher-kinded type.</p>
+
+<p>Thus, the form is: <code>(* -&gt; *) -&gt; *</code> where <code>(* -&gt; *)</code> is a type constructor. We also call these second-order types. For types greater than first-order, we call them <em>higher-kinded</em>.</p>
+
+<p>Following, say, Rust, we could have:</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">trait</span> <span class="n">Higher</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&lt;</span><span class="n">_</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>That&#39;s if we follow the currently defined syntax for generics. However, I feel like the following (used only for defining higher-order types) feels a lot more natural:</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">trait</span> <span class="n">Higher</span><span class="o">&lt;</span><span class="n">M</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The square brackets would perform the same function as the angle brackets, but would be used in a higher-order type context.</p>
+
+<p>Now, the <code>_</code> is simply a forgetter symbol (we don&#39;t want to deal with that type, so just infer and forget). Thus, we could have done <code>M[X]</code>, instead; but, often times, you don&#39;t care about that type parameter.</p>
+
+<hr>
+
+<p>Now that we got through higher-kinded polymorphism, let&#39;s go through it&#39;s uses.</p>
+
+<p>You may have heard of terms such as Monads, Monoids, Functors, Semigroups, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.</p>
+
+<p>Almost every aggregation problem can be represented as Monoids. For example, HyperLogLog is a monoid. HyperLogLog is actually a composition of monoids, because it contains operations such as Min, which is also a monoid.</p>
+
+<p>Monoids are an <em>extremely</em> powerful primitive, as well as Monads, Functors, etc...</p>
+
+<p>All of these come from abstract algebra and category theory, which is a pretty insane field.</p>
+
+<hr>
+
+<h3>How Does This Relate To Rust?</h3>
+
+<p>We&#39;ll, Rust currently doesn&#39;t support higher-kinded polymorphism. But, I&#39;m in the process of writing up an RFC for it and experimenting with various implementations.</p>
+
+<p>Within Rust, you typically use a lot of <code>Option&lt;T&gt;</code> and <code>Result&lt;T&gt;</code>, and may end up with quite a bit of pattern matching pyramids. This can get quite crazy and messy.</p>
+
+<p>Luckily, Monads are the perfect tool for the job. Haskell uses them extensively for working with their equivalent option type and it reduces the ugliness quite a bit.</p>
+
+<p>For the most part, most of these concepts are almost strictly exclusive in functional languages like Scala or Haskell (You can hack yourself some Monads with lots of C++ templates, if you wish), but imagine having these powerful primitives in a <em>systems</em> language!</p>
+
+<p>Resources:</p>
+
+<ul>
+<li><a href="http://adriaanm.github.io/files/higher.pdf">Generics of a Higher Kind</a> (Scala reference paper)</li>
+</ul>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/01/31/llvm-with-rust/">
         Using LLVM From Within Rust
       </a>
