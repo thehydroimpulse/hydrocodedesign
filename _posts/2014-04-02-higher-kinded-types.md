@@ -72,6 +72,7 @@ Luckily, Monads are the perfect tool for the job. Haskell uses them extensively 
 
 For the most part, most of these concepts are almost strictly exclusive in functional languages like Scala or Haskell (You can hack yourself some Monads with lots of C++ templates, if you wish), but imagine having these powerful primitives in a *systems* language!
 
+I'll be following up on this blog post the focuses on proper examples, specifically for Rust, and the advantages of it.
 
 Resources:
 
