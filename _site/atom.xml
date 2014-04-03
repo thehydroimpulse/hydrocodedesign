@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-04-02T11:38:23-06:00</updated>
+ <updated>2014-04-03T00:47:57-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -79,11 +79,15 @@
 
 &lt;p&gt;For the most part, most of these concepts are almost strictly exclusive in functional languages like Scala or Haskell (You can hack yourself some Monads with lots of C++ templates, if you wish), but imagine having these powerful primitives in a &lt;em&gt;systems&lt;/em&gt; language!&lt;/p&gt;
 
+&lt;p&gt;I&amp;#39;ll be following up on this blog post the focuses on proper examples, specifically for Rust, and the advantages of it.&lt;/p&gt;
+
 &lt;p&gt;Resources:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;http://adriaanm.github.io/files/higher.pdf&quot;&gt;Generics of a Higher Kind&lt;/a&gt; (Scala reference paper)&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.reddit.com/r/rust/comments/2212j2/higherkinded_polymorphism/&quot;&gt;Reddit thread within the Rust subreddit&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
