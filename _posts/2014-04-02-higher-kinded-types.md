@@ -76,3 +76,6 @@ For the most part, most of these concepts are almost strictly exclusive in funct
 Resources:
 
 * [Generics of a Higher Kind](http://adriaanm.github.io/files/higher.pdf) (Scala reference paper)
+
+
+[Reddit thread within the Rust subreddit](http://www.reddit.com/r/rust/comments/2212j2/higherkinded_polymorphism/)
