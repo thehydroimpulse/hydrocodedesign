@@ -107,6 +107,170 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2014/04/13/drop-everything-and-use-component/">
+        Drop The Chaos and Use Component(1)
+      </a>
+    </h1>
+
+    <span class="post-date">13 Apr 2014</span>
+
+    <p>Let&#39;s face it, CommonJS has won &mdash; AMD has lost. Let&#39;s move on to embracing this fact.</p>
+
+<p>ES6 modules have adopted the CommonJS-style. Thus, both Node.js and the browser will be running the same model. However, (native) ES6 modules are far away, and it still lacks (which is a good thing) distribution.</p>
+
+<p>That&#39;s where <a href="https://github.com/component/component">component(1)</a> steps in. For those unaware, component(1) is a client-side package manager <em>and</em> build tool. It let&#39;s you embrace a modularized approach to building apps. component(1) supports JavaScript, CSS, templates and various other kinds of assets. These are all bundled up in a consistent manner. The JavaScript-side uses a CommonJS environment, allowing you to code <em>exactly</em> like in Node.</p>
+
+<p><strong>Note:</strong> I&#39;ll be addressing component, the project, as component(1), and component, in the abstract concept as is.</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">// component(1) JavaScript</span>
+<span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dom&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">debug</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">);</span>
+</code></pre></div>
+<p>The important part, and what separates from tools like Browserify is the specific focus on the client-side. See, while Node has many modules available, they simply aren&#39;t built with the browser in-mind. Browserify feels (and is) a hack.</p>
+
+<h2>The Bower Problem</h2>
+
+<p>Bower achieved being the more popular package manager for client-side assets. Cool. But, it poses a substancial problem. It leaves <em>you</em> in-charge with managing all the assets it fetched for you. This process is completely ad-hoc. Better get grunt, gulp, or Makefiles to do some work.</p>
+
+<p>Moreover, it not only effects that act of building everything, but the runtime and format of these modules are chaotic. Some bundle minified assets, others don&#39;t. Some bundle concatenated files, some don&#39;t. Some bundle AMD-compatible JavaScript files, Some don&#39;t. Most, however, fill their modules with globals.</p>
+
+<p>This results in an extremely poor experience for the user and community.</p>
+
+<p>component(1) solves this problem because it&#39;s a package manager <strong>and</strong> build tool. Thus, 
+it&#39;s a lot more opinionated about things than say, Bower.</p>
+
+<h2>Community</h2>
+
+<p>The community has embraced these broken tools hole heartly. Most of the angular world, for example, lives with tools like Grunt and Bower.</p>
+
+<p>Wanted an Angular bootstrap module that just <em>worked</em>? Or how about a tooltip module that provided <em>just tooltips</em> dammit. Sorry, but these tools are making these worse. Sure, Bower solves the package manager issue, but that&#39;s only part of the pie.</p>
+
+<p>Have you ever wanted to get a dropdown module that works, in a matter of seconds? Again, <em>only dropdowns</em>, that&#39;s it. Or modals, or animations, or views, or...</p>
+
+<p>There might be some of these modules on Bower, except they are not consistent, not composable, and will most likely use globals. Globals are not the answer.</p>
+
+<h2>Dive into component(1)</h2>
+
+<p>You can install component(1) with NPM:</p>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">npm install component -g
+</code></pre></div>
+<p>You&#39;ll then have access to the <code>component</code> executable.</p>
+
+<p>component(1) follows a similar metadata format as npm&#39;s <code>package.json</code>. Here&#39;s a <code>component.json</code> file:</p>
+<div class="highlight"><pre><code class="json language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;something&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;repo&quot;</span><span class="p">:</span> <span class="s2">&quot;user/something&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;component/button&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;development&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;visionmedia/mocha&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;index.js&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;template.html&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;styles&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;style.css&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You&#39;ll notice that you&#39;re specifying each file manually, and <em>that&#39;s ok</em>! It might be annoying to some (globs are in the works for you), but, if you use component(1) in the manner it was designed, this shouldn&#39;t be a problem.</p>
+
+<h2>Unix Philosophy</h2>
+
+<p>The goal is to try and build small modules that do <strong>one thing</strong> &mdash; and do it extremely well.</p>
+
+<p>That&#39;s what component(1) is following. Don&#39;t build giant components. That&#39;s why specifying each file isn&#39;t a big deal, because <em>you shouldn&#39;t have that many per component</em>. If you have more than 5, than you&#39;re probably doing more than one thing.</p>
+
+<h2>Local Components</h2>
+
+<p>Because you want a modular environment, you&#39;ll want lots of components. However, you don&#39;t want to be creating a separate repo on Github for each (especially for a proprietary project). You&#39;ll want to use local components.</p>
+<div class="highlight"><pre><code class="json language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;moduleA&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;component/dom&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;.&quot;</span> <span class="p">],</span>
+  <span class="nt">&quot;local&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;moduleB&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;moduleC&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;moduleD&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;moduleE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;moduleF&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>You can specify arbitrary paths and component(1) will find the local components.</p>
+
+<h2>Installing &amp; Building</h2>
+
+<p>It&#39;s super simple. component(1) comes with a suite of tools, including a default builder. Yes, default. The builder executable just uses the component-builder module. It supports middleware and extra options.</p>
+
+<p>Let&#39;s setup a new demo module called <code>demo</code> in a new folder. We&#39;ll include a simple <code>component.json</code> file.</p>
+<div class="highlight"><pre><code class="json language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;repo&quot;</span><span class="p">:</span> <span class="s2">&quot;user/demo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{},</span>
+  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;index.js&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <code>index.js</code> file is just empty at this point.</p>
+
+<p>Let&#39;s install <code>component/dom</code> a modular jQuery-esq DOM manipulation library built for component(1). This isn&#39;t meant to have feature parity with jQuery, and it&#39;s build up by many smaller pieces.</p>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">component install component/dom --save
+</code></pre></div>
+<p>Now, you let&#39;s use that component within our <code>index.js</code> file:</p>
+<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">// demo/index.js</span>
+<span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dom&#39;</span><span class="p">);</span>
+
+<span class="nx">dom</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;fah&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+  <span class="p">});</span>
+</code></pre></div>
+<p>While the component is called <code>component/dom</code>, component(1) aliases each component to it&#39;s <code>name</code> property within their <code>component.json</code>. This allows one to forget the notion of usernames attached to component names (as they might be hard to remember).</p>
+
+<p>We can build our app with a single command:</p>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">component build --standalone demo
+</code></pre></div>
+<p>We&#39;ll have generated a new <code>build/</code> folder with a <code>build.js</code> file inside.</p>
+<div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;build/build.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+<p>When the component you&#39;re building is going to be loading via HTML, you&#39;ll want to build it with the <code>--standalone {name}</code> option. This will add code to automatically require the component when it loads.</p>
+
+<h2>Consistency</h2>
+
+<p>Why mess with grunt, gulp, etc... to manage building your dependencies? component(1) offers the simplest and most effective route to organizing assets for the client-side.</p>
+
+<p>Above all, the previous example used:</p>
+
+<ul>
+<li>1 script load</li>
+<li>0 globals!</li>
+<li>2 commands</li>
+<li>0 effort</li>
+</ul>
+
+<p>Globals are a massive code-smell. It shows you&#39;re not using appropriate tooling to solve the problem. component(1) solves this problem.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/04/02/higher-kinded-types/">
         Higher-Kinded Polymorphism
       </a>

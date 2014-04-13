@@ -41,7 +41,7 @@ body {
 }
 
 html {
-  font-family: "proxima-nova", Georgia, "Times New Roman", serif;
+  font-family: "kepler-std", Georgia, "Times New Roman", serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -61,11 +61,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: #0060FF;
-}
-
-a {
-  color: #0060FF;
+  color: #4542b1;
 }
 
 a:active, a:hover {
@@ -180,7 +176,7 @@ a:-webkit-any-link {
   width: 14rem;
   visibility: hidden;
   overflow-y: auto;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  font-family: "kepler-std", Helvetica, Arial, sans-serif;
   font-size: .875rem; /* 15px */
   color: rgba(255,255,255,.6);
   background-color: #202020;
@@ -341,8 +337,8 @@ a.sidebar-nav-item:focus {
   margin-bottom: 4em;
   padding-top: 10px;
   line-height: 1.7;
-  font-family: "proxima-nova", "Helvetica Neue", sans-serif;
-  font-size: 19px;
+  font-family: "kepler-std", "Helvetica Neue", sans-serif;
+  font-size: 22px;
 }
 
 
@@ -353,7 +349,7 @@ a.sidebar-nav-item:focus {
   font-size: 30px;
   letter-spacing: 0;
   line-height: 1.4;
-  font-family: "abril-text";
+  font-family: "kepler-std";
   padding: 0 0 8px;
   color: #303030;
   text-decoration: none;
@@ -389,7 +385,7 @@ a.sidebar-nav-item:focus {
   position: relative;
   left: 8%;
   font-size: 17px;
-  font-family: "proxima-nova";
+  font-family: "kepler-std";
 }
 
 .post .message span {
@@ -446,9 +442,19 @@ a.sidebar-nav-item:focus {
 .related-posts h3 {
   margin-top: 0;
 }
+.related-posts li {
+  margin-top: 20px;
+}
 .related-posts li small {
   font-size: 75%;
   color: #999;
+}
+.related-posts h3 {
+  font-size: 19px;
+}
+.related-posts a {
+  text-decoration: none;
+  color: #3d3b55;
 }
 .related-posts li a:hover {
   color: #268bd2;
@@ -470,7 +476,7 @@ a.sidebar-nav-item:focus {
   overflow: hidden; /* clearfix */
   margin-left: -1rem;
   margin-right: -1rem;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  font-family: "kepler-std", Helvetica, Arial, sans-serif;
   color: #ccc;
   text-align: center;
 }
