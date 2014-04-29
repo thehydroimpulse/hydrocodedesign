@@ -4,7 +4,7 @@ published: true
 title: A Just-in-time Compiler In Rust
 ---
 
-Today, we're going to build a simple, very simple, JIT compiler in [Rust](www.rust-lang.org). Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language. 
+Today, we're going to build a simple, very simple, JIT compiler in [Rust](http://rust-lang.org). Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language.
 
 Now, this is only the actual just-in-time compiler that we'll be implementing, not a language compiler, nor the encoding of machine instructions; the latter requires a lot of knowledge about the CPU instruction specification, such as x86.
 
@@ -21,11 +21,6 @@ What exactly is a *[just-in-time (JIT)](https://en.wikipedia.org/wiki/Just-in-ti
 Before we get started, you'll need to get yourself a copy of the [Rust compiler](https://github.com/mozilla/rust). The current version, as of this writing &mdash; is 0.9. I'll be updating this article to be applicable to future versions. But, if I don't get to it in time, let me know.
 
 Be aware that the Rust compiler takes a fairly long time to compile, mainly because it's a [bootstrapped compiler](https://en.wikipedia.org/wiki/Bootstrapping_(compilers). Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I'm aware, the Rust compiler must [compile itself 3 times][4]. It also has to compile it's dependencies, such as [LLVM][2], [libuv](https://github.com/joyent/libuv), only once.
-
-<div class="message blue">
-  <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Also, make sure you have enough RAM (about 1.5GB) leftover, or dedicated for the compilation process of the Rust compiler. If you start paging/swapping, it'll compile <b>much</b> slower.</div>
-</div>
 
 ## Safety & Interop
 
@@ -119,11 +114,6 @@ extern {
 }
 ```
 
-<div class="message blue">
-  <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Tip: A <b><code>*</code></b> defines a raw pointer. This is equivalent to <code>const T*</code> in C. <code>*mut T</code> is equivalent to <code>T*</code> &mdash; a normal C pointer.</div>
-</div>
-
 We don't need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.
 
 Next, we'll also include some flags that interop with these functions.
@@ -199,7 +189,7 @@ The following implementations of Traits are for printing and memory deallocation
 
 impl std::fmt::Default for MappedRegion {
     fn fmt(value: &MappedRegion, f: &mut std::fmt::Formatter) {
-        write!(f.buf, "MappedRegion\\{ {}, {}\\}", 
+        write!(f.buf, "MappedRegion\\{ {}, {}\\}",
           value.addr, value.len
         );
     }
@@ -215,9 +205,9 @@ impl Drop for MappedRegion {
     fn drop(&mut self) {
         unsafe {
             if raw::munmap(self.addr, self.len) < 0 {
-                fail!(format!("munmap({}, {}): {}", 
+                fail!(format!("munmap({}, {}): {}",
                   self.addr,
-                  self.len, 
+                  self.len,
                   os::last_os_error()
                 ));
             }
@@ -352,7 +342,7 @@ pub fn mprotect(region: &MappedRegion, contents: &[u8]) {
             contents.len() as libc::size_t,
             libc::PROT_READ | libc::PROT_EXEC
         ) == -1 {
-            fail!("err: mprotect failed to protect 
+            fail!("err: mprotect failed to protect
               the memory region.");
         }
     }

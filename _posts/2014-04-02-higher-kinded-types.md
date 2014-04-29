@@ -60,9 +60,7 @@ Monoids are an *extremely* powerful primitive, as well as Monads, Functors, etc.
 
 All of these come from abstract algebra and category theory, which is a pretty insane field.
 
-----
-
-### How Does This Relate To Rust?
+## How Does This Relate To Rust?
 
 We'll, Rust currently doesn't support higher-kinded polymorphism. But, I'm in the process of writing up an RFC for it and experimenting with various implementations.
 

@@ -1,1 +1,0 @@
-<div class="message blue"><span><i class="fa fa-exclamation-circle"></i></span><div></div></div>

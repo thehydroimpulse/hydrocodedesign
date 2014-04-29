@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<html lang="en">
 
   <head>
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="//use.typekit.net/yov8luh.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link href='http://fonts.googleapis.com/css?family=Radley' rel='stylesheet' type='text/css'>
 
   <title>
     
@@ -15,13 +21,8 @@
   </title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/poole.css">
-  <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="/public/css/lanyon.css">
   <link rel="stylesheet" href="/public/css/font-awesome.min.css">
-
-  <script type="text/javascript" src="//use.typekit.net/phm0nvf.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  <link rel="stylesheet" href="/public/styles/main.css">
 
   <!-- Google Analytics -->
   <script>
@@ -45,68 +46,52 @@
 </head>
 
 
-  <body class="">
-
-    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
-     styles, `#sidebar-checkbox` for behavior. -->
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
-
-<!-- Toggleable sidebar -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-item">
-    <p>I'm Daniel, a **Canadian** software engineer.<br /><br />I'm also working on <a href='http://titananalytics.com'>Titan Analytics.</a></p>
-  </div>
-
-  <nav class="sidebar-nav">
-    <a class="sidebar-nav-item" href="/">Home</a>
-
-    
-    
-      
-        
-      
-    
-      
-        
-          <a class="sidebar-nav-item" href="/about/">About</a>
-        
-      
-    
-      
-    
-      
-    
-
-    <a class="sidebar-nav-item" href="https://github.com/thehydroimpulse">GitHub</a>
-  </nav>
-
-  <div class="sidebar-item">
-    <p>
-      &copy; 2014. All rights reserved.
-    </p>
-  </div>
-</div>
-
+  <body>
 
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+    <div class="wrapper">
+      <header>
+          <!--<label for="sidebar-checkbox" class="sidebar-toggle"></label>-->
 
-          <h3 class="masthead-title">
-            <a href="/" title="Home">HydroCode Design</a>
-            <small></small>
-          </h3>
-        </div>
-      </div>
+        <nav class="nav">
+          <ul>
+            <li>
+              <a id="nav-home" href="/" title="Home">HydroCode Design</a>
+            </li>
+          </ul>
+        </nav>
+
+        <ul class="icons">
+          <li>
+            <a href="https://twitter.com/TheHydroImpulse" title="Twitter">
+              <span class='symbol'>circletwitterbird</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/TheHydroImpulse" title="Github">
+              <span class='symbol'>circlegithubalt</span>
+            </a>
+          </li>
+          <li>
+            <a href="http://www.linkedin.com/pub/daniel-fagnan/17/807/335" title="Linkedin">
+              <span class='symbol'>circlelinkedin</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:dnfagnan@gmail.com" title="Email">
+              <span class='symbol'>circleemail</span>
+            </a>
+          </li>
+        </ul>
+      </header>
 
       <div class="container content">
-        <div class="post">
+        <article class="single">
   <h1 class="post-title">A Just-in-time Compiler In Rust</h1>
   <span class="post-date">17 Jan 2014</span>
-  <p>Today, we&#39;re going to build a simple, very simple, JIT compiler in <a href="www.rust-lang.org">Rust</a>. Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language. </p>
+  <div class="post-content">
+    <p>Today, we&#39;re going to build a simple, very simple, JIT compiler in <a href="http://rust-lang.org">Rust</a>. Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language.</p>
 
 <p>Now, this is only the actual just-in-time compiler that we&#39;ll be implementing, not a language compiler, nor the encoding of machine instructions; the latter requires a lot of knowledge about the CPU instruction specification, such as x86.</p>
 
@@ -125,11 +110,6 @@
 <p>Before we get started, you&#39;ll need to get yourself a copy of the <a href="https://github.com/mozilla/rust">Rust compiler</a>. The current version, as of this writing &mdash; is 0.9. I&#39;ll be updating this article to be applicable to future versions. But, if I don&#39;t get to it in time, let me know.</p>
 
 <p>Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&#39;s a <a href="https://en.wikipedia.org/wiki/Bootstrapping_(compilers">bootstrapped compiler</a>. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&#39;m aware, the Rust compiler must <a href="https://github.com/mozilla/rust/blob/master/Makefile.in#L13">compile itself 3 times</a>. It also has to compile it&#39;s dependencies, such as <a href="http://llvm.org/">LLVM</a>, <a href="https://github.com/joyent/libuv">libuv</a>, only once.</p>
-
-<div class="message blue">
-  <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Also, make sure you have enough RAM (about 1.5GB) leftover, or dedicated for the compilation process of the Rust compiler. If you start paging/swapping, it'll compile <b>much</b> slower.</div>
-</div>
 
 <h2>Safety &amp; Interop</h2>
 
@@ -208,11 +188,6 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_void</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-<div class="message blue">
-  <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Tip: A <b><code>*</code></b> defines a raw pointer. This is equivalent to <code>const T*</code> in C. <code>*mut T</code> is equivalent to <code>T*</code> &mdash; a normal C pointer.</div>
-</div>
-
 <p>We don&#39;t need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.</p>
 
 <p>Next, we&#39;ll also include some flags that interop with these functions.</p>
@@ -280,7 +255,7 @@
 
 <span class="k">impl</span> <span class="n">std</span><span class="o">::</span><span class="n">fmt</span><span class="o">::</span><span class="n">Default</span> <span class="k">for</span> <span class="n">MappedRegion</span> <span class="p">{</span>
     <span class="k">fn</span> <span class="n">fmt</span><span class="p">(</span><span class="n">value</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="n">f</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">std</span><span class="o">::</span><span class="n">fmt</span><span class="o">::</span><span class="n">Formatter</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">buf</span><span class="p">,</span> <span class="s">&quot;MappedRegion</span><span class="se">\\</span><span class="s">{ {}, {}</span><span class="se">\\</span><span class="s">}&quot;</span><span class="p">,</span> 
+        <span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">buf</span><span class="p">,</span> <span class="s">&quot;MappedRegion</span><span class="se">\\</span><span class="s">{ {}, {}</span><span class="se">\\</span><span class="s">}&quot;</span><span class="p">,</span>
           <span class="n">value</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">value</span><span class="p">.</span><span class="n">len</span>
         <span class="p">);</span>
     <span class="p">}</span>
@@ -295,9 +270,9 @@
     <span class="k">fn</span> <span class="n">drop</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">self</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">unsafe</span> <span class="p">{</span>
             <span class="k">if</span> <span class="n">raw</span><span class="o">::</span><span class="n">munmap</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
-                <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;munmap({}, {}): {}&quot;</span><span class="p">,</span> 
+                <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;munmap({}, {}): {}&quot;</span><span class="p">,</span>
                   <span class="n">self</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span>
-                  <span class="n">self</span><span class="p">.</span><span class="n">len</span><span class="p">,</span> 
+                  <span class="n">self</span><span class="p">.</span><span class="n">len</span><span class="p">,</span>
                   <span class="n">os</span><span class="o">::</span><span class="n">last_os_error</span><span class="p">()</span>
                 <span class="p">));</span>
             <span class="p">}</span>
@@ -415,7 +390,7 @@
             <span class="n">contents</span><span class="p">.</span><span class="n">len</span><span class="p">()</span> <span class="k">as</span> <span class="n">libc</span><span class="o">::</span><span class="n">size_t</span><span class="p">,</span>
             <span class="n">libc</span><span class="o">::</span><span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">libc</span><span class="o">::</span><span class="n">PROT_EXEC</span>
         <span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
-            <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;err: mprotect failed to protect </span>
+            <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;err: mprotect failed to protect</span>
 <span class="s">              the memory region.&quot;</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -570,9 +545,10 @@
 
 <p><a href="http://github.com/TheHydroImpulse">Github</a></p>
 
-</div>
+  </div>
+</article>
 
-<div class="related">
+<!--<div class="related">
   <h2>Related Posts</h2>
   <ul class="related-posts">
     
@@ -604,7 +580,7 @@
       </li>
     
   </ul>
-</div>
+</div>-->
 
 <div class="comments">
     <div id="disqus_thread"></div>

@@ -1,6 +1,7 @@
 # Dependencies
 markdown:         redcarpet
 pygments:         true
+gems:             ['jekyll-sass']
 
 # Permalinks
 permalink:        pretty
@@ -22,3 +23,7 @@ version:          2.0.0
 
 github:
   repo:           https://github.com/thehydroimpulse
+
+sass:
+  style: compressed
+  deploy_style: compressed

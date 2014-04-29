@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<html lang="en">
 
   <head>
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="//use.typekit.net/yov8luh.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link href='http://fonts.googleapis.com/css?family=Radley' rel='stylesheet' type='text/css'>
 
   <title>
     
@@ -15,13 +21,8 @@
   </title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/poole.css">
-  <link rel="stylesheet" href="/public/css/syntax.css">
-  <link rel="stylesheet" href="/public/css/lanyon.css">
   <link rel="stylesheet" href="/public/css/font-awesome.min.css">
-
-  <script type="text/javascript" src="//use.typekit.net/phm0nvf.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  <link rel="stylesheet" href="/public/styles/main.css">
 
   <!-- Google Analytics -->
   <script>
@@ -45,67 +46,50 @@
 </head>
 
 
-  <body class="">
-
-    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
-     styles, `#sidebar-checkbox` for behavior. -->
-<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
-
-<!-- Toggleable sidebar -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-item">
-    <p>I'm Daniel, a **Canadian** software engineer.<br /><br />I'm also working on <a href='http://titananalytics.com'>Titan Analytics.</a></p>
-  </div>
-
-  <nav class="sidebar-nav">
-    <a class="sidebar-nav-item" href="/">Home</a>
-
-    
-    
-      
-        
-      
-    
-      
-        
-          <a class="sidebar-nav-item" href="/about/">About</a>
-        
-      
-    
-      
-    
-      
-    
-
-    <a class="sidebar-nav-item" href="https://github.com/thehydroimpulse">GitHub</a>
-  </nav>
-
-  <div class="sidebar-item">
-    <p>
-      &copy; 2014. All rights reserved.
-    </p>
-  </div>
-</div>
-
+  <body>
 
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+    <div class="wrapper">
+      <header>
+          <!--<label for="sidebar-checkbox" class="sidebar-toggle"></label>-->
 
-          <h3 class="masthead-title">
-            <a href="/" title="Home">HydroCode Design</a>
-            <small></small>
-          </h3>
-        </div>
-      </div>
+        <nav class="nav">
+          <ul>
+            <li>
+              <a id="nav-home" href="/" title="Home">HydroCode Design</a>
+            </li>
+          </ul>
+        </nav>
+
+        <ul class="icons">
+          <li>
+            <a href="https://twitter.com/TheHydroImpulse" title="Twitter">
+              <span class='symbol'>circletwitterbird</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/TheHydroImpulse" title="Github">
+              <span class='symbol'>circlegithubalt</span>
+            </a>
+          </li>
+          <li>
+            <a href="http://www.linkedin.com/pub/daniel-fagnan/17/807/335" title="Linkedin">
+              <span class='symbol'>circlelinkedin</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:dnfagnan@gmail.com" title="Email">
+              <span class='symbol'>circleemail</span>
+            </a>
+          </li>
+        </ul>
+      </header>
 
       <div class="container content">
         <div class="posts">
   
-  <div class="post">
+  <article class="post">
     <h1 class="post-title">
       <a href="/2014/04/13/drop-everything-and-use-component/">
         Drop The Chaos and Use Component(1)
@@ -113,163 +97,9 @@
     </h1>
 
     <span class="post-date">13 Apr 2014</span>
-
-    <p>Let&#39;s face it, CommonJS has won &mdash; AMD has lost. Let&#39;s move on to embracing this fact.</p>
-
-<p>ES6 modules have adopted the CommonJS-style. Thus, both Node.js and the browser will be running the same model. However, (native) ES6 modules are far away, and it still lacks (which is a good thing) distribution.</p>
-
-<p>That&#39;s where <a href="https://github.com/component/component">component(1)</a> steps in. For those unaware, component(1) is a client-side package manager <em>and</em> build tool. It let&#39;s you embrace a modularized approach to building apps. component(1) supports JavaScript, CSS, templates and various other kinds of assets. These are all bundled up in a consistent manner. The JavaScript-side uses a CommonJS environment, allowing you to code <em>exactly</em> like in Node.</p>
-
-<p><strong>Note:</strong> I&#39;ll be addressing component, the project, as component(1), and component, in the abstract concept as is.</p>
-<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">// component(1) JavaScript</span>
-<span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dom&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">debug</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">);</span>
-</code></pre></div>
-<p>The important part, and what separates from tools like Browserify is the specific focus on the client-side. See, while Node has many modules available, they simply aren&#39;t built with the browser in-mind. Browserify feels (and is) a hack.</p>
-
-<h2>The Bower Problem</h2>
-
-<p>Bower achieved being the more popular package manager for client-side assets. Cool. But, it poses a substancial problem. It leaves <em>you</em> in-charge with managing all the assets it fetched for you. This process is completely ad-hoc. Better get grunt, gulp, or Makefiles to do some work.</p>
-
-<p>Moreover, it not only effects that act of building everything, but the runtime and format of these modules are chaotic. Some bundle minified assets, others don&#39;t. Some bundle concatenated files, some don&#39;t. Some bundle AMD-compatible JavaScript files, Some don&#39;t. Most, however, fill their modules with globals.</p>
-
-<p>This results in an extremely poor experience for the user and community.</p>
-
-<p>component(1) solves this problem because it&#39;s a package manager <strong>and</strong> build tool. Thus, 
-it&#39;s a lot more opinionated about things than say, Bower.</p>
-
-<h2>Community</h2>
-
-<p>The community has embraced these broken tools hole heartly. Most of the angular world, for example, lives with tools like Grunt and Bower.</p>
-
-<p>Wanted an Angular bootstrap module that just <em>worked</em>? Or how about a tooltip module that provided <em>just tooltips</em> dammit. Sorry, but these tools are making these worse. Sure, Bower solves the package manager issue, but that&#39;s only part of the pie.</p>
-
-<p>Have you ever wanted to get a dropdown module that works, in a matter of seconds? Again, <em>only dropdowns</em>, that&#39;s it. Or modals, or animations, or views, or...</p>
-
-<p>There might be some of these modules on Bower, except they are not consistent, not composable, and will most likely use globals. Globals are not the answer.</p>
-
-<h2>Dive into component(1)</h2>
-
-<p>You can install component(1) with NPM:</p>
-<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">npm install component -g
-</code></pre></div>
-<p>You&#39;ll then have access to the <code>component</code> executable.</p>
-
-<p>component(1) follows a similar metadata format as npm&#39;s <code>package.json</code>. Here&#39;s a <code>component.json</code> file:</p>
-<div class="highlight"><pre><code class="json language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;something&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;repo&quot;</span><span class="p">:</span> <span class="s2">&quot;user/something&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;component/button&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
-  <span class="p">},</span>
-  <span class="nt">&quot;development&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;visionmedia/mocha&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
-  <span class="p">},</span>
-  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s2">&quot;index.js&quot;</span>
-  <span class="p">],</span>
-  <span class="nt">&quot;templates&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s2">&quot;template.html&quot;</span>
-  <span class="p">],</span>
-  <span class="nt">&quot;styles&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s2">&quot;style.css&quot;</span>
-  <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>You&#39;ll notice that you&#39;re specifying each file manually, and <em>that&#39;s ok</em>! It might be annoying to some (globs are in the works for you), but, if you use component(1) in the manner it was designed, this shouldn&#39;t be a problem.</p>
-
-<h2>Unix Philosophy</h2>
-
-<p>The goal is to try and build small modules that do <strong>one thing</strong> &mdash; and do it extremely well.</p>
-
-<p>That&#39;s what component(1) is following. Don&#39;t build giant components. That&#39;s why specifying each file isn&#39;t a big deal, because <em>you shouldn&#39;t have that many per component</em>. If you have more than 5, than you&#39;re probably doing more than one thing.</p>
-
-<h2>Local Components</h2>
-
-<p>Because you want a modular environment, you&#39;ll want lots of components. However, you don&#39;t want to be creating a separate repo on Github for each (especially for a proprietary project). You&#39;ll want to use local components.</p>
-<div class="highlight"><pre><code class="json language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;moduleA&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&quot;component/dom&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span>
-  <span class="p">},</span>
-  <span class="nt">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;.&quot;</span> <span class="p">],</span>
-  <span class="nt">&quot;local&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s2">&quot;moduleB&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;moduleC&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;moduleD&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;moduleE&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;moduleF&quot;</span>
-  <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>You can specify arbitrary paths and component(1) will find the local components.</p>
-
-<h2>Installing &amp; Building</h2>
-
-<p>It&#39;s super simple. component(1) comes with a suite of tools, including a default builder. Yes, default. The builder executable just uses the component-builder module. It supports middleware and extra options.</p>
-
-<p>Let&#39;s setup a new demo module called <code>demo</code> in a new folder. We&#39;ll include a simple <code>component.json</code> file.</p>
-<div class="highlight"><pre><code class="json language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.0.1&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;repo&quot;</span><span class="p">:</span> <span class="s2">&quot;user/demo&quot;</span><span class="p">,</span>
-  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{},</span>
-  <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s2">&quot;index.js&quot;</span>
-  <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>The <code>index.js</code> file is just empty at this point.</p>
-
-<p>Let&#39;s install <code>component/dom</code> a modular jQuery-esq DOM manipulation library built for component(1). This isn&#39;t meant to have feature parity with jQuery, and it&#39;s build up by many smaller pieces.</p>
-<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">component install component/dom --save
-</code></pre></div>
-<p>Now, you let&#39;s use that component within our <code>index.js</code> file:</p>
-<div class="highlight"><pre><code class="js language-js" data-lang="js"><span class="c1">// demo/index.js</span>
-<span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dom&#39;</span><span class="p">);</span>
-
-<span class="nx">dom</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;fah&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
-  <span class="p">});</span>
-</code></pre></div>
-<p>While the component is called <code>component/dom</code>, component(1) aliases each component to it&#39;s <code>name</code> property within their <code>component.json</code>. This allows one to forget the notion of usernames attached to component names (as they might be hard to remember).</p>
-
-<p>We can build our app with a single command:</p>
-<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">component build --standalone demo
-</code></pre></div>
-<p>We&#39;ll have generated a new <code>build/</code> folder with a <code>build.js</code> file inside.</p>
-<div class="highlight"><pre><code class="html language-html" data-lang="html"><span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;head&gt;&lt;/head&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;build/build.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre></div>
-<p>When the component you&#39;re building is going to be loading via HTML, you&#39;ll want to build it with the <code>--standalone {name}</code> option. This will add code to automatically require the component when it loads.</p>
-
-<h2>Consistency</h2>
-
-<p>Why mess with grunt, gulp, etc... to manage building your dependencies? component(1) offers the simplest and most effective route to organizing assets for the client-side.</p>
-
-<p>Above all, the previous example used:</p>
-
-<ul>
-<li>1 script load</li>
-<li>0 globals!</li>
-<li>2 commands</li>
-<li>0 effort</li>
-</ul>
-
-<p>Globals are a massive code-smell. It shows you&#39;re not using appropriate tooling to solve the problem. component(1) solves this problem.</p>
-
-  </div>
+  </article>
   
-  <div class="post">
+  <article class="post">
     <h1 class="post-title">
       <a href="/2014/04/02/higher-kinded-types/">
         Higher-Kinded Polymorphism
@@ -277,82 +107,9 @@ it&#39;s a lot more opinionated about things than say, Bower.</p>
     </h1>
 
     <span class="post-date">02 Apr 2014</span>
-
-    <p>Today I&#39;m going to go through higher-kinded polymorphism, what it&#39;s uses are, and what it is (briefly). It&#39;s extremely fascinating, at least for me, to go through these relatively complex, highly-abstracted subjects.</p>
-
-<hr>
-
-<p>Let&#39;s talk about types first, and specifically types that people are used to, for example <code>Int</code>, <code>String</code>, <code>Boolean</code>, etc... These are types we can use right away, they&#39;re values. These are also more formally called proper types.</p>
-
-<p>Now that we can work with proper types, let&#39;s go further. Many (but not all) statically-typed languages have a form of generics. For example, <code>List&lt;T&gt;</code>, <code>Map&lt;K,V&gt;</code>, etc... Generics or type parameters, and type constructors (functions that construct other types) form the basis for further abstraction on-top of proper types.</p>
-
-<p>Let&#39;s go through what <code>List&lt;T&gt;</code> <em>really</em> is. <code>List</code> is a type abstracting over a type <code>T</code>. This is called a type constructor; given a type <code>T</code>, we construct type <code>List&lt;T&gt;</code>. Moreover, it should be clear that <code>List&lt;T&gt;</code> is <em>not</em> a proper type. That is, it&#39;s not a concrete type &mdash; it needs a parameter to be passed before the useable type can be formed. That&#39;s the type constructor&#39;s job. <code>List&lt;Int&gt;</code>, however, <em>is</em> a concrete type; it&#39;s finished &mdash; we&#39;ve passed the appropriate type parameters.</p>
-
-<p>How can we distinguish this type constructor from proper types? Because it&#39;s a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.</p>
-
-<p>Using a more formal syntax for defining kinds of types, we can say a proper type is of <code>*</code>; whereas a first-ordered type is of <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code>.</p>
-
-<p>Let&#39;s go through <code>* -&gt; *</code>. It means, given a type, produce another type. That&#39;s exactly what the type constructor is. We can further visualize it as: <code>T -&gt; List&lt;Int&gt;</code>. The next form <code>* -&gt; * -&gt; *</code> is almost the same thing. You can think of it as: given two pairs of types, produce a third type. Thus, <code>* -&gt; * ...</code> in the context of <code>* -&gt; * -&gt; *</code> is the pair of types. A common example is a simple key-value map: <code>Map&lt;K,V&gt;</code> is of the form <code>* -&gt; * -&gt; *</code>.</p>
-
-<p>This is all great. We&#39;re able to express more abstract types, such as <code>Map&lt;K,V&gt;</code>, <code>List&lt;T&gt;</code>, etc... and void repetition. But, what if we could abstract further. Imagine a type <code>Foo</code> that takes type <code>M</code> &mdash; <code>Foo&lt;M&gt;</code>. But, what if <code>M</code> is a type constructor?</p>
-
-<hr>
-
-<p>That&#39;s where higher-kinded polymorphism come into play. Instead of having a type parameter that&#39;s of a proper type (like in the case of <code>List&lt;T&gt;</code>; where <code>T</code> is a proper type.), we have the type parameter be a type constructor. Thus, we require a type that will itself produce another type. Alternatively, we can say: a type that abstracts over a type that abstracts over a type. Very much abstracted. That&#39;s a higher-kinded type.</p>
-
-<p>Thus, the form is: <code>(* -&gt; *) -&gt; *</code> where <code>(* -&gt; *)</code> is a type constructor. We also call these second-order types. For types greater than first-order, we call them <em>higher-kinded</em>.</p>
-
-<p>Following, say, Rust, we could have:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">trait</span> <span class="n">Higher</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&lt;</span><span class="n">_</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
-    <span class="c1">// ...</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>That&#39;s if we follow the currently defined syntax for generics. However, I feel like the following (used only for defining higher-order types) feels a lot more natural:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">trait</span> <span class="n">Higher</span><span class="o">&lt;</span><span class="n">M</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="c1">// ...</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>The square brackets would perform the same function as the angle brackets, but would be used in a higher-order type context.</p>
-
-<p>Now, the <code>_</code> is simply a forgetter symbol (we don&#39;t want to deal with that type, so just infer and forget). Thus, we could have done <code>M[X]</code>, instead; but, often times, you don&#39;t care about that type parameter.</p>
-
-<hr>
-
-<p>Now that we got through higher-kinded polymorphism, let&#39;s go through it&#39;s uses.</p>
-
-<p>You may have heard of terms such as Monads, Monoids, Functors, Semigroups, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.</p>
-
-<p>Almost every aggregation problem can be represented as Monoids. For example, HyperLogLog is a monoid. HyperLogLog is actually a composition of monoids, because it contains operations such as Min, which is also a monoid.</p>
-
-<p>Monoids are an <em>extremely</em> powerful primitive, as well as Monads, Functors, etc...</p>
-
-<p>All of these come from abstract algebra and category theory, which is a pretty insane field.</p>
-
-<hr>
-
-<h3>How Does This Relate To Rust?</h3>
-
-<p>We&#39;ll, Rust currently doesn&#39;t support higher-kinded polymorphism. But, I&#39;m in the process of writing up an RFC for it and experimenting with various implementations.</p>
-
-<p>Within Rust, you typically use a lot of <code>Option&lt;T&gt;</code> and <code>Result&lt;T&gt;</code>, and may end up with quite a bit of pattern matching pyramids. This can get quite crazy and messy.</p>
-
-<p>Luckily, Monads are the perfect tool for the job. Haskell uses them extensively for working with their equivalent option type and it reduces the ugliness quite a bit.</p>
-
-<p>For the most part, most of these concepts are almost strictly exclusive in functional languages like Scala or Haskell (You can hack yourself some Monads with lots of C++ templates, if you wish), but imagine having these powerful primitives in a <em>systems</em> language!</p>
-
-<p>I&#39;ll be following up on this blog post the focuses on proper examples, specifically for Rust, and the advantages of it.</p>
-
-<p>Resources:</p>
-
-<ul>
-<li><a href="http://adriaanm.github.io/files/higher.pdf">Generics of a Higher Kind</a> (Scala reference paper)</li>
-</ul>
-
-<p><a href="http://www.reddit.com/r/rust/comments/2212j2/higherkinded_polymorphism/">Reddit thread within the Rust subreddit</a></p>
-
-  </div>
+  </article>
   
-  <div class="post">
+  <article class="post">
     <h1 class="post-title">
       <a href="/2014/01/31/llvm-with-rust/">
         Using LLVM From Within Rust
@@ -360,102 +117,9 @@ it&#39;s a lot more opinionated about things than say, Bower.</p>
     </h1>
 
     <span class="post-date">31 Jan 2014</span>
-
-    <p>Continuing with my previous writing theme about lower-level concepts from within Rust; we&#39;re going to get start using LLVM with Rust.</p>
-
-<p>As I stated in my previous blog post, Rust is amazing with interoping with C and even C++, which is hard to come by. However, because LLVM is written in C++, it introduces the need to link against libc++ and create wrappers around C++&#39;s classes and types.</p>
-
-<p>Luckily &mdash; or maybe not, considering Rust&#39;s compiler is built using LLVM &mdash; we already have usable Rust bindings in-place. However, there&#39;s roughly no documentation on these bindings, except the source, and Rust&#39;s compiler, which has a lot more stuff going on than simple LLVM usage.</p>
-
-<hr>
-
-<p>Now, the first order of operations is to link against <code>rustc</code>, the Rust compiler library. I&#39;ll also note that Rust is very good at handling this type of stuff, without adding any arguments to <code>rustc</code> &mdash; the compiler executable.</p>
-
-<p>Let&#39;s begin to define our program. We&#39;ll create a new file called <code>bin.rs</code> and it&#39;s full path being <code>src/bin.rs</code>. This is standard Rust operations.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-
-<span class="p">}</span>
-</code></pre></div>
-<p>Because <code>rustc</code> (the library) is a dynamic library, sitting somewhere in your Rust installation directories, we&#39;ll need to tell Rust to find it.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span><span class="p">;</span>
-
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{}</span>
-</code></pre></div>
-<p>This tells Rust that we want to link against an external module. However, depending on your installation, you might have multiple versions of Rust installed, or previous versions having leftover files on your system. We&#39;ll need to be explicit about which version we should link against.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span> <span class="o">=</span>  <span class="o">=</span> <span class="s">&quot;rustc#0.10-pre&quot;</span><span class="p">;</span>
-
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{}</span>
-</code></pre></div>
-<p>I&#39;m currently building against the master branch of Rust, so you can replace the version accordingly.</p>
-
-<hr>
-
-<p>The main LLVM wrapping types are under <code>rustc::lib::llvm</code>. This include <code>ModuleRef</code>, <code>ContextRef</code>, etc... However, all the functions are defined under <code>rustc::lib::llvm::llvm</code>. Let&#39;s include some of those modules which will make things less verbose when calling any LLVM functions.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span> <span class="o">=</span>  <span class="o">=</span> <span class="s">&quot;rustc#0.10-pre&quot;</span><span class="p">;</span>
-<span class="k">use</span> <span class="n">rustc</span><span class="o">::</span><span class="n">lib</span><span class="o">::</span><span class="n">llvm</span><span class="o">::</span><span class="n">llvm</span><span class="p">;</span>
-
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{}</span>
-</code></pre></div>
-<p>Great! Now we&#39;ll need to fill out our <code>main</code> function. We&#39;ll first need to wrap everything under an <code>unsafe</code> block.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="p">...</span>
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">unsafe</span> <span class="p">{</span>
-    <span class="p">...</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>This isn&#39;t going to be an LLVM tutorial. You can find out how to use LLVM itself in it&#39;s respective documentation. All the docs will be using C++, so you&#39;ll have to do some work getting that translated over to Rust land.</p>
-
-<hr>
-
-<p>We&#39;ll need three things created:</p>
-
-<ul>
-<li>Module</li>
-<li>Context</li>
-<li>Builder</li>
-</ul>
-
-<p>We&#39;ll only create a single, global context, but you&#39;d typically want to create multiple contexts if you&#39;d need isolation between, say, multiple threads.</p>
-
-<p>We won&#39;t be using the builder, so it&#39;s optional at this stage, unless you want to emit some useful LLVM IR.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">extern</span> <span class="k">mod</span> <span class="n">rustc</span> <span class="o">=</span> <span class="s">&quot;rustc#0.10-pre&quot;</span><span class="p">;</span>
-
-<span class="k">use</span> <span class="n">rustc</span><span class="o">::</span><span class="n">lib</span><span class="o">::</span><span class="n">llvm</span><span class="o">::</span><span class="n">llvm</span><span class="p">;</span>
-
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="c1">// Create our first global context.</span>
-        <span class="k">let</span> <span class="n">llvm_context</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMContextCreate</span><span class="p">();</span>
-
-        <span class="c1">// Create our module `module1` and attach our context.</span>
-        <span class="k">let</span> <span class="n">llvm_module</span> <span class="o">=</span> <span class="s">&quot;mod1&quot;</span><span class="p">.</span><span class="n">with_c_str</span><span class="p">(</span><span class="o">|</span><span class="n">buf</span><span class="o">|</span> <span class="p">{</span>
-            <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMModuleCreateWithNameInContext</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">llvm_context</span><span class="p">)</span>
-        <span class="p">});</span>
-
-        <span class="c1">// Create a useless builder.</span>
-        <span class="k">let</span> <span class="n">builder</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMCreateBuilderInContext</span><span class="p">(</span><span class="n">llvm_context</span><span class="p">);</span>
-
-        <span class="c1">// Dump the output of the LLVM module in IR format.</span>
-        <span class="n">llvm</span><span class="o">::</span><span class="n">LLVMDumpModule</span><span class="p">(</span><span class="n">llvm_module</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>That&#39;s it. We can build the program with:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">rustc src/bin.rs -o bin/rustllvm
-</code></pre></div>
-<p>Once running, you should have gotten the following output:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">; ModuleID = &#39;mod1&#39;
-</code></pre></div>
-<hr>
-
-<p>That&#39;s it! Pretty simple, eh?</p>
-
-<p>You can check out <a href="https://github.com/TheHydroImpulse/rust-llvm-example">the full source code on github.</a></p>
-
-  </div>
+  </article>
   
-  <div class="post">
+  <article class="post">
     <h1 class="post-title">
       <a href="/2014/01/17/jit-just-in-time-compiler-rust/">
         A Just-in-time Compiler In Rust
@@ -463,472 +127,7 @@ it&#39;s a lot more opinionated about things than say, Bower.</p>
     </h1>
 
     <span class="post-date">17 Jan 2014</span>
-
-    <p>Today, we&#39;re going to build a simple, very simple, JIT compiler in <a href="www.rust-lang.org">Rust</a>. Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language. </p>
-
-<p>Now, this is only the actual just-in-time compiler that we&#39;ll be implementing, not a language compiler, nor the encoding of machine instructions; the latter requires a lot of knowledge about the CPU instruction specification, such as x86.</p>
-
-<p>If you&#39;d like to use a production grade JIT compiler, there&#39;s <a href="http://llvm.org/">LLVM</a> and <a href="http://www.gnu.org/software/libjit/">LibJit</a>, just to name a couple.</p>
-
-<hr>
-
-<p>What exactly is a <em><a href="https://en.wikipedia.org/wiki/Just-in-time_compilation">just-in-time (JIT)</a></em> compiler? I think the following quote does a justice explanation.</p>
-
-<blockquote>
-<p>Whenever a program, while running, creates and runs some new executable code which was not part of the program when it was stored on disk, it’s a JIT. - <a href="http://eli.thegreenplace.net/2013/10/17/getting-started-with-libjit-part-1/">Eli Bendersky</a></p>
-</blockquote>
-
-<hr>
-
-<p>Before we get started, you&#39;ll need to get yourself a copy of the <a href="https://github.com/mozilla/rust">Rust compiler</a>. The current version, as of this writing &mdash; is 0.9. I&#39;ll be updating this article to be applicable to future versions. But, if I don&#39;t get to it in time, let me know.</p>
-
-<p>Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&#39;s a <a href="https://en.wikipedia.org/wiki/Bootstrapping_(compilers">bootstrapped compiler</a>. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&#39;m aware, the Rust compiler must <a href="https://github.com/mozilla/rust/blob/master/Makefile.in#L13">compile itself 3 times</a>. It also has to compile it&#39;s dependencies, such as <a href="http://llvm.org/">LLVM</a>, <a href="https://github.com/joyent/libuv">libuv</a>, only once.</p>
-
-<div class="message blue">
-  <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Also, make sure you have enough RAM (about 1.5GB) leftover, or dedicated for the compilation process of the Rust compiler. If you start paging/swapping, it'll compile <b>much</b> slower.</div>
-</div>
-
-<h2>Safety &amp; Interop</h2>
-
-<p>Let&#39;s begin by talking about safety, considering it&#39;s one of Rust&#39;s principles to begin with. Creating a JIT compiler was one of the first things I tried implementing within Rust. Why? Well, I got straight down to the core system, and, thus, I was able to clearly see how Rust was at handling low-level programming, and C-interop.</p>
-
-<p>Most of the constructs within a JIT compiler that handles any logic will be unsafe. Remember, I&#39;m talking about the JIT being the logic that handles the dynamic execution of code, machine code. If you&#39;d build a VM around this &mdash; or <em>a</em> JIT compiler &mdash; you could minimize the amount of unsafe code you&#39;d use. It would be much easier to prove that 1000 lines of code is correct, yourself, and let the compiler prove the rest; rather than having to prove mostly <em>everything</em> is correct yourself. This is what Rust offers. A way to minimize the amount of unsafe code you write and read.</p>
-
-<p>The end result would ultimately be to expose <em>safe</em> interfaces to <strong>all</strong> logic. That&#39;s how we&#39;re going to work.</p>
-
-<h3>Rust Modules</h3>
-
-<p>Let&#39;s define the files, effectively modules, that we&#39;re going to write.</p>
-
-<p>Here&#39;s our project&#39;s directory contents:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">src/
-  main.rs
-  raw.rs
-  region.rs
-  safe.rs
-</code></pre></div>
-<p>We&#39;ll be compiling all our examples with with <code>rustc</code>, Rust&#39;s compiler executable:</p>
-<div class="highlight"><pre><code class="bash language-bash" data-lang="bash">mkdir -p bin <span class="o">&amp;&amp;</span> rustc -Z debug-info src/main.rs -o bin/jit
-</code></pre></div>
-<p>We simply create a new folder <code>bin</code> that will hold the compiled program. You can place this into a <code>Makefile</code> if you&#39;d like, for simplicity.</p>
-
-<p><code>main.rs</code> will contain our program logic. This will contain our examples that will use our JIT compiler.</p>
-
-<p><code>raw.rs</code> are C function interfaces. Libc is linked by default with Rust programs, so there are no extra efforts to include the library.</p>
-
-<p><code>region.rs</code> will hold a Rust-idiomatic struct <code>MappedRegion</code> that contain some raw pointers, which are unsafe. We also define some implementations for a couple <a href="http://static.rust-lang.org/doc/master/tutorial.html#traits">Traits</a>.</p>
-
-<p><code>safe.rs</code> will contain <em>safe</em> interfaces to native C functions.</p>
-
-<h2></h2>
-
-<p>Let&#39;s begin with the <code>raw.rs</code> module. We&#39;ll begin by including the <code>libc</code> module.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/raw.rs</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">libc</span><span class="p">;</span>
-</code></pre></div>
-<p>Next, we&#39;ll want to define some external functions, C functions. These are <strong>all</strong> unsafe.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/raw.rs</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">libc</span><span class="p">;</span>
-
-<span class="k">extern</span> <span class="p">{}</span>
-</code></pre></div>
-<p>You don&#39;t <em>need</em> to understand the next function interfaces. They&#39;re interfaces to libc functions, such as <code>mmap</code>, <code>memcpy</code>, etc...</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/raw.rs</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">libc</span><span class="p">;</span>
-
-<span class="k">extern</span> <span class="p">{</span>
-
-    <span class="k">pub</span> <span class="k">fn</span> <span class="n">mmap</span><span class="p">(</span>
-        <span class="n">addr</span> <span class="o">:</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_char</span><span class="p">,</span>
-        <span class="n">length</span> <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">size_t</span><span class="p">,</span>
-        <span class="n">prot</span> <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span><span class="p">,</span>
-        <span class="n">flags</span>  <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span><span class="p">,</span>
-        <span class="n">fd</span>   <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span><span class="p">,</span>
-        <span class="n">offset</span> <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">off_t</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="k">u8</span><span class="p">;</span>
-
-    <span class="k">pub</span> <span class="k">fn</span> <span class="n">munmap</span><span class="p">(</span>
-        <span class="n">addr</span> <span class="o">:</span> <span class="o">*</span><span class="k">u8</span><span class="p">,</span>
-        <span class="n">length</span> <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">size_t</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span><span class="p">;</span>
-
-    <span class="k">pub</span> <span class="k">fn</span> <span class="n">mprotect</span><span class="p">(</span>
-        <span class="n">addr</span><span class="o">:</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_void</span><span class="p">,</span>
-        <span class="n">length</span><span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">size_t</span><span class="p">,</span>
-        <span class="n">prot</span><span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span><span class="p">;</span>
-
-    <span class="k">pub</span> <span class="k">fn</span> <span class="n">memcpy</span><span class="p">(</span>
-        <span class="n">dest</span><span class="o">:</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_void</span><span class="p">,</span>
-        <span class="n">src</span><span class="o">:</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_void</span><span class="p">,</span>
-        <span class="n">n</span><span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">size_t</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_void</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<div class="message blue">
-  <span><i class="fa fa-exclamation-circle"></i></span>
-  <div>Tip: A <b><code>*</code></b> defines a raw pointer. This is equivalent to <code>const T*</code> in C. <code>*mut T</code> is equivalent to <code>T*</code> &mdash; a normal C pointer.</div>
-</div>
-
-<p>We don&#39;t need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.</p>
-
-<p>Next, we&#39;ll also include some flags that interop with these functions.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/raw.rs</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">libc</span><span class="p">;</span>
-
-<span class="k">extern</span> <span class="p">{...}</span>
-
-<span class="k">pub</span> <span class="k">static</span> <span class="n">PROT_NONE</span>   <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">;</span>
-<span class="k">pub</span> <span class="k">static</span> <span class="n">PROT_READ</span>   <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span> <span class="o">=</span> <span class="mh">0x1</span><span class="p">;</span>
-<span class="k">pub</span> <span class="k">static</span> <span class="n">PROT_WRITE</span>  <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span> <span class="o">=</span> <span class="mh">0x2</span><span class="p">;</span>
-<span class="k">pub</span> <span class="k">static</span> <span class="n">PROT_EXEC</span>   <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span> <span class="o">=</span> <span class="mh">0x4</span><span class="p">;</span>
-
-<span class="k">pub</span> <span class="k">static</span> <span class="n">MAP_SHARED</span>  <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span> <span class="o">=</span> <span class="mh">0x1</span><span class="p">;</span>
-<span class="k">pub</span> <span class="k">static</span> <span class="n">MAP_PRIVATE</span> <span class="o">:</span> <span class="n">libc</span><span class="o">::</span><span class="n">c_int</span> <span class="o">=</span> <span class="mh">0x2</span><span class="p">;</span>
-</code></pre></div>
-<hr>
-
-<p>Awesome, we&#39;re now done with the <code>src/raw.rs</code> module. As you can see, it&#39;s dead simple to interop with C code.</p>
-
-<p>Because Rust is trying to provide a way to build <strong>safer</strong> software, we need to take advantage of this. Thus, we want to wrap the main portion of the state in a <em>safe</em> struct.</p>
-
-<p>But, before we get into that, let&#39;s go through how we can execute machine code dynamically.</p>
-
-<h2>Execution</h2>
-
-<p>The first portion we need is to store our instructions somewhere in memory. Ok, so how about malloc? While malloc works on traditional data, we have some very specific requirements &mdash; them being that we need to control the memory&#39;s protection flags, and malloc doesn&#39;t give us that ability.</p>
-
-<p>Mmap is exactly what we need. We need to create a new memory mapped region with some custom protection. Initially, we only need to read and write to the region. But, we&#39;ll need to change the protection to turn off writing <em>then</em> enable executation. By default, you cannot try and execute normal malloced memory. Well, you can try, but the program will blow up because of security reasons. Having a memory region that is <em>both</em> writable <strong>and</strong> executable is dangerously insecure. That&#39;s why we need to do it in steps.</p>
-
-<ul>
-<li>Allocate a new memory region of the size we need.</li>
-<li>Make the region readable <strong>and</strong> writable.</li>
-<li>Commit our instructions to that region.</li>
-<li>Make it read-only and executable.</li>
-</ul>
-
-<hr>
-
-<p>Let&#39;s get to starting <code>src/region.rs</code>. When we create a new memory region with <code>mmap</code>, we&#39;ll receive a pointer; which points to the beginning of the new memory block. This isn&#39;t safe, so we&#39;ll abstract it around safer constructs.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/region.rs</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">os</span><span class="p">;</span>
-<span class="k">use</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">mod</span> <span class="n">raw</span><span class="p">;</span>
-</code></pre></div>
-<p>Let&#39;s include the specific modules we need from the standard library, then define a local module we need to use &mdash; our raw module containing the C interfaces/prototypes.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/region.rs</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">os</span><span class="p">;</span>
-<span class="k">use</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">mod</span> <span class="n">raw</span><span class="p">;</span>
-
-<span class="k">pub</span> <span class="k">struct</span> <span class="n">MappedRegion</span> <span class="p">{</span>
-    <span class="n">addr</span><span class="o">:</span> <span class="o">*</span><span class="k">u8</span><span class="p">,</span>
-    <span class="n">len</span><span class="o">:</span> <span class="k">u64</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>We are defining a new struct that wraps the dirty, raw pointer; and holds the length of the memory region.</p>
-
-<p>The following implementations of Traits are for printing and memory deallocation, respectively.</p>
-
-<div class="highlight"><pre><code class="rust"><span class="c1">// src/region.rs</span>
-<span class="p">...</span>
-
-<span class="k">impl</span> <span class="n">std</span><span class="o">::</span><span class="n">fmt</span><span class="o">::</span><span class="n">Default</span> <span class="k">for</span> <span class="n">MappedRegion</span> <span class="p">{</span>
-    <span class="k">fn</span> <span class="n">fmt</span><span class="p">(</span><span class="n">value</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="n">f</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">std</span><span class="o">::</span><span class="n">fmt</span><span class="o">::</span><span class="n">Formatter</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">buf</span><span class="p">,</span> <span class="s">&quot;MappedRegion</span><span class="se">\\</span><span class="s">{ {}, {}</span><span class="se">\\</span><span class="s">}&quot;</span><span class="p">,</span> 
-          <span class="n">value</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">value</span><span class="p">.</span><span class="n">len</span>
-        <span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<div class="highlight"><pre><code class="rust"><span class="c1">// src.region.rs</span>
-<span class="p">...</span>
-
-<span class="k">impl</span> <span class="n">Drop</span> <span class="k">for</span> <span class="n">MappedRegion</span> <span class="p">{</span>
-    <span class="cp">#[inline(never)]</span>
-    <span class="k">fn</span> <span class="n">drop</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">self</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">unsafe</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="n">raw</span><span class="o">::</span><span class="n">munmap</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">0</span> <span class="p">{</span>
-                <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="n">format</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;munmap({}, {}): {}&quot;</span><span class="p">,</span> 
-                  <span class="n">self</span><span class="p">.</span><span class="n">addr</span><span class="p">,</span>
-                  <span class="n">self</span><span class="p">.</span><span class="n">len</span><span class="p">,</span> 
-                  <span class="n">os</span><span class="o">::</span><span class="n">last_os_error</span><span class="p">()</span>
-                <span class="p">));</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>I&#39;m not going to go into much detail on the <code>Drop</code> trait, but this destructor will be called whenever the <em>owner</em> of the <code>MappedRegion</code> instance has gone out of scope.</p>
-
-<hr>
-
-<p>As with the Rust model of providing <em>safe</em> interfaces, we need to define friendlier functions than the raw C functions.</p>
-
-<p>Let&#39;s create our <code>safe.rs</code> module.</p>
-
-<div class="highlight"><pre><code class="rust"><span class="c1">// src/safe.rs</span>
-<span class="k">use</span> <span class="n">region</span><span class="o">::</span><span class="n">MappedRegion</span><span class="p">;</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">libc</span><span class="o">::</span><span class="p">{</span><span class="n">c_char</span><span class="p">,</span> <span class="n">size_t</span><span class="p">,</span> <span class="n">c_void</span><span class="p">};</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">libc</span><span class="p">;</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">os</span><span class="p">;</span>
-
-<span class="k">mod</span> <span class="n">raw</span><span class="p">;</span>
-<span class="k">mod</span> <span class="n">region</span><span class="p">;</span>
-</code></pre></div>
-
-<p>We&#39;ll start off by including some modules.</p>
-
-<div class="highlight"><pre><code class="rust"><span class="c1">// src/safe.rs</span>
-<span class="p">...</span>
-
-<span class="k">pub</span> <span class="k">fn</span> <span class="n">mmap</span><span class="p">(</span><span class="n">size</span><span class="o">:</span> <span class="k">u64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="o">&lt;~</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="o">~</span><span class="k">str</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="n">buf</span> <span class="o">=</span> <span class="n">raw</span><span class="o">::</span><span class="n">mmap</span><span class="p">(</span>
-            <span class="m">0</span> <span class="k">as</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_char</span><span class="p">,</span>
-            <span class="n">size</span><span class="p">,</span>
-            <span class="n">libc</span><span class="o">::</span><span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">libc</span><span class="o">::</span><span class="n">PROT_WRITE</span><span class="p">,</span>
-            <span class="n">libc</span><span class="o">::</span><span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">libc</span><span class="o">::</span><span class="n">MAP_ANON</span><span class="p">,</span>
-            <span class="o">-</span><span class="m">1</span><span class="p">,</span>
-            <span class="m">0</span>
-        <span class="p">);</span>
-
-        <span class="k">if</span> <span class="n">buf</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="k">as</span> <span class="o">*</span><span class="k">u8</span> <span class="p">{</span>
-          <span class="n">Err</span><span class="p">(</span><span class="n">os</span><span class="o">::</span><span class="n">last_os_error</span><span class="p">())</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="n">Ok</span><span class="p">(</span><span class="o">~</span><span class="n">MappedRegion</span><span class="p">{</span> <span class="n">addr</span><span class="o">:</span> <span class="n">buf</span><span class="p">,</span> <span class="n">len</span><span class="o">:</span> <span class="n">size</span> <span class="p">})</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Now, we defined a <em>safe</em> version of mmap. Thus, we don&#39;t accept unsafe inputs or outputs &mdash; no null points allowed.</p>
-
-<div class="highlight"><pre><code class="rust"><span class="n">Result</span><span class="o">&lt;~</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="o">~</span><span class="k">str</span><span class="o">&gt;</span>
-</code></pre></div>
-
-<p><code>Result</code> is one of Rust&#39;s types that provide safer and more expression code. <code>Result</code> includes two cases: Ok, and Err. This allows us to mattern match accordingly.</p>
-
-<div class="highlight"><pre><code class="rust"><span class="c1">// example</span>
-<span class="k">let</span> <span class="n">region</span> <span class="o">=</span> <span class="k">match</span> <span class="n">mmap</span><span class="p">(</span><span class="m">1024</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">Ok</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="p">,</span>
-  <span class="n">Err</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-<span class="p">};</span>
-</code></pre></div>
-
-<hr>
-
-<p>We also return an owned pointer of <code>MappedRegion</code> if the function succeeded. We could&#39;ve returned the instance by value, but we&#39;ll need to pass this around to multiple functions, so we want to reduce copying.</p>
-
-<hr>
-
-<div class="highlight"><pre><code class="rust"><span class="n">libc</span><span class="o">::</span><span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">libc</span><span class="o">::</span><span class="n">PROT_WRITE</span>
-</code></pre></div>
-
-<p>These flags are important. They define what protection/permissions the memory region has. We can now read and write to the memory region.</p>
-
-<p>Remember that the contents of this safe function is wrapped within an <code>unsafe</code> block. This is needed to interop with naked, unsafe code.</p>
-
-<div class="message blue"><span><i class="fa fa-exclamation-circle"></i></span><div>Remember, it's much easier to understand and prove the correctness of one-thousand lines of completely unsafe code &mdash; which can be reasoned about &mdash; rather than hundreds of thousands of possibly unsafe, or even completely unsafe lines of code &mdash; that cannot be reasoned about.</div></div>
-
-<hr>
-
-<p>We can now create a new memory mapped region using safe interfaces. But, the memory doesn&#39;t have anything written to it yet. We&#39;ll use the <code>memcpy</code> function to copy the machine instructions to the memory region. Let&#39;s write a safe interface around the native function.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/safe.rs</span>
-<span class="p">...</span>
-
-<span class="k">pub</span> <span class="k">fn</span> <span class="n">memcpy</span><span class="p">(</span><span class="n">region</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="n">contents</span><span class="o">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="k">u8</span><span class="p">])</span> <span class="p">{</span>
-    <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="n">raw</span><span class="o">::</span><span class="n">memcpy</span><span class="p">(</span>
-            <span class="n">region</span><span class="p">.</span><span class="n">addr</span> <span class="k">as</span> <span class="o">*</span> <span class="n">c_void</span><span class="p">,</span>
-            <span class="n">contents</span><span class="p">.</span><span class="n">as_ptr</span><span class="p">()</span> <span class="k">as</span> <span class="o">*</span><span class="n">c_void</span><span class="p">,</span>
-            <span class="n">region</span><span class="p">.</span><span class="n">len</span> <span class="k">as</span> <span class="n">size_t</span><span class="p">);</span>
-        <span class="n">assert_eq</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">contents</span><span class="p">.</span><span class="n">as_ptr</span><span class="p">()),</span> <span class="o">*</span><span class="n">region</span><span class="p">.</span><span class="n">addr</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<hr>
-
-<p>We&#39;ll take a reference, or borrow a pointer to a <code>MappedRegion</code>.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="n">region</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">MappedRegion</span>
-</code></pre></div>
-<p>Pass a reference, or a borrowed pointer to a vector of <code>u8</code>s.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="n">contents</span><span class="o">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="k">u8</span><span class="p">]</span>
-</code></pre></div>
-<p>Again, we operate within an <code>unsafe</code> block. <code>memcpy</code> is practically like in C.</p>
-
-<hr>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/safe.rs</span>
-<span class="p">...</span>
-
-<span class="k">pub</span> <span class="k">fn</span> <span class="n">mprotect</span><span class="p">(</span><span class="n">region</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="n">contents</span><span class="o">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="k">u8</span><span class="p">])</span> <span class="p">{</span>
-    <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="n">raw</span><span class="o">::</span><span class="n">mprotect</span><span class="p">(</span>
-            <span class="n">region</span><span class="p">.</span><span class="n">addr</span> <span class="k">as</span> <span class="o">*</span><span class="n">libc</span><span class="o">::</span><span class="n">c_void</span><span class="p">,</span>
-            <span class="n">contents</span><span class="p">.</span><span class="n">len</span><span class="p">()</span> <span class="k">as</span> <span class="n">libc</span><span class="o">::</span><span class="n">size_t</span><span class="p">,</span>
-            <span class="n">libc</span><span class="o">::</span><span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">libc</span><span class="o">::</span><span class="n">PROT_EXEC</span>
-        <span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="m">1</span> <span class="p">{</span>
-            <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;err: mprotect failed to protect </span>
-<span class="s">              the memory region.&quot;</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>The last function we need to define, takes the same arguments as <code>memcpy</code>. This is how we transform the memory region to be read-only and executable, after we write to it.</p>
-
-<hr>
-
-<p>Now we have <code>src/safe.rs</code>, <code>src/raw.rs</code>, and <code>src/region.rs</code> completed. We can now put these pieces together to make a functional JIT compiler.</p>
-
-<p>Let&#39;s move onto our <code>src/main.rs</code> file.</p>
-
-<p>We&#39;ll start by defining our crate:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="cp">#[crate_id = </span><span class="s">&quot;jiter#0.0.1&quot;</span><span class="cp">];</span>
-<span class="cp">#[desc = </span><span class="s">&quot;Jiter&quot;</span><span class="cp">];</span>
-<span class="cp">#[crate_type = </span><span class="s">&quot;bin&quot;</span><span class="cp">];</span>
-<span class="cp">#[license = </span><span class="s">&quot;MIT&quot;</span><span class="cp">];</span>
-</code></pre></div>
-<p>Include some modules we&#39;ll need:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">cast</span><span class="p">;</span>
-<span class="k">use</span> <span class="n">region</span><span class="o">::</span><span class="n">MappedRegion</span><span class="p">;</span>
-</code></pre></div>
-<p>Include some local modules:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="k">mod</span> <span class="n">raw</span><span class="p">;</span>
-<span class="k">mod</span> <span class="n">region</span><span class="p">;</span>
-<span class="k">mod</span> <span class="n">safe</span><span class="p">;</span>
-</code></pre></div>
-<p>Before we go any further, let&#39;s go through the machine code we&#39;ll be generating. We&#39;re defining a function, because all JIT code needs to be wrapped in some sort of function, which can be called; that takes a single integer as it&#39;s only input, adds four to that integer, then returns that value. We&#39;ll be using the standard cdecl calling convention.</p>
-<div class="highlight"><pre><code class="asm language-asm" data-lang="asm"><span class="nf">mov</span> <span class="nv">%rdi</span><span class="p">,</span> <span class="nv">%rax</span>
-<span class="nf">add</span> <span class="no">$4</span><span class="p">,</span> <span class="nv">%rax</span>
-<span class="nf">ret</span>
-</code></pre></div>
-<p>Which is compiled/encoded to:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">0x48 0x89 0xf8       // mov %rdi, %rax
-0x48 0x83 0xc0 0x04  // add $4, %rax
-0xc3                 // ret
-</code></pre></div>
-<p>We can express the code using a vector within Rust.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">let</span> <span class="n">code</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="mh">0x48</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">,</span> <span class="mh">0xf8</span><span class="p">,</span>       <span class="c1">// mov %rdi, %rax</span>
-  <span class="mh">0x48</span><span class="p">,</span> <span class="mh">0x83</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="c1">// add $4, %rax</span>
-  <span class="mh">0xc3</span>                    <span class="c1">// ret</span>
-<span class="p">];</span>
-</code></pre></div>
-<hr>
-
-<p>Let&#39;s define our <code>main</code> function.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">let</span> <span class="n">code</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="mh">0x48</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">,</span> <span class="mh">0xf8</span><span class="p">,</span>       <span class="c1">// mov %rdi, %rax</span>
-    <span class="mh">0x48</span><span class="p">,</span> <span class="mh">0x83</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="c1">// add $4, %rax</span>
-    <span class="mh">0xc3</span>                    <span class="c1">// ret</span>
-  <span class="p">];</span>
-
-  <span class="k">let</span> <span class="n">region</span> <span class="o">=</span> <span class="k">match</span> <span class="n">safe</span><span class="o">::</span><span class="n">mmap</span><span class="p">(</span><span class="n">code</span><span class="p">.</span><span class="n">len</span><span class="p">()</span> <span class="k">as</span> <span class="k">u64</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">Ok</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="p">,</span>
-      <span class="n">Err</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-  <span class="p">};</span>
-
-  <span class="k">type</span> <span class="n">AddFourFn</span> <span class="o">=</span> <span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="k">fn</span><span class="p">(</span><span class="k">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">int</span><span class="p">;</span>
-  <span class="k">let</span> <span class="n">Add</span> <span class="o">=</span> <span class="n">jit_func</span><span class="o">::&lt;</span><span class="n">AddFourFn</span><span class="o">&gt;</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
-  <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;Add(4): {}&quot;</span><span class="p">,</span> <span class="n">Add</span><span class="p">(</span><span class="m">4</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>Again, this was a previous example on using the safe mmap function. We&#39;ll assign the new <code>MappedRegion</code> to <code>region</code>.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="k">let</span> <span class="n">region</span> <span class="o">=</span> <span class="k">match</span> <span class="n">safe</span><span class="o">::</span><span class="n">mmap</span><span class="p">(</span><span class="n">contents</span><span class="p">.</span><span class="n">len</span><span class="p">()</span> <span class="k">as</span> <span class="k">u64</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">Ok</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="p">,</span>
-    <span class="n">Err</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-<span class="p">};</span>
-<span class="p">...</span>
-</code></pre></div>
-<p>Rust is extremely good at interoperating with other runtimes, such as C. We&#39;ll define a basic function pointer that takes an <code>int</code> and returns an <code>int</code>. We&#39;re also defining this as a type, to make it easier to use.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="k">type</span> <span class="n">AddFourFn</span> <span class="o">=</span> <span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="k">fn</span><span class="p">(</span><span class="k">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">int</span><span class="p">;</span>
-<span class="p">...</span>
-</code></pre></div>
-<p>This is the magic bit. We haven&#39;t defined this function yet; we&#39;ll get to that next.</p>
-
-<p>We&#39;ll pass our function pointer as a generic argument, along with the <code>code</code> (our encoded x86 instructions), and <code>region</code> which hold our mmapped memory block.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="k">let</span> <span class="n">Add</span> <span class="o">=</span> <span class="n">jit_func</span><span class="o">::&lt;</span><span class="n">AddFourFn</span><span class="o">&gt;</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
-<span class="p">...</span>
-</code></pre></div>
-<p>Call the awesome function:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;Add(4): {}&quot;</span><span class="p">,</span> <span class="n">Add</span><span class="p">(</span><span class="m">4</span><span class="p">));</span> <span class="c1">// Add(4): 8</span>
-<span class="p">...</span>
-</code></pre></div>
-<hr>
-
-<p>Let&#39;s define the <code>jit_func</code> function. This should be placed right before the <code>main</code> function.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// src/main.rs</span>
-<span class="p">...</span>
-<span class="k">fn</span> <span class="n">jit_func</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">region</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">MappedRegion</span><span class="p">,</span> <span class="n">contents</span><span class="o">:</span> <span class="o">&amp;</span><span class="p">[</span><span class="k">u8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span> <span class="p">{</span>
-    <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="n">safe</span><span class="o">::</span><span class="n">memcpy</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">contents</span><span class="p">);</span>
-        <span class="n">safe</span><span class="o">::</span><span class="n">mprotect</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">contents</span><span class="p">);</span>
-        <span class="n">assert_eq</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">contents</span><span class="p">.</span><span class="n">as_ptr</span><span class="p">()),</span> <span class="o">*</span><span class="n">region</span><span class="p">.</span><span class="n">addr</span><span class="p">);</span>
-        <span class="n">cast</span><span class="o">::</span><span class="n">transmute</span><span class="p">(</span><span class="n">region</span><span class="p">.</span><span class="n">addr</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{...}</span>
-</code></pre></div>
-<p>So, the basic steps are:</p>
-
-<ul>
-<li><code>safe::memcpy</code>: Copy the instructions into the memory block.</li>
-<li><code>safe::mprotect</code> Make the memory read-only, but executable.</li>
-<li><code>assert_eq!(*(contents.as_ptr()), *region.addr);</code>: Ensure that the contents of the memory block is <em>exactly</em> the same as our vector.</li>
-<li><code>cast::transmute(region.addr)</code>: We need to transform a raw pointer, which points to the beginning of the JIT function, to a C-style function pointer.</li>
-</ul>
-
-<p>The <code>cast::transmute(region.addr)</code> will be casted against the specific JIT function type (which is a generic argument <code>T</code>). In this example, it&#39;s a function <code>extern &quot;C&quot; fn(int) -&gt; int</code>.</p>
-
-<hr>
-
-<p>Also, the reason we didn&#39;t put the <code>safe::mmap</code> call within the <code>jit_func</code> function is because we&#39;d run into a segfault error while trying to execute our JITed function. That&#39;s because as soon as <code>jit_func</code> returns, our mmapped memory will be deallocated because the <code>MappedRegion</code> unique pointer will have gone out of scope.</p>
-
-<p>A better way would be to split the functionality into many steps.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">type</span> <span class="n">AddFourFn</span> <span class="o">=</span> <span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="k">fn</span><span class="p">(</span><span class="k">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">int</span><span class="p">;</span>
-<span class="k">let</span> <span class="n">add</span> <span class="o">=</span> <span class="n">jit</span><span class="o">::</span><span class="n">func</span><span class="o">::&lt;</span><span class="n">AddFourFn</span><span class="o">&gt;</span><span class="p">();</span>
-<span class="n">add</span><span class="p">.</span><span class="n">emit_mov</span><span class="p">(</span><span class="s">&quot;%rdi&quot;</span><span class="p">,</span> <span class="s">&quot;%rax&quot;</span><span class="p">);</span>
-<span class="n">add</span><span class="p">.</span><span class="n">emit_add</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="s">&quot;%rax&quot;</span><span class="p">);</span>
-<span class="n">add</span><span class="p">.</span><span class="n">emit_ret</span><span class="p">();</span>
-<span class="k">let</span> <span class="n">addFn</span> <span class="o">=</span> <span class="n">add</span><span class="p">.</span><span class="n">getFunction</span><span class="p">();</span>
-<span class="n">addFn</span><span class="p">(</span><span class="m">4</span><span class="p">);</span>
-</code></pre></div>
-<p>This would include having instruction encoding for various architectures and such.</p>
-
-<p>Or, you could just use LLVM or LibJit. But, it&#39;s a good educational experience to learning, understanding, and implementing a JIT compiler.</p>
-
-<p>You can view the <a href="https://github.com/TheHydroImpulse/jiter">full source code on Github.</a></p>
-
-<hr>
-
-<p><a href="http://twitter.com/TheHydroImpulse">Follow me on Twitter</a></p>
-
-<p><a href="http://github.com/TheHydroImpulse">Github</a></p>
-
-  </div>
+  </article>
   
 </div>
 

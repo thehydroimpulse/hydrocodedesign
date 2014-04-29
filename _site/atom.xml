@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-04-13T08:09:25-06:00</updated>
+ <updated>2014-04-29T01:47:24-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -227,9 +227,7 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
 
 &lt;p&gt;All of these come from abstract algebra and category theory, which is a pretty insane field.&lt;/p&gt;
 
-&lt;hr&gt;
-
-&lt;h3&gt;How Does This Relate To Rust?&lt;/h3&gt;
+&lt;h2&gt;How Does This Relate To Rust?&lt;/h2&gt;
 
 &lt;p&gt;We&amp;#39;ll, Rust currently doesn&amp;#39;t support higher-kinded polymorphism. But, I&amp;#39;m in the process of writing up an RFC for it and experimenting with various implementations.&lt;/p&gt;
 
@@ -355,7 +353,7 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
    <link href="http://hydrocodedesign.com/2014/01/17/jit-just-in-time-compiler-rust/"/>
    <updated>2014-01-17T00:00:00-07:00</updated>
    <id>http://hydrocodedesign.com/2014/01/17/jit-just-in-time-compiler-rust</id>
-   <content type="html">&lt;p&gt;Today, we&amp;#39;re going to build a simple, very simple, JIT compiler in &lt;a href=&quot;www.rust-lang.org&quot;&gt;Rust&lt;/a&gt;. Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language. &lt;/p&gt;
+   <content type="html">&lt;p&gt;Today, we&amp;#39;re going to build a simple, very simple, JIT compiler in &lt;a href=&quot;http://rust-lang.org&quot;&gt;Rust&lt;/a&gt;. Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language.&lt;/p&gt;
 
 &lt;p&gt;Now, this is only the actual just-in-time compiler that we&amp;#39;ll be implementing, not a language compiler, nor the encoding of machine instructions; the latter requires a lot of knowledge about the CPU instruction specification, such as x86.&lt;/p&gt;
 
@@ -374,11 +372,6 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
 &lt;p&gt;Before we get started, you&amp;#39;ll need to get yourself a copy of the &lt;a href=&quot;https://github.com/mozilla/rust&quot;&gt;Rust compiler&lt;/a&gt;. The current version, as of this writing &amp;mdash; is 0.9. I&amp;#39;ll be updating this article to be applicable to future versions. But, if I don&amp;#39;t get to it in time, let me know.&lt;/p&gt;
 
 &lt;p&gt;Be aware that the Rust compiler takes a fairly long time to compile, mainly because it&amp;#39;s a &lt;a href=&quot;https://en.wikipedia.org/wiki/Bootstrapping_(compilers&quot;&gt;bootstrapped compiler&lt;/a&gt;. Thus, the compiler itself is written in Rust. Yeah, that might be confusing, but it makes the development of a language much more streamlined at the cost of more complexity. Currently, as far as I&amp;#39;m aware, the Rust compiler must &lt;a href=&quot;https://github.com/mozilla/rust/blob/master/Makefile.in#L13&quot;&gt;compile itself 3 times&lt;/a&gt;. It also has to compile it&amp;#39;s dependencies, such as &lt;a href=&quot;http://llvm.org/&quot;&gt;LLVM&lt;/a&gt;, &lt;a href=&quot;https://github.com/joyent/libuv&quot;&gt;libuv&lt;/a&gt;, only once.&lt;/p&gt;
-
-&lt;div class=&quot;message blue&quot;&gt;
-  &lt;span&gt;&lt;i class=&quot;fa fa-exclamation-circle&quot;&gt;&lt;/i&gt;&lt;/span&gt;
-  &lt;div&gt;Also, make sure you have enough RAM (about 1.5GB) leftover, or dedicated for the compilation process of the Rust compiler. If you start paging/swapping, it&#39;ll compile &lt;b&gt;much&lt;/b&gt; slower.&lt;/div&gt;
-&lt;/div&gt;
 
 &lt;h2&gt;Safety &amp;amp; Interop&lt;/h2&gt;
 
@@ -457,11 +450,6 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
     &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c_void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&quot;message blue&quot;&gt;
-  &lt;span&gt;&lt;i class=&quot;fa fa-exclamation-circle&quot;&gt;&lt;/i&gt;&lt;/span&gt;
-  &lt;div&gt;Tip: A &lt;b&gt;&lt;code&gt;*&lt;/code&gt;&lt;/b&gt; defines a raw pointer. This is equivalent to &lt;code&gt;const T*&lt;/code&gt; in C. &lt;code&gt;*mut T&lt;/code&gt; is equivalent to &lt;code&gt;T*&lt;/code&gt; &amp;mdash; a normal C pointer.&lt;/div&gt;
-&lt;/div&gt;
-
 &lt;p&gt;We don&amp;#39;t need to define the actual contents of these functions, because they will be included in the compiled binary by linking with libc.&lt;/p&gt;
 
 &lt;p&gt;Next, we&amp;#39;ll also include some flags that interop with these functions.&lt;/p&gt;
@@ -529,7 +517,7 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
 
 &lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Default&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MappedRegion&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MappedRegion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Formatter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;MappedRegion&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;{ {}, {}&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;}&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+        &lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;MappedRegion&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;{ {}, {}&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;}&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
           &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;addr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -544,9 +532,9 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
     &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;drop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;unsafe&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;raw&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;munmap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;addr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;fail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;munmap({}, {}): {}&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;k&quot;&gt;fail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;munmap({}, {}): {}&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                   &lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;addr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                  &lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                  &lt;span class=&quot;n&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                   &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;last_os_error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
                 &lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
             &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -664,7 +652,7 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
             &lt;span class=&quot;n&quot;&gt;contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size_t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PROT_READ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PROT_EXEC&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;fail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;err: mprotect failed to protect &lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;fail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;err: mprotect failed to protect&lt;/span&gt;
 &lt;span class=&quot;s&quot;&gt;              the memory region.&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;

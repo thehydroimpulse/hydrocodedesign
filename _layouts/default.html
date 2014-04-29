@@ -1,25 +1,47 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<html lang="en">
 
   {% include head.html %}
 
-  <body class="">
-
-    {% include sidebar.html %}
+  <body>
 
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
-    <div class="wrap">
-      <div class="masthead">
-        <div class="container">
-          <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+    <div class="wrapper">
+      <header>
+          <!--<label for="sidebar-checkbox" class="sidebar-toggle"></label>-->
 
-          <h3 class="masthead-title">
-            <a href="/" title="Home">{{ site.title }}</a>
-            <small>{{ site.tagline }}</small>
-          </h3>
-        </div>
-      </div>
+        <nav class="nav">
+          <ul>
+            <li>
+              <a id="nav-home" href="/" title="Home">{{ site.title }}</a>
+            </li>
+          </ul>
+        </nav>
+
+        <ul class="icons">
+          <li>
+            <a href="https://twitter.com/TheHydroImpulse" title="Twitter">
+              <span class='symbol'>circletwitterbird</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/TheHydroImpulse" title="Github">
+              <span class='symbol'>circlegithubalt</span>
+            </a>
+          </li>
+          <li>
+            <a href="http://www.linkedin.com/pub/daniel-fagnan/17/807/335" title="Linkedin">
+              <span class='symbol'>circlelinkedin</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:dnfagnan@gmail.com" title="Email">
+              <span class='symbol'>circleemail</span>
+            </a>
+          </li>
+        </ul>
+      </header>
 
       <div class="container content">
         {{ content }}
