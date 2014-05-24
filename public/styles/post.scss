@@ -120,10 +120,12 @@ article a {
   padding-bottom: 4px;
   border-width: 3px;
   transition: background 0.3s ease-out;
-  padding: 4px;
+  padding: 2px;
 }
 
 article a:hover {
-  background: #7f6ed5;
-  color: #fff !important;
+  border-style: dashed;
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }

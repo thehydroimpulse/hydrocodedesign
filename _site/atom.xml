@@ -4,13 +4,157 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-04-29T01:47:24-06:00</updated>
+ <updated>2014-05-24T14:33:25-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Practicality With Rust: Setting Up A Project</title>
+   <link href="http://hydrocodedesign.com/2014/04/24/practicality-with-rust/"/>
+   <updated>2014-04-24T00:00:00-06:00</updated>
+   <id>http://hydrocodedesign.com/2014/04/24/practicality-with-rust</id>
+   <content type="html">&lt;p&gt;This is going to be the first of many articles on the subject. The goal is to provide resources on how to use Rust effectively.&lt;/p&gt;
+
+&lt;p&gt;Note: I&amp;#39;m going to be using Rust through the master branch, and I&amp;#39;ll be updating this series if things change.&lt;/p&gt;
+
+&lt;h2&gt;Let&amp;#39;s Get Started!&lt;/h2&gt;
+
+&lt;p&gt;Setting a new Rust project from scratch is somewhat cumbersome, currently. This will change in the future, with tools like Cargo (The future Rust package manager). For now, we&amp;#39;ll be sticking to regular Makefiles.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s create a new project directory:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;mkdir project-name
+cd project-name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We&amp;#39;ll generate a few folders and empty files:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;git init
+mkdir src
+touch Readme.md
+touch Makefile
+touch src/bin.rs
+touch src/lib.rs
+touch .gitignore
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now, depending on the project (is it a library? An executable? Both?), you might not need &lt;code&gt;src/bin.rs&lt;/code&gt; or &lt;code&gt;src/lib.rs&lt;/code&gt;, or you might need both. &lt;code&gt;src/lib.rs&lt;/code&gt; is the convention for a library, and &lt;code&gt;src/bin.rs&lt;/code&gt; is the convention for an executable.&lt;/p&gt;
+
+&lt;p&gt;Before we go any further, you&amp;#39;ll want to edit the &lt;code&gt;.gitignore&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.rlib
+target
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Most of these were automatically added by Github for C++. Some that are most important are &lt;code&gt;*.rlib&lt;/code&gt;, &lt;code&gt;*.dylib&lt;/code&gt; and &lt;code&gt;target&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;target&lt;/code&gt; is where we&amp;#39;ll dump what we compile, which we&amp;#39;ll write in our Makefile.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s work on the Makefile.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;makefile language-makefile&quot; data-lang=&quot;makefile&quot;&gt;&lt;span class=&quot;nv&quot;&gt;RUSTC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?=&lt;/span&gt; rustc
+&lt;span class=&quot;nv&quot;&gt;RUSTC_FLAGS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?=&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;SRC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;shell find src -name &lt;span class=&quot;s1&quot;&gt;&amp;#39;*.rs&amp;#39;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nf&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;libprojectname&lt;/span&gt;
+
+&lt;span class=&quot;nf&quot;&gt;libprojectname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;$(SRC)&lt;/span&gt;
+    mkdir -p target
+    &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;RUSTC&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; --out-dir target src/lib.rs
+
+&lt;span class=&quot;nf&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;$(SRC)&lt;/span&gt;
+    mkdir -p target
+    &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;RUSTC&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; --test --out-dir target src/lib.rs
+    ./target/projectname
+
+&lt;span class=&quot;nf&quot;&gt;clean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+    @rm -rf target
+
+
+&lt;span class=&quot;nf&quot;&gt;.PHONY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;clean&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is all you need for a library. You can copy the &lt;code&gt;libprojectname&lt;/code&gt; target for an executable. The only difference is you&amp;#39;ll want to point to &lt;code&gt;src/bin.rs&lt;/code&gt; instead of &lt;code&gt;src/lib.rs&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;We can now compile our library with &lt;code&gt;make&lt;/code&gt; or &lt;code&gt;make libprojectname&lt;/code&gt; and compile and run all the tests through &lt;code&gt;make test&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are more &lt;a href=&quot;https://github.com/bvssvni/rust-empty&quot;&gt;exotic Rust makefiles&lt;/a&gt; out there, but I wouldn&amp;#39;t use most of the features they offer, and writing one is pretty straightforward.&lt;/p&gt;
+
+&lt;h2&gt;Library&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;#39;s start writing our library. We&amp;#39;ll open up &lt;code&gt;src/lib.rs&lt;/code&gt; to get going.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// src/lib.rs&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crate_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;projectname&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crate_type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;lib&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We just wrote two annotations to add some metadata to the library.&lt;/p&gt;
+
+&lt;p&gt;Now, it&amp;#39;s your turn. The next task is to actually write the library you&amp;#39;re dreaming of.&lt;/p&gt;
+
+&lt;h2&gt;Testing&lt;/h2&gt;
+
+&lt;p&gt;Testing is pretty important. However, because Rust makes a lot more guarantees than other languages, you don&amp;#39;t have to test simple stuff (like arguments, types, &amp;quot;constructors&amp;quot;, etc...). &lt;/p&gt;
+
+&lt;p&gt;The main focus should be on computation and operations. Does this function have a side-effect? Does it do more than one thing? Have more than one result? Those should be signs that they need to be tested. Of course, if you have any unsafe code, it definitely &lt;strong&gt;should&lt;/strong&gt; be tested and vetted.&lt;/p&gt;
+
+&lt;p&gt;Testing in Rust is built-in, so let&amp;#39;s take advantage of that. We can place our tests along side the code we&amp;#39;re testing. Typically, you&amp;#39;ll want all the tests at the bottom of each file and wrapped within it&amp;#39;s own module:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// src/lib.rs&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// ... Whatever you wrote in the library would be here.&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;#[cfg(test)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;cp&quot;&gt;#[test]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;should_pass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;assert_eq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you want to include data structures, functions that you wrote, you&amp;#39;ll need to use the &lt;code&gt;use x;&lt;/code&gt; statement.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// src/lib.rs&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// ... Whatever you wrote in the library would be here.&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;int&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;#[cfg(test)]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;cp&quot;&gt;#[test]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;should_pass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;assert_eq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;Foo&lt;/code&gt; will now be available to your tests.&lt;/p&gt;
+
+&lt;h2&gt;Wrapping Up&lt;/h2&gt;
+
+&lt;p&gt;I think I&amp;#39;ll stop there. While Rust is still lacking rigorous documentation and tooling, you can still get the job done. I&amp;#39;ll also mention that dealing with dependencies is a massive pain, and you&amp;#39;ll be resorting to something like &lt;a href=&quot;https://github.com/cmr/cargo-lite&quot;&gt;cargo-lite&lt;/a&gt; or following what people do in the C and C++ world (git submodules and such).&lt;/p&gt;
+
+&lt;p&gt;Want something covered next? Let me know either through my links at the top or the comment section!&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Drop The Chaos and Use Component(1)</title>
