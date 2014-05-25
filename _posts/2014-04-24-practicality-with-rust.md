@@ -8,6 +8,13 @@ This is going to be the first of many articles on the subject. The goal is to pr
 
 Note: I'm going to be using Rust through the master branch, and I'll be updating this series if things change.
 
+My Rust version:
+
+```bash
+$ rustc -v
+rustc 0.11.0-pre (773eb8c 2014-05-17 13:08:43 -0600)
+host: x86_64-apple-darwin
+```
 
 ## Let's Get Started!
 

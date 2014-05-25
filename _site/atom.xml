@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-05-24T14:33:25-06:00</updated>
+ <updated>2014-05-24T21:44:52-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -21,6 +21,11 @@
 
 &lt;p&gt;Note: I&amp;#39;m going to be using Rust through the master branch, and I&amp;#39;ll be updating this series if things change.&lt;/p&gt;
 
+&lt;p&gt;My Rust version:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rustc -v
+rustc 0.11.0-pre &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;773eb8c 2014-05-17 13:08:43 -0600&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+host: x86_64-apple-darwin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2&gt;Let&amp;#39;s Get Started!&lt;/h2&gt;
 
 &lt;p&gt;Setting a new Rust project from scratch is somewhat cumbersome, currently. This will change in the future, with tools like Cargo (The future Rust package manager). For now, we&amp;#39;ll be sticking to regular Makefiles.&lt;/p&gt;
