@@ -105,6 +105,11 @@ pre code {
 .vi { color: #003333 } /* Name.Variable.Instance */
 .il { color: #FF6600 } /* Literal.Number.Integer.Long */
 
+.err {
+  color: #333;
+  background: none;
+}
+
 .css .o,
 .css .o + .nt,
 .css .nt + .nt { color: #999; }
