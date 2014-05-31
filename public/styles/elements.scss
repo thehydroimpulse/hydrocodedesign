@@ -58,3 +58,56 @@ a {
     cursor: auto;
   }
 }
+
+.mailinglist {
+  margin-top: 30px;
+  position: relative;
+  left: -30px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+#mc_embed_signup {
+  background:#fff;
+  clear:left;
+  width: 70%;
+  margin: 0 auto;
+
+  label {
+    font-weight: normal;
+    font-family: 'brandon-grotesque', 'open-sans', Arial, sans-serif;
+    font-size: 20px;
+    margin-right: 10px;
+    text-align: center;
+    display: block;
+  }
+
+  input.email {
+    font-size: 20px;
+    font-family: 'brandon-grotesque', 'open-sans', Arial, sans-serif;
+    padding: 10px 10px;
+    border: 4px solid #e3e3e3;
+    color: #333;
+    width: 400px;
+    margin: 10px auto;
+    display: block;
+
+    &:focus {
+      outline: none;
+      border-color: #555;
+    }
+  }
+
+  input[type="submit"] {
+    display: block;
+    width: 200px;
+    position: relative;
+    left: 70px;
+    outline: none;
+    background: none;
+    font-size: 18px;
+    padding: 10px 40px;
+    cursor: pointer;
+    border: 2px solid #eee;
+  }
+}
