@@ -47,7 +47,7 @@
 
 
   <body>
-
+    <div class="topbar"></div>
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
     <div class="wrapper">
@@ -91,7 +91,21 @@
   <h1 class="post-title">Practicality With Rust: Setting Up A Project</h1>
   <span class="post-date">24 Apr 2014</span>
   <div class="post-content">
-    <p>This is going to be the first of many articles on the subject. The goal is to provide resources on how to use Rust effectively.</p>
+    <div>
+    The Series:
+    <ul>
+        <li>
+            Setting Up A Project
+        </li>
+        <li>
+            <a href="../../../../2014/04/28/practicality-with-rust-error-handling/">Error Handling</a>
+        </li>
+    </ul>
+</div>
+
+<hr>
+
+<p>This is going to be the first of many articles on the subject. The goal is to provide resources on how to use Rust effectively.</p>
 
 <p>Note: I&#39;m going to be using Rust through the master branch, and I&#39;ll be updating this series if things change.</p>
 
@@ -190,7 +204,7 @@ target
 
 <h2>Testing</h2>
 
-<p>Testing is pretty important. However, because Rust makes a lot more guarantees than other languages, you don&#39;t have to test simple stuff (like arguments, types, &quot;constructors&quot;, etc...). </p>
+<p>Testing is pretty important. However, because Rust makes a lot more guarantees than other languages, you don&#39;t have to test simple stuff (like arguments, types, &quot;constructors&quot;, etc...).</p>
 
 <p>The main focus should be on computation and operations. Does this function have a side-effect? Does it do more than one thing? Have more than one result? Those should be signs that they need to be tested. Of course, if you have any unsafe code, it definitely <strong>should</strong> be tested and vetted.</p>
 
@@ -242,6 +256,15 @@ target
     
       <li>
         <h3>
+          <a href="/2014/04/28/practicality-with-rust-error-handling/">
+            Practicality With Rust: Error Handling
+            <small>28 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2014/04/13/drop-everything-and-use-component/">
             Drop The Chaos and Use Component(1)
             <small>13 Apr 2014</small>
@@ -254,15 +277,6 @@ target
           <a href="/2014/04/02/higher-kinded-types/">
             Higher-Kinded Polymorphism
             <small>02 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/01/31/llvm-with-rust/">
-            Using LLVM From Within Rust
-            <small>31 Jan 2014</small>
           </a>
         </h3>
       </li>

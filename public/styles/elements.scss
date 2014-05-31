@@ -16,6 +16,16 @@ body {
   max-width: 1200px;
 }
 
+.topbar {
+  z-index: 99;
+  position: fixed;
+  width: 100%;
+  background: #e15e5e;
+  height: 5px;
+  top: 0px;
+  left: 0px;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: "brandon-grotesque", Georgia, serif;
   font-weight: normal;
@@ -24,7 +34,7 @@ h1, h2, h3, h4, h5, h6 {
 
 hr {
   border: 2px solid #eee;
-  margin: 10px 0;
+  margin: 40px 0;
 }
 
 ol, ul {
@@ -39,6 +49,7 @@ a {
   cursor: pointer;
   text-decoration: none;
 
+
   &:active, &:hover {
     color: #DF0000;
   }
@@ -46,9 +57,4 @@ a {
   &:-webkit-any-link {
     cursor: auto;
   }
-}
-
-.container {
-  max-width: 640px;
-  margin: 0 auto;
 }

@@ -4,6 +4,20 @@ published: true
 title: "Practicality With Rust: Setting Up A Project"
 ---
 
+<div>
+    The Series:
+    <ul>
+        <li>
+            Setting Up A Project
+        </li>
+        <li>
+            <a href="../../../../2014/04/28/practicality-with-rust-error-handling/">Error Handling</a>
+        </li>
+    </ul>
+</div>
+
+---
+
 This is going to be the first of many articles on the subject. The goal is to provide resources on how to use Rust effectively.
 
 Note: I'm going to be using Rust through the master branch, and I'll be updating this series if things change.
@@ -122,7 +136,7 @@ Now, it's your turn. The next task is to actually write the library you're dream
 
 ## Testing
 
-Testing is pretty important. However, because Rust makes a lot more guarantees than other languages, you don't have to test simple stuff (like arguments, types, "constructors", etc...). 
+Testing is pretty important. However, because Rust makes a lot more guarantees than other languages, you don't have to test simple stuff (like arguments, types, "constructors", etc...).
 
 The main focus should be on computation and operations. Does this function have a side-effect? Does it do more than one thing? Have more than one result? Those should be signs that they need to be tested. Of course, if you have any unsafe code, it definitely **should** be tested and vetted.
 
