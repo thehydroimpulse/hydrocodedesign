@@ -126,44 +126,15 @@
 <p><a href="http://static.rust-lang.org/doc/master/core/result/type.Result.html">Result</a> is just an <a href="https://en.wikipedia.org/wiki/Algebraic_data_type">algebraic data type</a> (Rust enum) that has two options: <code>Ok(T)</code> and <code>Err(E)</code>. Those are the two variants that <code>Result</code> provides.</p>
 
 <p>Let&#39;s define a function that could produce an error:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">/// Take an input, and make sure that &#39;{&#39; is at the</span>
-<span class="c1">/// beginning (0th position) and &#39;}&#39; is at the end.</span>
-<span class="k">fn</span> <span class="n">parse</span><span class="p">(</span><span class="n">input</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="n">String</span><span class="o">&gt;</span> <span class="p">{</span>
-
-    <span class="c1">// Create a new iterator of chars.</span>
-    <span class="k">let</span> <span class="k">mut</span> <span class="n">chars</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">chars</span><span class="p">();</span>
-    <span class="k">let</span> <span class="k">mut</span> <span class="n">done</span>  <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="n">input</span><span class="p">.</span><span class="n">len</span><span class="p">()</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s">&quot;Invalid Syntax: Empty string was</span>
-<span class="s">                passed.&quot;</span><span class="p">.</span><span class="n">to_string</span><span class="p">());</span>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">do_something</span><span class="p">(</span><span class="n">input</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="p">(),</span> <span class="n">String</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">input</span> <span class="o">!=</span> <span class="s">&quot;foobar&quot;</span> <span class="p">{</span>
+        <span class="n">Err</span><span class="p">(</span><span class="s">&quot;input doesn&#39;t match &#39;foobar&#39;.&quot;</span><span class="p">.</span><span class="n">to_string</span><span class="p">())</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">Ok</span><span class="p">(())</span>
     <span class="p">}</span>
-
-    <span class="k">if</span> <span class="n">chars</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">&#39;{&#39;</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s">&quot;Invalid Syntax: Expected &#39;{&#39; to be at</span>
-<span class="s">                position 0.&quot;</span><span class="p">.</span><span class="n">to_string</span><span class="p">());</span>
-    <span class="p">}</span>
-
-    <span class="n">chars</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="n">while_some</span><span class="p">(</span><span class="o">|</span><span class="n">ch</span><span class="o">|</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="n">ch</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span> <span class="p">{</span>
-
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">done</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">None</span>
-        <span class="p">}</span>
-
-        <span class="n">chars</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
-    <span class="p">});</span>
-
-    <span class="k">if</span> <span class="o">!</span><span class="n">done</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s">&quot;Invalid Syntax: Expected &#39;}&#39; to be at the</span>
-<span class="s">                end of the input.&quot;</span><span class="p">.</span><span class="n">to_string</span><span class="p">());</span>
-    <span class="p">}</span>
-
-    <span class="n">Ok</span><span class="p">(())</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>This is just a simple parsing example. We can either successfully parse the contents of the slice, or return an error.</p>
+<p>This is just a simple example.</p>
 
 <p>One question that you should ask yourself is: &quot;<em>When the function is successful, do I need to return any data back to the user?</em>&quot;</p>
 
@@ -172,89 +143,42 @@
 <p>While having error strings are <em>fine</em> in some languages, they&#39;re not the most ideal way of doing things. One of Rust&#39;s more powerful feature is pattern matching and by using strings we lose that ability. That&#39;s not good, so let&#39;s make use of it by working with enum types.</p>
 
 <p>I&#39;ll dump some code here and I&#39;ll go over everything after:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">fmt</span><span class="o">::</span><span class="p">{</span><span class="n">Show</span><span class="p">,</span><span class="n">Formatter</span><span class="p">};</span>
-<span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">fmt</span><span class="p">;</span>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="k">str</span><span class="o">::</span><span class="n">SendStr</span><span class="p">;</span>
 
-<span class="c1">/// Create a new ParseResult to wrap our ParseError.</span>
-<span class="c1">/// This allows us to work with a single type throughout</span>
-<span class="c1">/// our program.</span>
-<span class="k">type</span> <span class="n">ParseResult</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">ParseError</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">type</span> <span class="n">ProgramResult</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">ProgramError</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="cp">#[deriving(Show)]</span>
-<span class="k">struct</span> <span class="n">ParseError</span> <span class="p">{</span>
-    <span class="n">kind</span><span class="o">:</span> <span class="n">ParseErrorKind</span><span class="p">,</span>
-    <span class="n">message</span><span class="o">:</span> <span class="n">ErrorMessage</span>
-<span class="p">}</span>
-
-<span class="c1">/// Allow messages to be a static slice or a boxed string.</span>
-<span class="cp">#[deriving(Show)]</span>
-<span class="k">enum</span> <span class="n">ErrorMessage</span> <span class="p">{</span>
-    <span class="n">StringMessage</span><span class="p">(</span><span class="n">String</span><span class="p">),</span>
-    <span class="n">StaticMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="err">&#39;</span><span class="k">static</span> <span class="k">str</span><span class="p">)</span>
+<span class="k">struct</span> <span class="n">ProgramError</span> <span class="p">{</span>
+    <span class="n">kind</span><span class="o">:</span> <span class="n">ProgramErrorKind</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">:</span> <span class="n">SendStr</span>
 <span class="p">}</span>
 
 <span class="c1">/// The kinds of errors that can happen in our program.</span>
 <span class="c1">/// We&#39;ll be able to pattern match against these.</span>
-<span class="k">enum</span> <span class="n">ParseErrorKind</span> <span class="p">{</span>
-    <span class="n">Empty</span><span class="p">,</span>
-    <span class="n">InvalidSyntax</span><span class="p">(</span><span class="k">uint</span><span class="p">)</span>
+<span class="cp">#[deriving(Show)]</span>
+<span class="k">enum</span> <span class="n">ProgramErrorKind</span> <span class="p">{</span>
+    <span class="n">Other</span>
 <span class="p">}</span>
 
-<span class="k">impl</span> <span class="n">ParseError</span> <span class="p">{</span>
-    <span class="k">pub</span> <span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="n">T</span><span class="o">:</span> <span class="n">Show</span><span class="o">&gt;</span><span class="p">(</span><span class="n">msg</span><span class="o">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">kind</span><span class="o">:</span> <span class="n">ParseErrorKind</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParseError</span> <span class="p">{</span>
-        <span class="n">ParseError</span> <span class="p">{</span>
+<span class="k">impl</span> <span class="n">ProgramError</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="n">T</span><span class="o">:</span> <span class="n">IntoMaybeOwned</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="k">static</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">msg</span><span class="o">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">kind</span><span class="o">:</span> <span class="n">ProgramErrorKind</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProgramError</span> <span class="p">{</span>
+        <span class="n">ProgramError</span> <span class="p">{</span>
             <span class="n">kind</span><span class="o">:</span> <span class="n">kind</span><span class="p">,</span>
-            <span class="n">message</span><span class="o">:</span> <span class="n">StringMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">to_str</span><span class="p">())</span>
+            <span class="n">message</span><span class="o">:</span> <span class="n">msg</span><span class="p">.</span><span class="n">into_maybe_owned</span><span class="p">()</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="c1">/// Add the ability to print out the message kind. This will allow</span>
-<span class="c1">/// us to have nicely formatted messages.</span>
-<span class="k">impl</span> <span class="n">Show</span> <span class="k">for</span> <span class="n">ParseErrorKind</span> <span class="p">{</span>
-    <span class="k">fn</span> <span class="n">fmt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">self</span><span class="p">,</span> <span class="n">f</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">Formatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fmt</span><span class="o">::</span><span class="n">Result</span> <span class="p">{</span>
-        <span class="k">match</span> <span class="n">self</span> <span class="p">{</span>
-            <span class="o">&amp;</span><span class="n">Empty</span> <span class="o">=&gt;</span> <span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;Empty Input: &quot;</span><span class="p">),</span>
-            <span class="o">&amp;</span><span class="n">InvalidSyntax</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;Invalid</span>
-<span class="s">                Syntax at {}: &quot;</span><span class="p">,</span> <span class="n">pos</span><span class="p">),</span>
-            <span class="n">_</span> <span class="o">=&gt;</span> <span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;Other&quot;</span><span class="p">)</span>
-        <span class="p">}</span>
+<span class="k">fn</span> <span class="n">do_something</span><span class="p">(</span><span class="n">input</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProgramResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">input</span> <span class="o">==</span> <span class="s">&quot;foobar&quot;</span> <span class="p">{</span>
+        <span class="n">Err</span><span class="p">(</span><span class="n">ProgramError</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="s">&quot;input doesn&#39;t match &#39;foobar&#39;.&quot;</span><span class="p">,</span> <span class="n">Other</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">Ok</span><span class="p">(())</span>
     <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="c1">/// Parse an input string hopefully containing &#39;{...}&#39;.</span>
-<span class="k">fn</span> <span class="n">parse</span><span class="p">(</span><span class="n">input</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParseResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="c1">// Create a new iterator containing chars.</span>
-    <span class="k">let</span> <span class="k">mut</span> <span class="n">chars</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">chars</span><span class="p">();</span>
-    <span class="k">let</span> <span class="k">mut</span> <span class="n">done</span>  <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="n">chars</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">&#39;{&#39;</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">ParseError</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="s">&quot;Expected &#39;{&#39; to</span>
-<span class="s">            be first.&quot;</span><span class="p">,</span> <span class="n">InvalidSyntax</span><span class="p">(</span><span class="m">1</span><span class="p">)));</span>
-    <span class="p">}</span>
-
-    <span class="n">chars</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="n">while_some</span><span class="p">(</span><span class="o">|</span><span class="n">ch</span><span class="o">|</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="n">ch</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span> <span class="p">{</span>
-
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">done</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">None</span>
-        <span class="p">}</span>
-
-        <span class="n">chars</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
-    <span class="p">});</span>
-
-    <span class="k">if</span> <span class="o">!</span><span class="n">done</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">ParseError</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="s">&quot;Expected &#39;}&#39;</span>
-<span class="s">            to be last.&quot;</span><span class="p">,</span> <span class="n">InvalidSyntax</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">len</span><span class="p">())));</span>
-    <span class="p">}</span>
-
-    <span class="n">Ok</span><span class="p">(())</span>
-<span class="p">}</span>
-
 
 <span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">match</span> <span class="n">parse</span><span class="p">(</span><span class="s">&quot;{foobar}&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">match</span> <span class="n">do_something</span><span class="p">(</span><span class="s">&quot;foobarnope&quot;</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">Ok</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{},</span>
         <span class="n">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
     <span class="p">}</span>
@@ -262,15 +186,17 @@
 </code></pre></div>
 <p>Let&#39;s go through this one piece at a time.</p>
 <div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="cp">#[deriving(Show)]</span>
-<span class="k">struct</span> <span class="n">ParseError</span> <span class="p">{</span>
-    <span class="n">kind</span><span class="o">:</span> <span class="n">ParseErrorKind</span><span class="p">,</span>
-    <span class="n">message</span><span class="o">:</span> <span class="n">ErrorMessage</span>
+<span class="k">struct</span> <span class="n">ProgramError</span> <span class="p">{</span>
+    <span class="n">kind</span><span class="o">:</span> <span class="n">ProgramErrorKind</span><span class="p">,</span>
+    <span class="n">message</span><span class="o">:</span> <span class="n">SendStr</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Here, we&#39;ll define our new error type. Now, you would have a single (depending on your program) error type that you would use. You wouldn&#39;t need to create multiple per project, just one time. You can add additional fields to the struct to accommodate your needs. We have the <code>kind</code> field which holds all possible error kinds. This allows us to pattern match against them. If your program can produce new error kinds, you can add them to that enum. The message is simply a way to work with both statically allocated strings (which are common for error messages) and boxed strings. This way we can support both through <code>StaticMessage(&quot;blah blah&quot;)</code> and <code>StringMessage(&quot;blah blah 123&quot;.to_string())</code>.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">type</span> <span class="n">ParseResult</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">ParseError</span><span class="o">&gt;</span><span class="p">;</span>
+<p>Here, we&#39;ll define our new error type. Now, you would have a single (depending on your program) error type that you would use. You wouldn&#39;t need to create multiple per project, just one. You can also add additional fields to the struct to accommodate your needs. We have the <code>kind</code> field which holds all possible error kinds. This allows us to pattern match against them. If your program can produce new error kinds, you can add them to that enum.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">type</span> <span class="n">ProgramResult</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">ProgramError</span><span class="o">&gt;</span><span class="p">;</span>
 </code></pre></div>
-<p>Instead of repeating ourselves throughout our codebase with <code>Result&lt;T, ParseError&gt;</code>, we&#39;ll just create a type alias. Again, we use Rust&#39;s sophisticated type system to our advantage.</p>
+<p>Instead of repeating ourselves throughout our codebase with <code>Result&lt;T, ProgramError&gt;</code>, we&#39;ll just create a type alias. Again, we use Rust&#39;s sophisticated type system to our advantage.</p>
+
+<p>Note: You&#39;ll probably want to rename <code>Program</code> to the actual name of your program/library.</p>
 
 <hr>
 
@@ -279,16 +205,16 @@
 <p>Ok, so we can create sophisticated errors, but how do we handle them?</p>
 
 <p>Let&#39;s focus on the manual process: pattern matching:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">match</span> <span class="n">parse</span><span class="p">(</span><span class="s">&quot;{foobar}&quot;</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">match</span> <span class="n">do_something</span><span class="p">(</span><span class="s">&quot;foobar&quot;</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">Ok</span><span class="p">(</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{},</span>
     <span class="n">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">fail</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>This is quite verbose and has an explicit <code>fail!</code> in there. In our parsing example, we definitely don&#39;t want to <code>fail!</code>. That&#39;s not the appropriate place to do so. You want to try and have as little side-effects as possible &mdash; and failing is a huge one. We&#39;ll want to leave that to a broader function, perhaps.</p>
+<p>This is quite verbose and has an explicit <code>fail!</code> in there. You want to try and have as little side-effects as possible &mdash; and failing is a huge one. We&#39;ll want to leave that to a broader function, perhaps.</p>
 
-<p>If the broader function also returns a <code>ParseResult</code>, then we can use the nifty <code>try!</code> macro:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">do_parse</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParseResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;{hello world}&quot;</span><span class="p">));</span>
+<p>If the broader function also returns a <code>ProgramResult</code>, then we can use the nifty <code>try!</code> macro:</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">do_many_things</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ProgramResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">do_something</span><span class="p">(</span><span class="s">&quot;foobar&quot;</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre></div>
 <p><code>try!</code> is not magic, it just expands to:</p>
@@ -298,32 +224,29 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>So, it&#39;ll return the function with the error if one exists, otherwise it&#39;ll return the contents of the <code>Ok</code> variant. That allows one to do:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">do_parse</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ParseResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="n">foobar</span> <span class="o">=</span> <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;{hello world}&quot;</span><span class="p">));</span>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">do_many_things</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ProgramResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">foobar</span> <span class="o">=</span> <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">program</span><span class="p">(</span><span class="s">&quot;{hello world}&quot;</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre></div>
 <h2>Working With Other Errors</h2>
 
-<p>An issue with the approach above is when working with <code>IoError</code>s. In addition to using <code>try!</code>, we&#39;ll need to convert an <code>IoError</code> to a <code>ParseError</code>.</p>
+<p>An issue with the approach above is when working with <code>IoError</code>s. In addition to using <code>try!</code>, we&#39;ll need to convert an <code>IoError</code> to a <code>ProgramError</code>.</p>
 
-<p>We first need to add a variant to the <code>ParseErrorKind</code>:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">/// The kinds of errors that can happen in our program.</span>
-<span class="c1">/// We&#39;ll be able to pattern match against these.</span>
-<span class="k">enum</span> <span class="n">ParseErrorKind</span> <span class="p">{</span>
+<p>We first need to add a variant to the <code>ProgramErrorKind</code>:</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">enum</span> <span class="n">ProgramErrorKind</span> <span class="p">{</span>
     <span class="n">Empty</span><span class="p">,</span>
-    <span class="n">InvalidSyntax</span><span class="p">(</span><span class="k">uint</span><span class="p">),</span>
     <span class="n">IoError</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">io</span><span class="o">::</span><span class="n">IoError</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>Now we can convert between the two:</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">to_parse</span><span class="p">(</span><span class="n">io</span><span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">io</span><span class="o">::</span><span class="n">IoError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParseError</span> <span class="p">{</span>
-    <span class="n">ParseError</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">StaticMessage</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">desc</span><span class="p">),</span> <span class="n">IoError</span><span class="p">(</span><span class="n">io</span><span class="p">))</span>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">to_program</span><span class="p">(</span><span class="n">io</span><span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">io</span><span class="o">::</span><span class="n">IoError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProgramError</span> <span class="p">{</span>
+    <span class="n">ProgramError</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">desc</span><span class="p">.</span><span class="n">into_maybe_owned</span><span class="p">(),</span> <span class="n">IoError</span><span class="p">(</span><span class="n">io</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Here&#39;s a function that uses an I/O function (thus working with <code>IoError</code>) and <code>ParseError</code>.</p>
-<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">from_file</span><span class="p">(</span><span class="n">path</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParseResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="n">file</span> <span class="o">=</span> <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">File</span><span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">read_to_str</span><span class="p">().</span><span class="n">map_err</span><span class="p">(</span><span class="n">to_parse</span><span class="p">));</span>
-    <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">as_str</span><span class="p">()));</span>
+<p>Here&#39;s a function that uses an I/O function (thus working with <code>IoError</code>) and <code>ProgramError</code>.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">from_file</span><span class="p">(</span><span class="n">path</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProgramResult</span><span class="o">&lt;</span><span class="p">()</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">file</span> <span class="o">=</span> <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">File</span><span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">read_to_str</span><span class="p">().</span><span class="n">map_err</span><span class="p">(</span><span class="n">to_program</span><span class="p">));</span>
+    <span class="n">try</span><span class="o">!</span><span class="p">(</span><span class="n">do_something</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">as_str</span><span class="p">()));</span>
     <span class="n">Ok</span><span class="p">(())</span>
 <span class="p">}</span>
 </code></pre></div>

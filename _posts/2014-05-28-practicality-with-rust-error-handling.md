@@ -41,45 +41,16 @@ In languages like C and Go, you might barely use a type system to work with erro
 Let's define a function that could produce an error:
 
 ```rust
-/// Take an input, and make sure that '{' is at the
-/// beginning (0th position) and '}' is at the end.
-fn parse(input: &str) -> Result<(), String> {
-
-	// Create a new iterator of chars.
-    let mut chars = input.chars();
-    let mut done  = false;
-
-    if input.len() == 0 {
-        return Err("Invalid Syntax: Empty string was
-        		passed.".to_string());
+fn do_something(input: &str) -> Result<(), String> {
+    if input != "foobar" {
+        Err("input doesn't match 'foobar'.".to_string())
+    } else {
+        Ok(())
     }
-
-    if chars.next().unwrap() != '{' {
-        return Err("Invalid Syntax: Expected '{' to be at
-        		position 0.".to_string());
-    }
-
-    chars.next().while_some(|ch| {
-        if ch != '}' {
-
-        } else {
-            done = true;
-            return None
-        }
-
-        chars.next()
-    });
-
-    if !done {
-        return Err("Invalid Syntax: Expected '}' to be at the
-        		end of the input.".to_string());
-    }
-
-    Ok(())
 }
 ```
 
-This is just a simple parsing example. We can either successfully parse the contents of the slice, or return an error.
+This is just a simple example.
 
 One question that you should ask yourself is: "*When the function is successful, do I need to return any data back to the user?*"
 
@@ -90,113 +61,67 @@ While having error strings are *fine* in some languages, they're not the most id
 I'll dump some code here and I'll go over everything after:
 
 ```rust
-use std::fmt::{Show,Formatter};
-use std::fmt;
+use std::str::SendStr;
 
-/// Create a new ParseResult to wrap our ParseError.
-/// This allows us to work with a single type throughout
-/// our program.
-type ParseResult<T> = Result<T, ParseError>;
+type ProgramResult<T> = Result<T, ProgramError>;
 
 #[deriving(Show)]
-struct ParseError {
-    kind: ParseErrorKind,
-    message: ErrorMessage
-}
-
-/// Allow messages to be a static slice or a boxed string.
-#[deriving(Show)]
-enum ErrorMessage {
-    StringMessage(String),
-    StaticMessage(&'static str)
+struct ProgramError {
+    kind: ProgramErrorKind,
+    message: SendStr
 }
 
 /// The kinds of errors that can happen in our program.
 /// We'll be able to pattern match against these.
-enum ParseErrorKind {
-    Empty,
-    InvalidSyntax(uint)
+#[deriving(Show)]
+enum ProgramErrorKind {
+    Other
 }
 
-impl ParseError {
-    pub fn new<T: Show>(msg: T, kind: ParseErrorKind) -> ParseError {
-        ParseError {
+impl ProgramError {
+    pub fn new<T: IntoMaybeOwned<'static>>(msg: T, kind: ProgramErrorKind) -> ProgramError {
+        ProgramError {
             kind: kind,
-            message: StringMessage(msg.to_str())
+            message: msg.into_maybe_owned()
         }
     }
 }
 
-/// Add the ability to print out the message kind. This will allow
-/// us to have nicely formatted messages.
-impl Show for ParseErrorKind {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self {
-            &Empty => write!(f, "Empty Input: "),
-            &InvalidSyntax(pos) => write!(f, "Invalid
-                Syntax at {}: ", pos),
-            _ => write!(f, "Other")
-        }
+fn do_something(input: &str) -> ProgramResult<()> {
+    if input == "foobar" {
+        Err(ProgramError::new("input doesn't match 'foobar'.", Other)
+    } else {
+        Ok(())
     }
 }
-
-/// Parse an input string hopefully containing '{...}'.
-fn parse(input: &str) -> ParseResult<()> {
-    // Create a new iterator containing chars.
-    let mut chars = input.chars();
-    let mut done  = false;
-
-    if chars.next().unwrap() != '{' {
-        return Err(ParseError::new("Expected '{' to
-            be first.", InvalidSyntax(1)));
-    }
-
-    chars.next().while_some(|ch| {
-        if ch != '}' {
-
-        } else {
-            done = true;
-            return None
-        }
-
-        chars.next()
-    });
-
-    if !done {
-        return Err(ParseError::new("Expected '}'
-            to be last.", InvalidSyntax(input.len())));
-    }
-
-    Ok(())
-}
-
 
 fn main() {
-    match parse("{foobar}") {
+    match do_something("foobarnope") {
         Ok(_) => {},
         Err(e) => fail!("{}", e)
     }
 }
 ```
 
-
 Let's go through this one piece at a time.
 
 ```rust
 #[deriving(Show)]
-struct ParseError {
-    kind: ParseErrorKind,
-    message: ErrorMessage
+struct ProgramError {
+    kind: ProgramErrorKind,
+    message: SendStr
 }
 ```
 
-Here, we'll define our new error type. Now, you would have a single (depending on your program) error type that you would use. You wouldn't need to create multiple per project, just one time. You can add additional fields to the struct to accommodate your needs. We have the `kind` field which holds all possible error kinds. This allows us to pattern match against them. If your program can produce new error kinds, you can add them to that enum. The message is simply a way to work with both statically allocated strings (which are common for error messages) and boxed strings. This way we can support both through `StaticMessage("blah blah")` and `StringMessage("blah blah 123".to_string())`.
+Here, we'll define our new error type. Now, you would have a single (depending on your program) error type that you would use. You wouldn't need to create multiple per project, just one. You can also add additional fields to the struct to accommodate your needs. We have the `kind` field which holds all possible error kinds. This allows us to pattern match against them. If your program can produce new error kinds, you can add them to that enum.
 
 ```rust
-type ParseResult<T> = Result<T, ParseError>;
+type ProgramResult<T> = Result<T, ProgramError>;
 ```
 
-Instead of repeating ourselves throughout our codebase with `Result<T, ParseError>`, we'll just create a type alias. Again, we use Rust's sophisticated type system to our advantage.
+Instead of repeating ourselves throughout our codebase with `Result<T, ProgramError>`, we'll just create a type alias. Again, we use Rust's sophisticated type system to our advantage.
+
+Note: You'll probably want to rename `Program` to the actual name of your program/library.
 
 ---
 
@@ -207,19 +132,19 @@ Ok, so we can create sophisticated errors, but how do we handle them?
 Let's focus on the manual process: pattern matching:
 
 ```rust
-match parse("{foobar}") {
+match do_something("foobar") {
     Ok(_) => {},
     Err(e) => fail!("{}", e)
 }
 ```
 
-This is quite verbose and has an explicit `fail!` in there. In our parsing example, we definitely don't want to `fail!`. That's not the appropriate place to do so. You want to try and have as little side-effects as possible &mdash; and failing is a huge one. We'll want to leave that to a broader function, perhaps.
+This is quite verbose and has an explicit `fail!` in there. You want to try and have as little side-effects as possible &mdash; and failing is a huge one. We'll want to leave that to a broader function, perhaps.
 
-If the broader function also returns a `ParseResult`, then we can use the nifty `try!` macro:
+If the broader function also returns a `ProgramResult`, then we can use the nifty `try!` macro:
 
 ```rust
-fn do_parse() -> ParseResult<()> {
-	try!(parse("{hello world}"));
+fn do_many_things() -> ProgramResult<()> {
+	try!(do_something("foobar"));
 }
 ```
 
@@ -235,23 +160,20 @@ match $e {
 So, it'll return the function with the error if one exists, otherwise it'll return the contents of the `Ok` variant. That allows one to do:
 
 ```rust
-fn do_parse() -> ParseResult<()> {
-	let foobar = try!(parse("{hello world}"));
+fn do_many_things() -> ProgramResult<()> {
+	let foobar = try!(program("{hello world}"));
 }
 ```
 
 ## Working With Other Errors
 
-An issue with the approach above is when working with `IoError`s. In addition to using `try!`, we'll need to convert an `IoError` to a `ParseError`.
+An issue with the approach above is when working with `IoError`s. In addition to using `try!`, we'll need to convert an `IoError` to a `ProgramError`.
 
-We first need to add a variant to the `ParseErrorKind`:
+We first need to add a variant to the `ProgramErrorKind`:
 
 ```rust
-/// The kinds of errors that can happen in our program.
-/// We'll be able to pattern match against these.
-enum ParseErrorKind {
+enum ProgramErrorKind {
     Empty,
-    InvalidSyntax(uint),
     IoError(std::io::IoError)
 }
 ```
@@ -259,17 +181,17 @@ enum ParseErrorKind {
 Now we can convert between the two:
 
 ```rust
-fn to_parse(io: std::io::IoError) -> ParseError {
-	ParseError::new(StaticMessage(io.desc), IoError(io))
+fn to_program(io: std::io::IoError) -> ProgramError {
+	ProgramError::new(io.desc.into_maybe_owned(), IoError(io))
 }
 ```
 
-Here's a function that uses an I/O function (thus working with `IoError`) and `ParseError`.
+Here's a function that uses an I/O function (thus working with `IoError`) and `ProgramError`.
 
 ```rust
-fn from_file(path: &Path) -> ParseResult<()> {
-	let file = try!(File::open(path).read_to_str().map_err(to_parse));
-	try!(parse(file.as_str()));
+fn from_file(path: &Path) -> ProgramResult<()> {
+	let file = try!(File::open(path).read_to_str().map_err(to_program));
+	try!(do_something(file.as_str()));
 	Ok(())
 }
 ```
