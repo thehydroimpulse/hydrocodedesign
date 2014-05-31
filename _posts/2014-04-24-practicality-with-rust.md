@@ -11,7 +11,7 @@ title: "Practicality With Rust: Setting Up A Project"
             Setting Up A Project
         </li>
         <li>
-            <a href="../../../../2014/04/28/practicality-with-rust-error-handling/">Error Handling</a>
+            <a href="../../../../2014/05/28/practicality-with-rust-error-handling/">Error Handling</a>
         </li>
     </ul>
 </div>

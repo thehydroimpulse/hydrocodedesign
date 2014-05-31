@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-05-30T23:56:31-06:00</updated>
+ <updated>2014-05-30T23:58:11-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Practicality With Rust: Error Handling</title>
-   <link href="http://hydrocodedesign.com/2014/04/28/practicality-with-rust-error-handling/"/>
-   <updated>2014-04-28T00:00:00-06:00</updated>
-   <id>http://hydrocodedesign.com/2014/04/28/practicality-with-rust-error-handling</id>
+   <link href="http://hydrocodedesign.com/2014/05/28/practicality-with-rust-error-handling/"/>
+   <updated>2014-05-28T00:00:00-06:00</updated>
+   <id>http://hydrocodedesign.com/2014/05/28/practicality-with-rust-error-handling</id>
    <content type="html">&lt;div&gt;
     The Series:
     &lt;ul&gt;
@@ -303,7 +303,7 @@ host: x86_64-apple-darwin
             Setting Up A Project
         &lt;/li&gt;
         &lt;li&gt;
-            &lt;a href=&quot;../../../../2014/04/28/practicality-with-rust-error-handling/&quot;&gt;Error Handling&lt;/a&gt;
+            &lt;a href=&quot;../../../../2014/05/28/practicality-with-rust-error-handling/&quot;&gt;Error Handling&lt;/a&gt;
         &lt;/li&gt;
     &lt;/ul&gt;
 &lt;/div&gt;
