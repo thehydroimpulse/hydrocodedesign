@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-05-31T01:02:02-06:00</updated>
+ <updated>2014-05-31T13:10:01-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -317,7 +317,7 @@ target
 
 &lt;p&gt;We can now compile our library with &lt;code&gt;make&lt;/code&gt; or &lt;code&gt;make libprojectname&lt;/code&gt; and compile and run all the tests through &lt;code&gt;make test&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;There are more &lt;a href=&quot;https://github.com/bvssvni/rust-empty&quot;&gt;exotic Rust makefiles&lt;/a&gt; out there, but I wouldn&amp;#39;t use most of the features they offer, and writing one is pretty straightforward.&lt;/p&gt;
+&lt;p&gt;There are more &lt;a href=&quot;https://github.com/bvssvni/rust-empty&quot;&gt;exotic Rust makefiles&lt;/a&gt; &lt;a href=&quot;https://github.com/KokaKiwi/rust-mk&quot;&gt;out there&lt;/a&gt;, but I wouldn&amp;#39;t use most of the features they offer, and writing one is pretty straightforward.&lt;/p&gt;
 
 &lt;h2&gt;Library&lt;/h2&gt;
 

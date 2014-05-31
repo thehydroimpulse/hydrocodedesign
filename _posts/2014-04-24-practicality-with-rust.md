@@ -117,7 +117,7 @@ This is all you need for a library. You can copy the `libprojectname` target for
 
 We can now compile our library with `make` or `make libprojectname` and compile and run all the tests through `make test`.
 
-There are more [exotic Rust makefiles](https://github.com/bvssvni/rust-empty) out there, but I wouldn't use most of the features they offer, and writing one is pretty straightforward.
+There are more [exotic Rust makefiles](https://github.com/bvssvni/rust-empty) [out there](https://github.com/KokaKiwi/rust-mk), but I wouldn't use most of the features they offer, and writing one is pretty straightforward.
 
 
 ## Library
