@@ -99,9 +99,11 @@
 
 <p>Now that we can work with proper types, let&#39;s go further. Many (but not all) statically-typed languages have a form of generics. For example, <code>List&lt;T&gt;</code>, <code>Map&lt;K,V&gt;</code>, etc... Generics or type parameters, and type constructors (functions that construct other types) form the basis for further abstraction on-top of proper types.</p>
 
-<p>Let&#39;s go through what <code>List&lt;T&gt;</code> <em>really</em> is. <code>List</code> is a type abstracting over a type <code>T</code>. This is called a type constructor; given a type <code>T</code>, we construct type <code>List&lt;T&gt;</code>. Moreover, it should be clear that <code>List&lt;T&gt;</code> is <em>not</em> a proper type. That is, it&#39;s not a concrete type &mdash; it needs a parameter to be passed before the useable type can be formed. That&#39;s the type constructor&#39;s job. <code>List&lt;Int&gt;</code>, however, <em>is</em> a concrete type; it&#39;s finished &mdash; we&#39;ve passed the appropriate type parameters.</p>
+<p>Let&#39;s go through what <code>List&lt;T&gt;</code> <em>really</em> is. <code>List</code> is a type abstracting over a type <code>T</code>. This is called generics or type parameters; given a type <code>T</code>, we construct type <code>List&lt;T&gt;</code>. Moreover, it should be clear that <code>List&lt;T&gt;</code> is <em>not</em> a proper type. That is, it&#39;s not a concrete type &mdash; it needs a parameter to be passed before the useable type can be formed. That&#39;s where the type constructor&#39;s job comes in; it&#39;ll construct the final type.</p>
 
-<p>How can we distinguish this type constructor from proper types? Because it&#39;s a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.</p>
+<p><code>List&lt;Int&gt;</code>, however, <em>is</em> a concrete type; it&#39;s finished &mdash; we&#39;ve passed the appropriate type parameters.</p>
+
+<p>How can we distinguish this type from proper types? Because it&#39;s a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.</p>
 
 <p>Using a more formal syntax for defining kinds of types, we can say a proper type is of <code>*</code>; whereas a first-ordered type is of <code>* -&gt; *</code> and <code>* -&gt; * -&gt; *</code>.</p>
 
@@ -133,11 +135,7 @@
 
 <p>Now that we got through higher-kinded polymorphism, let&#39;s go through it&#39;s uses.</p>
 
-<p>You may have heard of terms such as Monads, Monoids, Functors, Semigroups, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.</p>
-
-<p>Almost every aggregation problem can be represented as Monoids. For example, HyperLogLog is a monoid. HyperLogLog is actually a composition of monoids, because it contains operations such as Min, which is also a monoid.</p>
-
-<p>Monoids are an <em>extremely</em> powerful primitive, as well as Monads, Functors, etc...</p>
+<p>You may have heard of terms such as Monads, Functors, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.</p>
 
 <p>All of these come from abstract algebra and category theory, which is a pretty insane field.</p>
 

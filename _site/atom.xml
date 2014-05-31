@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-05-31T00:56:24-06:00</updated>
+ <updated>2014-05-31T01:02:02-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -550,9 +550,11 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
 
 &lt;p&gt;Now that we can work with proper types, let&amp;#39;s go further. Many (but not all) statically-typed languages have a form of generics. For example, &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code&gt;Map&amp;lt;K,V&amp;gt;&lt;/code&gt;, etc... Generics or type parameters, and type constructors (functions that construct other types) form the basis for further abstraction on-top of proper types.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;#39;s go through what &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt; &lt;em&gt;really&lt;/em&gt; is. &lt;code&gt;List&lt;/code&gt; is a type abstracting over a type &lt;code&gt;T&lt;/code&gt;. This is called a type constructor; given a type &lt;code&gt;T&lt;/code&gt;, we construct type &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt;. Moreover, it should be clear that &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt; is &lt;em&gt;not&lt;/em&gt; a proper type. That is, it&amp;#39;s not a concrete type &amp;mdash; it needs a parameter to be passed before the useable type can be formed. That&amp;#39;s the type constructor&amp;#39;s job. &lt;code&gt;List&amp;lt;Int&amp;gt;&lt;/code&gt;, however, &lt;em&gt;is&lt;/em&gt; a concrete type; it&amp;#39;s finished &amp;mdash; we&amp;#39;ve passed the appropriate type parameters.&lt;/p&gt;
+&lt;p&gt;Let&amp;#39;s go through what &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt; &lt;em&gt;really&lt;/em&gt; is. &lt;code&gt;List&lt;/code&gt; is a type abstracting over a type &lt;code&gt;T&lt;/code&gt;. This is called generics or type parameters; given a type &lt;code&gt;T&lt;/code&gt;, we construct type &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt;. Moreover, it should be clear that &lt;code&gt;List&amp;lt;T&amp;gt;&lt;/code&gt; is &lt;em&gt;not&lt;/em&gt; a proper type. That is, it&amp;#39;s not a concrete type &amp;mdash; it needs a parameter to be passed before the useable type can be formed. That&amp;#39;s where the type constructor&amp;#39;s job comes in; it&amp;#39;ll construct the final type.&lt;/p&gt;
 
-&lt;p&gt;How can we distinguish this type constructor from proper types? Because it&amp;#39;s a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;List&amp;lt;Int&amp;gt;&lt;/code&gt;, however, &lt;em&gt;is&lt;/em&gt; a concrete type; it&amp;#39;s finished &amp;mdash; we&amp;#39;ve passed the appropriate type parameters.&lt;/p&gt;
+
+&lt;p&gt;How can we distinguish this type from proper types? Because it&amp;#39;s a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.&lt;/p&gt;
 
 &lt;p&gt;Using a more formal syntax for defining kinds of types, we can say a proper type is of &lt;code&gt;*&lt;/code&gt;; whereas a first-ordered type is of &lt;code&gt;* -&amp;gt; *&lt;/code&gt; and &lt;code&gt;* -&amp;gt; * -&amp;gt; *&lt;/code&gt;.&lt;/p&gt;
 
@@ -584,11 +586,7 @@ it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
 
 &lt;p&gt;Now that we got through higher-kinded polymorphism, let&amp;#39;s go through it&amp;#39;s uses.&lt;/p&gt;
 
-&lt;p&gt;You may have heard of terms such as Monads, Monoids, Functors, Semigroups, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.&lt;/p&gt;
-
-&lt;p&gt;Almost every aggregation problem can be represented as Monoids. For example, HyperLogLog is a monoid. HyperLogLog is actually a composition of monoids, because it contains operations such as Min, which is also a monoid.&lt;/p&gt;
-
-&lt;p&gt;Monoids are an &lt;em&gt;extremely&lt;/em&gt; powerful primitive, as well as Monads, Functors, etc...&lt;/p&gt;
+&lt;p&gt;You may have heard of terms such as Monads, Functors, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.&lt;/p&gt;
 
 &lt;p&gt;All of these come from abstract algebra and category theory, which is a pretty insane field.&lt;/p&gt;
 

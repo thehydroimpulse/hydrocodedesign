@@ -12,9 +12,11 @@ Let's talk about types first, and specifically types that people are used to, fo
 
 Now that we can work with proper types, let's go further. Many (but not all) statically-typed languages have a form of generics. For example, `List<T>`, `Map<K,V>`, etc... Generics or type parameters, and type constructors (functions that construct other types) form the basis for further abstraction on-top of proper types.
 
-Let's go through what `List<T>` *really* is. `List` is a type abstracting over a type `T`. This is called a type constructor; given a type `T`, we construct type `List<T>`. Moreover, it should be clear that `List<T>` is *not* a proper type. That is, it's not a concrete type &mdash; it needs a parameter to be passed before the useable type can be formed. That's the type constructor's job. `List<Int>`, however, *is* a concrete type; it's finished &mdash; we've passed the appropriate type parameters.
+Let's go through what `List<T>` *really* is. `List` is a type abstracting over a type `T`. This is called generics or type parameters; given a type `T`, we construct type `List<T>`. Moreover, it should be clear that `List<T>` is *not* a proper type. That is, it's not a concrete type &mdash; it needs a parameter to be passed before the useable type can be formed. That's where the type constructor's job comes in; it'll construct the final type.
 
-How can we distinguish this type constructor from proper types? Because it's a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.
+`List<Int>`, however, *is* a concrete type; it's finished &mdash; we've passed the appropriate type parameters.
+
+How can we distinguish this type from proper types? Because it's a type abstracting over another (proper) type. This is called first-order types; because we only abstract over a type once.
 
 Using a more formal syntax for defining kinds of types, we can say a proper type is of `*`; whereas a first-ordered type is of `* -> *` and `* -> * -> *`.
 
@@ -52,11 +54,7 @@ Now, the `_` is simply a forgetter symbol (we don't want to deal with that type,
 
 Now that we got through higher-kinded polymorphism, let's go through it's uses.
 
-You may have heard of terms such as Monads, Monoids, Functors, Semigroups, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.
-
-Almost every aggregation problem can be represented as Monoids. For example, HyperLogLog is a monoid. HyperLogLog is actually a composition of monoids, because it contains operations such as Min, which is also a monoid.
-
-Monoids are an *extremely* powerful primitive, as well as Monads, Functors, etc...
+You may have heard of terms such as Monads, Functors, etc... These are all fairly popular in functional languages, some terms more so than others. These are all represented as higher-kinded types.
 
 All of these come from abstract algebra and category theory, which is a pretty insane field.
 
