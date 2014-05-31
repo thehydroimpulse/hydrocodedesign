@@ -26,7 +26,7 @@ Rust **doesn't have exceptions**.
 
 Ok, now that we got that out of the way, let us see what Rust does have.
 
-Rust has tasks, where these tasks can be used as native threads (N:N), or green threads (M:N).
+Rust has tasks, where these tasks can be used as native threads (1:1), or green threads (M:N).
 
 Tasks are the fundamental unit of containment within Rust programs. Instead of trying to catch an exception and *try* to repair the current state, you can just kill the task, and restart.
 

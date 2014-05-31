@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-05-30T23:58:54-06:00</updated>
+ <updated>2014-05-31T00:22:42-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -39,7 +39,7 @@
 
 &lt;p&gt;Ok, now that we got that out of the way, let us see what Rust does have.&lt;/p&gt;
 
-&lt;p&gt;Rust has tasks, where these tasks can be used as native threads (N:N), or green threads (M:N).&lt;/p&gt;
+&lt;p&gt;Rust has tasks, where these tasks can be used as native threads (1:1), or green threads (M:N).&lt;/p&gt;
 
 &lt;p&gt;Tasks are the fundamental unit of containment within Rust programs. Instead of trying to catch an exception and &lt;em&gt;try&lt;/em&gt; to repair the current state, you can just kill the task, and restart.&lt;/p&gt;
 
