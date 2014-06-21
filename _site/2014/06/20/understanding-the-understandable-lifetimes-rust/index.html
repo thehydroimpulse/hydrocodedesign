@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="//use.typekit.net/yov8luh.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link href='http://fonts.googleapis.com/css?family=Radley' rel='stylesheet' type='text/css'>
+
+  <title>
+    
+      Understanding The Understandable: Lifetimes in Rust &middot; HydroCode Design
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/public/styles/main.css">
+
+  <!-- Google Analytics -->
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34047874-1', 'auto');
+  ga('send', 'pageview');
+
+  </script>
+  <!-- End Google Analytics -->
+
+  <!-- Icons -->
+  <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">-->
+  <!--<link rel="shortcut icon" href="/public/favicon.ico">-->
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+  <body>
+    <div class="topbar"></div>
+    <header>
+      <div class="container">
+        <nav class="nav">
+          <ul>
+            <li>
+              <a id="nav-home" href="/" title="Home">HydroCode Design</a>
+            </li>
+          </ul>
+        </nav>
+
+        <ul class="icons">
+          <li>
+            <a href="https://twitter.com/TheHydroImpulse" title="Twitter">
+              <span class='symbol'>circletwitterbird</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/TheHydroImpulse" title="Github">
+              <span class='symbol'>circlegithubalt</span>
+            </a>
+          </li>
+          <li>
+            <a href="http://www.linkedin.com/pub/daniel-fagnan/17/807/335" title="Linkedin">
+              <span class='symbol'>circlelinkedin</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:dnfagnan@gmail.com" title="Email">
+              <span class='symbol'>circleemail</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <div class="wrapper">
+      <div class="container content">
+        <article class="single">
+  <h1 class="post-title">Understanding The Understandable: Lifetimes in Rust</h1>
+  <span class="post-date">20 Jun 2014</span>
+  <div class="post-content">
+    <p><img src="/public/img/vines.jpg" class="poster" /></p>
+
+<p>Lifetimes: A common concept that seems vastly more complicated than they actually are.</p>
+
+<p>After reading this article, you should:</p>
+
+<ul>
+<li>have an excellent understanding of lifetimes!</li>
+<li>be able to express lifetimes in Rust!</li>
+</ul>
+
+<p>Those are two worthy goals.</p>
+
+<h2>Records</h2>
+
+<p>Let&#39;s talk about records before we dive elsewhere. A record is a more formal word (read: fancy) used to describe &quot;objects&quot; or data (but it doesn&#39;t have any other associations to it. Like Object oriented programming has with &quot;objects&quot;). It&#39;s just data in some form of structure. Any program has a lot of these and we&#39;ll need a way to reason about them without resorting to a garbage collector.</p>
+
+<h2>Vines</h2>
+
+<p>Let&#39;s talk about vines, like in the image above. Most of them are going in arbitrary directions and interleaving with other vines. Each vine has a different length and size, resulting in a complex relationship. Some are dying and others are growing.</p>
+
+<p>We can just replace the word &quot;vine&quot; with &quot;record&quot; and we have lifetimes. Ok, so let&#39;s say that different records have different <em>lifetimes</em> (read: durations until they die) from each other.</p>
+
+<h2>Lifetimes</h2>
+
+<p><img src="/public/img/lifetime.png" class="poster" /></p>
+
+<p>Ok, so we have 3 objects: <code>Object1</code>, <code>Object2</code>, <code>Object3</code>. Each of those smaller lines are lifetimes. The blue line, under <code>entry</code>, is called the <em>program lifetime</em>. This can also be called the <em>static lifetime</em>, meaning, objects with this lifetime have to live as long as the program itself.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// static lifetime.</span>
+    <span class="p">{</span> <span class="c1">// Lifetime 1</span>
+        <span class="k">let</span> <span class="n">object1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="m">1</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Lifetime 3</span>
+            <span class="k">let</span> <span class="n">object3</span> <span class="o">=</span> <span class="o">&amp;</span><span class="m">3</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="p">{</span> <span class="c1">// Lifetime 2</span>
+        <span class="k">let</span> <span class="n">object2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="m">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>So, the lifetimes of objects describe their duration (from the time they are created to when they are freed). While I did put the static lifetime to begin when <code>main()</code> is called, this isn&#39;t completely true. You can have static lifetimes for objects that are defined before main.</p>
+
+<p>As you can see, Rust has blocks <code>{}</code> to denote scope.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">static</span> <span class="n">foo</span><span class="o">:</span> <span class="o">&amp;</span><span class="err">&#39;</span><span class="k">static</span> <span class="k">str</span> <span class="o">=</span> <span class="s">&quot;This string will live as long as the program does.&quot;</span><span class="p">;</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2>What&#39;s The Big Deal?</h2>
+
+<p>Well, most languages, like those that have a garbage collector (C#, Java, JavaScript, etc..), hide the details of lifetimes. Garbage collectors would effectively ensure that all lifetimes are correct and records are cleaned up appropriately, even with insanely complicated interwoven dependencies.</p>
+
+<p>Languages without GC &mdash; like C and C++ &mdash; do not hide this detail. However, they don&#39;t provide first-class support for expressing lifetimes, either. This leads to programmers having to manage lifetimes in their heads and through conventions. This makes it extremely easy to make mistakes and result with incorrect lifetimes and potentially leaking bugs (memory leaks, double free, null pointer dereference, etc...).</p>
+
+<p>Rust also <em>doesn&#39;t have a garbage collector</em>, but it doesn&#39;t resort to memory-unsafe constructs like C or C++. Rust provides first-class support for lifetimes where the compiler can officially infer and validate the lifetimes of objects. However, Rust doesn&#39;t have program-wide inference and there are many situations where the user has more appropriate knowledge of the lifetimes than the compiler does. The compiler will still ensure the lifetimes match up, because it <em>has</em> to retain safety without resorting to a GC.</p>
+
+<p>The ability for users to denote the lifetime of objects is called having <em>named lifetimes</em>. Named lifetimes are placed right beside type parameters (convention is to put lifetimes first) in the <code>&lt;&gt;</code> form and all begin with a single quote <code>&#39;</code> followed by a single letter name; such as <code>&#39;a</code>, <code>&#39;b</code>, <code>&#39;c</code>, etc... The only exception to this rule is built-in lifetimes such as <code>&#39;static</code>.</p>
+
+<p>You&#39;re probably asking why we use cryptic, single letter names, instead of something more descriptive, right? Well, you <em>can&#39;t</em> actually be more descriptive other than a simple enumeration. If you have two lifetimes, are you going to call them <code>&#39;lifetime_that_does_b</code> and <code>&#39;lifetime_for_struct_c</code>? Definitely not. That&#39;s way too verbose and doesn&#39;t give that much benefit in the end (not to mention more mental effort on the part of the user to come up with unique names).</p>
+
+<h2>Creating A Named Lifetime</h2>
+
+<p>A very useful result out of being able to express lifetimes is the ability to store an unboxed string within structs. By unboxed, I mean it&#39;s stored onto the stack, which becomes a problem in C or C++ &mdash; if the stack frame that the string was created under has a shorter lifetime than the string itself, the reference may be pointing to some invalid memory and potentially crash. That&#39;s not the case in Rust.</p>
+
+<p>Let&#39;s try to use a regular string slice (<code>&amp;str</code>) and store it within some record:</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Execution</span> <span class="p">{</span>
+  <span class="n">command</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="n">exec</span> <span class="o">=</span> <span class="n">Execution</span> <span class="p">{</span> <span class="n">command</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span> <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The compiler will indeed throw an error because we&#39;re missing a lifetime (i.e., the compiler has no guarantees for how long the string is alive for and thus won&#39;t compile).</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;anon&gt;:3:12: 3:16 error: missing lifetime specifier
+&lt;anon&gt;:3   command: &amp;str
+                    ^~~~
+error: aborting due to previous error
+</code></pre></div>
+<p>We&#39;ll need to first create a new named lifetime that we could apply to the string. This is done with the same syntax as type parameters.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// Notice the `&#39;a`?</span>
+<span class="k">struct</span> <span class="n">Execution</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">command</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="n">exec</span> <span class="o">=</span> <span class="n">Execution</span> <span class="p">{</span> <span class="n">command</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span> <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Nothing has in-fact changed. The compiler will continue to scream at you and that&#39;s ok. In the code above, we just introduced a new named lifetime of <code>&#39;a</code>. Now we can use it!</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// Notice the `&#39;a`?</span>
+<span class="k">struct</span> <span class="n">Execution</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="n">command</span><span class="o">:</span> <span class="o">&amp;</span><span class="err">&#39;</span><span class="n">a</span> <span class="k">str</span>
+<span class="p">}</span>
+
+<span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="n">exec</span> <span class="o">=</span> <span class="n">Execution</span> <span class="p">{</span> <span class="n">command</span><span class="o">:</span> <span class="s">&quot;foobar&quot;</span> <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Ta-da! We have successfully created and used a lifetime. Moreover, <em>Rust isn&#39;t even using a garbage collector</em> and we don&#39;t have any messy (and unsafe) allocation code all over the place.</p>
+
+<h2>One More</h2>
+
+<p>Let&#39;s get another example going, a perhaps more complicated example. This should give you the skills required to apply lifetimes in your own Rust programs.</p>
+
+<p>Let&#39;s create a <code>Parser</code> struct that contains a <code>Chars</code> iterator to, well, iterate over characters from a string.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="k">str</span><span class="o">::</span><span class="n">Chars</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">Parser</span> <span class="p">{</span>
+    <span class="n">iter</span><span class="o">:</span> <span class="n">Chars</span>
+<span class="p">}</span>
+
+<span class="k">impl</span> <span class="n">Parser</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="n">new</span><span class="p">(</span><span class="n">input</span><span class="o">:</span> <span class="o">&amp;</span><span class="k">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Parser</span> <span class="p">{</span>
+        <span class="n">Parser</span> <span class="p">{</span>
+            <span class="n">iter</span><span class="o">:</span> <span class="n">input</span><span class="p">.</span><span class="n">chars</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>ughh... Once again, the compiler screams at you. Not again, right?</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">error: main function not found
+&lt;anon&gt;:4:11: 4:16 error: wrong number of lifetime parameters: expected 1 but found 0
+&lt;anon&gt;:4     iter: Chars
+                   ^~~~~
+</code></pre></div>
+<p>Ok, so I guess <code>Chars</code> requires a lifetime and we haven&#39;t passed on, right? Yep, so let&#39;s do that.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">struct</span> <span class="n">Parser</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">iter</span><span class="o">:</span> <span class="n">Chars</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>That&#39;s how you pass a lifetime through another type. Pretty consistent. But, like type parameters, we need to add the lifetime to the <code>impl</code> syntax.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="k">impl</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span> <span class="n">Parser</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="n">new</span><span class="p">(</span><span class="n">input</span><span class="o">:</span> <span class="o">&amp;</span><span class="err">&#39;</span><span class="n">a</span> <span class="k">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Parser</span><span class="o">&lt;</span><span class="err">&#39;</span><span class="n">a</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="n">Parser</span> <span class="p">{</span>
+            <span class="n">iter</span><span class="o">:</span> <span class="n">input</span><span class="p">.</span><span class="n">chars</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>That&#39;s it! So, what have we done?</p>
+
+<ul>
+<li><code>impl&lt;&#39;a&gt;</code>: Create a new named lifetime for the <code>impl</code> block.</li>
+<li><code>Parser&lt;&#39;a&gt;</code>: The parser type also requires a lifetime, so we&#39;ll pass it the one we created.</li>
+<li><code>input: &amp;&#39;a str</code>: This tells the compiler that the lifetime is bound to that string.</li>
+<li><code>-&gt; Parser&lt;&#39;a&gt;</code>: Again, we need to pass the lifetime to match the requirements.</li>
+</ul>
+
+<p>At first, this might look verbose, busy, and perhaps needlessly complicated. I can assure you that it becomes super simple.</p>
+
+<h2>And?</h2>
+
+<p>This is <em>one</em> of the reasons that Rust doesn&#39;t need a garbage collector to remain memory safe. It also allows us to use the stack much more effectively and lay off the heap until we really need it. Today, there&#39;s simply too much heap allocations happening because of languages like Java where objects were naturally heap allocated. Current CPU architectures are extremely optimized for stack allocations, so we should use them &mdash; and Rust allows you to.</p>
+
+<h2>Precedence</h2>
+
+<p>Lifetimes aren&#39;t actually new. First-class support for them in compilers are. Whereas before, you had to reason about <em>all</em> the lifetimes in a given project <em>without</em> proof that they are correct and safe.</p>
+
+<hr>
+<div class="highlight"><pre><code class="bash language-bash" data-lang="bash"><span class="nv">$ </span>rustc -v
+rustc 0.11.0-pre-nightly <span class="o">(</span>feb294c 2014-06-17 08:16:27 +0000<span class="o">)</span>
+host: x86_64-apple-darwin
+</code></pre></div>
+  </div>
+</article>
+
+<!--<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/05/28/practicality-with-rust-error-handling/">
+            Practicality With Rust: Error Handling
+            <small>28 May 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/04/24/practicality-with-rust/">
+            Practicality With Rust: Setting Up A Project
+            <small>24 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/04/13/drop-everything-and-use-component/">
+            Drop The Chaos and Use Component(1)
+            <small>13 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>-->
+
+<div class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'hydrocodedesign'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+        <div class="mailinglist">
+          <div id="mc_embed_signup">
+          <form action="http://hydrocodedesign.us8.list-manage2.com/subscribe/post?u=bef64187da16f647e609951f0&amp;id=d40e25a6fe" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+            <label for="mce-EMAIL">Subscribe to be notified when new articles are written</label>
+            <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+              <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+              <div style="position: absolute; left: -5000px;"><input type="text" name="b_bef64187da16f647e609951f0_d40e25a6fe" tabindex="-1" value=""></div>
+              <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+          </form>
+          </div>
+          </div>
+      </div>
+    </div>
+
+  </body>
+</html>

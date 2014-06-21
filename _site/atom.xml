@@ -4,13 +4,187 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-05-31T13:36:11-06:00</updated>
+ <updated>2014-06-20T20:52:03-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Understanding The Understandable: Lifetimes in Rust</title>
+   <link href="http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust/"/>
+   <updated>2014-06-20T00:00:00-06:00</updated>
+   <id>http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust</id>
+   <content type="html">&lt;p&gt;&lt;img src=&quot;/public/img/vines.jpg&quot; class=&quot;poster&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lifetimes: A common concept that seems vastly more complicated than they actually are.&lt;/p&gt;
+
+&lt;p&gt;After reading this article, you should:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;have an excellent understanding of lifetimes!&lt;/li&gt;
+&lt;li&gt;be able to express lifetimes in Rust!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Those are two worthy goals.&lt;/p&gt;
+
+&lt;h2&gt;Records&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;#39;s talk about records before we dive elsewhere. A record is a more formal word (read: fancy) used to describe &amp;quot;objects&amp;quot; or data (but it doesn&amp;#39;t have any other associations to it. Like Object oriented programming has with &amp;quot;objects&amp;quot;). It&amp;#39;s just data in some form of structure. Any program has a lot of these and we&amp;#39;ll need a way to reason about them without resorting to a garbage collector.&lt;/p&gt;
+
+&lt;h2&gt;Vines&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;#39;s talk about vines, like in the image above. Most of them are going in arbitrary directions and interleaving with other vines. Each vine has a different length and size, resulting in a complex relationship. Some are dying and others are growing.&lt;/p&gt;
+
+&lt;p&gt;We can just replace the word &amp;quot;vine&amp;quot; with &amp;quot;record&amp;quot; and we have lifetimes. Ok, so let&amp;#39;s say that different records have different &lt;em&gt;lifetimes&lt;/em&gt; (read: durations until they die) from each other.&lt;/p&gt;
+
+&lt;h2&gt;Lifetimes&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/img/lifetime.png&quot; class=&quot;poster&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, so we have 3 objects: &lt;code&gt;Object1&lt;/code&gt;, &lt;code&gt;Object2&lt;/code&gt;, &lt;code&gt;Object3&lt;/code&gt;. Each of those smaller lines are lifetimes. The blue line, under &lt;code&gt;entry&lt;/code&gt;, is called the &lt;em&gt;program lifetime&lt;/em&gt;. This can also be called the &lt;em&gt;static lifetime&lt;/em&gt;, meaning, objects with this lifetime have to live as long as the program itself.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// static lifetime.&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Lifetime 1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Lifetime 3&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Lifetime 2&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So, the lifetimes of objects describe their duration (from the time they are created to when they are freed). While I did put the static lifetime to begin when &lt;code&gt;main()&lt;/code&gt; is called, this isn&amp;#39;t completely true. You can have static lifetimes for objects that are defined before main.&lt;/p&gt;
+
+&lt;p&gt;As you can see, Rust has blocks &lt;code&gt;{}&lt;/code&gt; to denote scope.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;This string will live as long as the program does.&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;What&amp;#39;s The Big Deal?&lt;/h2&gt;
+
+&lt;p&gt;Well, most languages, like those that have a garbage collector (C#, Java, JavaScript, etc..), hide the details of lifetimes. Garbage collectors would effectively ensure that all lifetimes are correct and records are cleaned up appropriately, even with insanely complicated interwoven dependencies.&lt;/p&gt;
+
+&lt;p&gt;Languages without GC &amp;mdash; like C and C++ &amp;mdash; do not hide this detail. However, they don&amp;#39;t provide first-class support for expressing lifetimes, either. This leads to programmers having to manage lifetimes in their heads and through conventions. This makes it extremely easy to make mistakes and result with incorrect lifetimes and potentially leaking bugs (memory leaks, double free, null pointer dereference, etc...).&lt;/p&gt;
+
+&lt;p&gt;Rust also &lt;em&gt;doesn&amp;#39;t have a garbage collector&lt;/em&gt;, but it doesn&amp;#39;t resort to memory-unsafe constructs like C or C++. Rust provides first-class support for lifetimes where the compiler can officially infer and validate the lifetimes of objects. However, Rust doesn&amp;#39;t have program-wide inference and there are many situations where the user has more appropriate knowledge of the lifetimes than the compiler does. The compiler will still ensure the lifetimes match up, because it &lt;em&gt;has&lt;/em&gt; to retain safety without resorting to a GC.&lt;/p&gt;
+
+&lt;p&gt;The ability for users to denote the lifetime of objects is called having &lt;em&gt;named lifetimes&lt;/em&gt;. Named lifetimes are placed right beside type parameters (convention is to put lifetimes first) in the &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; form and all begin with a single quote &lt;code&gt;&amp;#39;&lt;/code&gt; followed by a single letter name; such as &lt;code&gt;&amp;#39;a&lt;/code&gt;, &lt;code&gt;&amp;#39;b&lt;/code&gt;, &lt;code&gt;&amp;#39;c&lt;/code&gt;, etc... The only exception to this rule is built-in lifetimes such as &lt;code&gt;&amp;#39;static&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You&amp;#39;re probably asking why we use cryptic, single letter names, instead of something more descriptive, right? Well, you &lt;em&gt;can&amp;#39;t&lt;/em&gt; actually be more descriptive other than a simple enumeration. If you have two lifetimes, are you going to call them &lt;code&gt;&amp;#39;lifetime_that_does_b&lt;/code&gt; and &lt;code&gt;&amp;#39;lifetime_for_struct_c&lt;/code&gt;? Definitely not. That&amp;#39;s way too verbose and doesn&amp;#39;t give that much benefit in the end (not to mention more mental effort on the part of the user to come up with unique names).&lt;/p&gt;
+
+&lt;h2&gt;Creating A Named Lifetime&lt;/h2&gt;
+
+&lt;p&gt;A very useful result out of being able to express lifetimes is the ability to store an unboxed string within structs. By unboxed, I mean it&amp;#39;s stored onto the stack, which becomes a problem in C or C++ &amp;mdash; if the stack frame that the string was created under has a shorter lifetime than the string itself, the reference may be pointing to some invalid memory and potentially crash. That&amp;#39;s not the case in Rust.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s try to use a regular string slice (&lt;code&gt;&amp;amp;str&lt;/code&gt;) and store it within some record:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Execution&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;str&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Execution&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;foobar&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The compiler will indeed throw an error because we&amp;#39;re missing a lifetime (i.e., the compiler has no guarantees for how long the string is alive for and thus won&amp;#39;t compile).&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;anon&amp;gt;:3:12: 3:16 error: missing lifetime specifier
+&amp;lt;anon&amp;gt;:3   command: &amp;amp;str
+                    ^~~~
+error: aborting due to previous error
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We&amp;#39;ll need to first create a new named lifetime that we could apply to the string. This is done with the same syntax as type parameters.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Notice the `&amp;#39;a`?&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Execution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;str&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Execution&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;foobar&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Nothing has in-fact changed. The compiler will continue to scream at you and that&amp;#39;s ok. In the code above, we just introduced a new named lifetime of &lt;code&gt;&amp;#39;a&lt;/code&gt;. Now we can use it!&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Notice the `&amp;#39;a`?&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Execution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;str&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Execution&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;foobar&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Ta-da! We have successfully created and used a lifetime. Moreover, &lt;em&gt;Rust isn&amp;#39;t even using a garbage collector&lt;/em&gt; and we don&amp;#39;t have any messy (and unsafe) allocation code all over the place.&lt;/p&gt;
+
+&lt;h2&gt;One More&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;#39;s get another example going, a perhaps more complicated example. This should give you the skills required to apply lifetimes in your own Rust programs.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s create a &lt;code&gt;Parser&lt;/code&gt; struct that contains a &lt;code&gt;Chars&lt;/code&gt; iterator to, well, iterate over characters from a string.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Chars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Chars&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;ughh... Once again, the compiler screams at you. Not again, right?&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;error: main function not found
+&amp;lt;anon&amp;gt;:4:11: 4:16 error: wrong number of lifetime parameters: expected 1 but found 0
+&amp;lt;anon&amp;gt;:4     iter: Chars
+                   ^~~~~
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Ok, so I guess &lt;code&gt;Chars&lt;/code&gt; requires a lifetime and we haven&amp;#39;t passed on, right? Yep, so let&amp;#39;s do that.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That&amp;#39;s how you pass a lifetime through another type. Pretty consistent. But, like type parameters, we need to add the lifetime to the &lt;code&gt;impl&lt;/code&gt; syntax.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Parser&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That&amp;#39;s it! So, what have we done?&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;impl&amp;lt;&amp;#39;a&amp;gt;&lt;/code&gt;: Create a new named lifetime for the &lt;code&gt;impl&lt;/code&gt; block.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Parser&amp;lt;&amp;#39;a&amp;gt;&lt;/code&gt;: The parser type also requires a lifetime, so we&amp;#39;ll pass it the one we created.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;input: &amp;amp;&amp;#39;a str&lt;/code&gt;: This tells the compiler that the lifetime is bound to that string.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-&amp;gt; Parser&amp;lt;&amp;#39;a&amp;gt;&lt;/code&gt;: Again, we need to pass the lifetime to match the requirements.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At first, this might look verbose, busy, and perhaps needlessly complicated. I can assure you that it becomes super simple.&lt;/p&gt;
+
+&lt;h2&gt;And?&lt;/h2&gt;
+
+&lt;p&gt;This is &lt;em&gt;one&lt;/em&gt; of the reasons that Rust doesn&amp;#39;t need a garbage collector to remain memory safe. It also allows us to use the stack much more effectively and lay off the heap until we really need it. Today, there&amp;#39;s simply too much heap allocations happening because of languages like Java where objects were naturally heap allocated. Current CPU architectures are extremely optimized for stack allocations, so we should use them &amp;mdash; and Rust allows you to.&lt;/p&gt;
+
+&lt;h2&gt;Precedence&lt;/h2&gt;
+
+&lt;p&gt;Lifetimes aren&amp;#39;t actually new. First-class support for them in compilers are. Whereas before, you had to reason about &lt;em&gt;all&lt;/em&gt; the lifetimes in a given project &lt;em&gt;without&lt;/em&gt; proof that they are correct and safe.&lt;/p&gt;
+
+&lt;hr&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rustc -v
+rustc 0.11.0-pre-nightly &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;feb294c 2014-06-17 08:16:27 +0000&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+host: x86_64-apple-darwin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+ </entry>
  
  <entry>
    <title>Practicality With Rust: Error Handling</title>

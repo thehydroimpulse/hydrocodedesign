@@ -1,8 +1,8 @@
 article h2, article h3, article h4 {
-  margin-top: 2.4rem;
+  margin-top: 2.6rem;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 2px dashed #e9e9e9;
+  //border-bottom: 2px dashed #e9e9e9;
   font-family: 'Libre Baskerville', 'serif';
   color: #444;
   font-weight: 400;
@@ -15,12 +15,17 @@ h2 {
 }
 
 article {
-  //font-family: "open-sans", serif;
   font-family: 'Libre Baskerville', 'serif';
+}
+
+article img.poster {
+  position: relative;
+  left: -80px;
 }
 
 article.single {
   margin-top: 4rem;
+  margin-bottom: 30%;
   position: relative;
 }
 
@@ -126,9 +131,12 @@ article {
 }
 
 .posts .post-title {
+  font-weight: normal;
+  font-family: 'jaf-facitweb', 'serif';
   color: #444;
   padding-bottom: 3px;
   margin-bottom: 0px;
+  font-size: 25px;
 
   a {
     color: #444;

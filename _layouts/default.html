@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
   {% include head.html %}
-
   <body>
     <div class="topbar"></div>
-    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-    <div class="wrapper">
-      <header>
-          <!--<label for="sidebar-checkbox" class="sidebar-toggle"></label>-->
-
+    <header>
+      <div class="container">
         <nav class="nav">
           <ul>
             <li>
@@ -41,8 +35,10 @@
             </a>
           </li>
         </ul>
-      </header>
+      </div>
+    </header>
 
+    <div class="wrapper">
       <div class="container content">
         {{ content }}
 
@@ -56,8 +52,6 @@
               <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
           </form>
           </div>
-
-          <!--End mc_embed_signup-->
           </div>
       </div>
     </div>

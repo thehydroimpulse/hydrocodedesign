@@ -35,9 +35,20 @@ a.symbol:before {
 @import "post";
 @import "code";
 
+.content .intro {
+  text-align: center;
+  margin: 80px 0;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.intro h1 {
+  text-decoration: underline;
+  color: #6aa9e3;
+}
+
 @media (max-width: 860px) {
   body {
-    width: 34em;
   }
 
   .single h1.post-title {

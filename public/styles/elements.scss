@@ -4,16 +4,16 @@ body {
   overflow-x: hidden;
 }
 
-html { font-size: 19px; }
+html {
+  font-size: 19px;
+}
 
 body {
   font: 1em/1.5 'brandon-grotesque', 'open-sans', Arial, sans-serif;
   color: #4A4A4A;
-  margin: 3em auto 5em;
-  padding: 0 2.8em;
-  width: 43em;
   min-width: 600px;
-  max-width: 1200px;
+  margin: 0px;
+  margin-bottom: 50px;
 }
 
 .topbar {
@@ -59,12 +59,23 @@ a {
   }
 }
 
+.wrapper {
+  width: 900px;
+  margin: 0 auto;
+}
+
 .mailinglist {
   margin-top: 30px;
   position: relative;
   left: -30px;
   border-top: 1px solid #eee;
   padding-top: 20px;
+}
+
+.posts {
+  margin: 0 auto;
+  width: 700px;
+  text-align: center;
 }
 
 #mc_embed_signup {

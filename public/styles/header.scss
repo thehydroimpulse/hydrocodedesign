@@ -1,14 +1,22 @@
 header {
   width: 100%;
   height: 80px;
-  margin-bottom: 4rem;
+  line-height: 80px;
+  position: relative;
+  background: #df6663;
+  padding: 0px 20px;
+  min-width: 800px;
+}
+
+header .container {
+  width: 70%;
+  margin: 0 auto;
   position: relative;
 }
 
 header nav {
   font-size: 1.4125rem;
-  line-height: 2rem;
-  padding: 2rem 0;
+  line-height: 80px;
 }
 
 .nav li {
@@ -16,8 +24,13 @@ header nav {
   margin-right: 2rem;
 }
 
+.nav li a {
+  text-decoration: none;
+  border-bottom: none;
+}
+
 .nav a {
-  color: #93A1A1;
+  color: #fff;
 }
 
 .nav ul, .nav ul li {
@@ -29,8 +42,7 @@ header .icons {
   position: absolute;
   right: 0;
   text-align: right;
-  top: 2rem;
-  top: 0px;
+  top: -20px;
   color: #fff;
 }
 
@@ -46,7 +58,7 @@ header .icons {
 }
 
 .icons span {
-  color: #93A1A1;
+  color: #fff;
 }
 
 .icons span:hover {
