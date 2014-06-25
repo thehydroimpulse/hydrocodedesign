@@ -1,5 +1,6 @@
 @import "code";
 @import "header";
+@import "app";
 
 /**
  * Top elements.
@@ -12,6 +13,7 @@ html, body {
 }
 
 body {
+  position: relative;
   font-family: Palatino, Helvetica;
   font-size: 17px;
   color: #333;

@@ -1,9 +1,3 @@
-import Stack from "stack";
+import StackIntroduction from "stack/introduction";
 
-var Component = React.createClass({
-  render: function() {
-    return React.DOM.h1({}, new Stack());
-  }
-});
-
-React.renderComponent(new Component(), document.getElementById('app'));
+React.renderComponent(new StackIntroduction(), document.getElementById('introduction'));

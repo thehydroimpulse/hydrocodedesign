@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-06-24T21:22:52-06:00</updated>
+ <updated>2014-06-25T10:59:10-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -17,7 +17,9 @@
    <link href="http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust/"/>
    <updated>2014-06-20T00:00:00-06:00</updated>
    <id>http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust</id>
-   <content type="html">&lt;p&gt;&lt;div id=&quot;app&quot;&gt;&lt;/p&gt;
+   <content type="html">&lt;p&gt;Foobar&lt;/p&gt;
+
+&lt;div id=&quot;introduction&quot;&gt;&lt;/div&gt;
 
 &lt;script src=&quot;http://fb.me/react-with-addons-0.10.0.js&quot;&gt;&lt;/script&gt;
 
