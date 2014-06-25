@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-06-21T13:34:40-06:00</updated>
+ <updated>2014-06-24T21:22:52-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -13,12 +13,36 @@
 
  
  <entry>
+   <title>Understanding The Understandable: Lifetimes in Rust</title>
+   <link href="http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust/"/>
+   <updated>2014-06-20T00:00:00-06:00</updated>
+   <id>http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust</id>
+   <content type="html">&lt;p&gt;&lt;div id=&quot;app&quot;&gt;&lt;/p&gt;
+
+&lt;script src=&quot;http://fb.me/react-with-addons-0.10.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;http://requirejs.org/docs/release/2.1.14/minified/require.js&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;/public/dist/app.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+  require([&#39;app&#39;])
+&lt;/script&gt;
+
+&lt;hr&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rustc -v
+rustc 0.11.0-pre-nightly &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;feb294c 2014-06-17 08:16:27 +0000&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+host: x86_64-apple-darwin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+ </entry>
+ 
+ <entry>
    <title>Practicality With Rust: Error Handling</title>
    <link href="http://hydrocodedesign.com/2014/05/28/practicality-with-rust-error-handling/"/>
    <updated>2014-05-28T00:00:00-06:00</updated>
    <id>http://hydrocodedesign.com/2014/05/28/practicality-with-rust-error-handling</id>
-   <content type="html">&lt;div&gt;
-    The Series:
+   <content type="html">&lt;div class=&quot;series&quot;&gt;
+    &lt;span&gt;The Series:&lt;/span&gt;
     &lt;ul&gt;
         &lt;li&gt;
             &lt;a href=&quot;../../../../2014/04/24/practicality-with-rust/&quot;&gt;Setting Up A Project&lt;/a&gt;
@@ -219,8 +243,8 @@ host: x86_64-apple-darwin
    <link href="http://hydrocodedesign.com/2014/04/24/practicality-with-rust/"/>
    <updated>2014-04-24T00:00:00-06:00</updated>
    <id>http://hydrocodedesign.com/2014/04/24/practicality-with-rust</id>
-   <content type="html">&lt;div&gt;
-    The Series:
+   <content type="html">&lt;div class=&quot;series&quot;&gt;
+    &lt;span&gt;The Series:&lt;/span&gt;
     &lt;ul&gt;
         &lt;li&gt;
             Setting Up A Project
@@ -374,166 +398,6 @@ target
 &lt;p&gt;I think I&amp;#39;ll stop there. While Rust is still lacking rigorous documentation and tooling, you can still get the job done. I&amp;#39;ll also mention that dealing with dependencies is a massive pain, and you&amp;#39;ll be resorting to something like &lt;a href=&quot;https://github.com/cmr/cargo-lite&quot;&gt;cargo-lite&lt;/a&gt; or following what people do in the C and C++ world (git submodules and such).&lt;/p&gt;
 
 &lt;p&gt;Want something covered next? Let me know either through my links at the top or the comment section!&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Drop The Chaos and Use Component(1)</title>
-   <link href="http://hydrocodedesign.com/2014/04/13/drop-everything-and-use-component/"/>
-   <updated>2014-04-13T00:00:00-06:00</updated>
-   <id>http://hydrocodedesign.com/2014/04/13/drop-everything-and-use-component</id>
-   <content type="html">&lt;p&gt;Let&amp;#39;s face it, CommonJS has won &amp;mdash; AMD has lost. Let&amp;#39;s move on to embracing this fact.&lt;/p&gt;
-
-&lt;p&gt;ES6 modules have adopted the CommonJS-style. Thus, both Node.js and the browser will be running the same model. However, (native) ES6 modules are far away, and it still lacks (which is a good thing) distribution.&lt;/p&gt;
-
-&lt;p&gt;That&amp;#39;s where &lt;a href=&quot;https://github.com/component/component&quot;&gt;component(1)&lt;/a&gt; steps in. For those unaware, component(1) is a client-side package manager &lt;em&gt;and&lt;/em&gt; build tool. It let&amp;#39;s you embrace a modularized approach to building apps. component(1) supports JavaScript, CSS, templates and various other kinds of assets. These are all bundled up in a consistent manner. The JavaScript-side uses a CommonJS environment, allowing you to code &lt;em&gt;exactly&lt;/em&gt; like in Node.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; I&amp;#39;ll be addressing component, the project, as component(1), and component, in the abstract concept as is.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;js language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// component(1) JavaScript&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dom&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;dom&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;debug&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;debug&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The important part, and what separates from tools like Browserify is the specific focus on the client-side. See, while Node has many modules available, they simply aren&amp;#39;t built with the browser in-mind. Browserify feels (and is) a hack.&lt;/p&gt;
-
-&lt;h2&gt;The Bower Problem&lt;/h2&gt;
-
-&lt;p&gt;Bower achieved being the more popular package manager for client-side assets. Cool. But, it poses a substancial problem. It leaves &lt;em&gt;you&lt;/em&gt; in-charge with managing all the assets it fetched for you. This process is completely ad-hoc. Better get grunt, gulp, or Makefiles to do some work.&lt;/p&gt;
-
-&lt;p&gt;Moreover, it not only effects that act of building everything, but the runtime and format of these modules are chaotic. Some bundle minified assets, others don&amp;#39;t. Some bundle concatenated files, some don&amp;#39;t. Some bundle AMD-compatible JavaScript files, Some don&amp;#39;t. Most, however, fill their modules with globals.&lt;/p&gt;
-
-&lt;p&gt;This results in an extremely poor experience for the user and community.&lt;/p&gt;
-
-&lt;p&gt;component(1) solves this problem because it&amp;#39;s a package manager &lt;strong&gt;and&lt;/strong&gt; build tool. Thus, 
-it&amp;#39;s a lot more opinionated about things than say, Bower.&lt;/p&gt;
-
-&lt;h2&gt;Community&lt;/h2&gt;
-
-&lt;p&gt;The community has embraced these broken tools hole heartly. Most of the angular world, for example, lives with tools like Grunt and Bower.&lt;/p&gt;
-
-&lt;p&gt;Wanted an Angular bootstrap module that just &lt;em&gt;worked&lt;/em&gt;? Or how about a tooltip module that provided &lt;em&gt;just tooltips&lt;/em&gt; dammit. Sorry, but these tools are making these worse. Sure, Bower solves the package manager issue, but that&amp;#39;s only part of the pie.&lt;/p&gt;
-
-&lt;p&gt;Have you ever wanted to get a dropdown module that works, in a matter of seconds? Again, &lt;em&gt;only dropdowns&lt;/em&gt;, that&amp;#39;s it. Or modals, or animations, or views, or...&lt;/p&gt;
-
-&lt;p&gt;There might be some of these modules on Bower, except they are not consistent, not composable, and will most likely use globals. Globals are not the answer.&lt;/p&gt;
-
-&lt;h2&gt;Dive into component(1)&lt;/h2&gt;
-
-&lt;p&gt;You can install component(1) with NPM:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;npm install component -g
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;You&amp;#39;ll then have access to the &lt;code&gt;component&lt;/code&gt; executable.&lt;/p&gt;
-
-&lt;p&gt;component(1) follows a similar metadata format as npm&amp;#39;s &lt;code&gt;package.json&lt;/code&gt;. Here&amp;#39;s a &lt;code&gt;component.json&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;something&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0.0.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;repo&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;user/something&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;quot;component/button&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;*&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;development&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;quot;visionmedia/mocha&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;*&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;scripts&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;index.js&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;templates&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;template.html&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;styles&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;style.css&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;You&amp;#39;ll notice that you&amp;#39;re specifying each file manually, and &lt;em&gt;that&amp;#39;s ok&lt;/em&gt;! It might be annoying to some (globs are in the works for you), but, if you use component(1) in the manner it was designed, this shouldn&amp;#39;t be a problem.&lt;/p&gt;
-
-&lt;h2&gt;Unix Philosophy&lt;/h2&gt;
-
-&lt;p&gt;The goal is to try and build small modules that do &lt;strong&gt;one thing&lt;/strong&gt; &amp;mdash; and do it extremely well.&lt;/p&gt;
-
-&lt;p&gt;That&amp;#39;s what component(1) is following. Don&amp;#39;t build giant components. That&amp;#39;s why specifying each file isn&amp;#39;t a big deal, because &lt;em&gt;you shouldn&amp;#39;t have that many per component&lt;/em&gt;. If you have more than 5, than you&amp;#39;re probably doing more than one thing.&lt;/p&gt;
-
-&lt;h2&gt;Local Components&lt;/h2&gt;
-
-&lt;p&gt;Because you want a modular environment, you&amp;#39;ll want lots of components. However, you don&amp;#39;t want to be creating a separate repo on Github for each (especially for a proprietary project). You&amp;#39;ll want to use local components.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;moduleA&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0.0.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;quot;component/dom&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;*&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;paths&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;.&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;local&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;moduleB&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;moduleC&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;moduleD&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;moduleE&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;moduleF&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;You can specify arbitrary paths and component(1) will find the local components.&lt;/p&gt;
-
-&lt;h2&gt;Installing &amp;amp; Building&lt;/h2&gt;
-
-&lt;p&gt;It&amp;#39;s super simple. component(1) comes with a suite of tools, including a default builder. Yes, default. The builder executable just uses the component-builder module. It supports middleware and extra options.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#39;s setup a new demo module called &lt;code&gt;demo&lt;/code&gt; in a new folder. We&amp;#39;ll include a simple &lt;code&gt;component.json&lt;/code&gt; file.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;json language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;demo&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0.0.1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;repo&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;user/demo&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;quot;scripts&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;index.js&amp;quot;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The &lt;code&gt;index.js&lt;/code&gt; file is just empty at this point.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#39;s install &lt;code&gt;component/dom&lt;/code&gt; a modular jQuery-esq DOM manipulation library built for component(1). This isn&amp;#39;t meant to have feature parity with jQuery, and it&amp;#39;s build up by many smaller pieces.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;component install component/dom --save
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Now, you let&amp;#39;s use that component within our &lt;code&gt;index.js&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;js language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// demo/index.js&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dom&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;dom&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;dom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;removeClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;fah&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;click&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;While the component is called &lt;code&gt;component/dom&lt;/code&gt;, component(1) aliases each component to it&amp;#39;s &lt;code&gt;name&lt;/code&gt; property within their &lt;code&gt;component.json&lt;/code&gt;. This allows one to forget the notion of usernames attached to component names (as they might be hard to remember).&lt;/p&gt;
-
-&lt;p&gt;We can build our app with a single command:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;component build --standalone demo
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;We&amp;#39;ll have generated a new &lt;code&gt;build/&lt;/code&gt; folder with a &lt;code&gt;build.js&lt;/code&gt; file inside.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;html language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;build/build.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;When the component you&amp;#39;re building is going to be loading via HTML, you&amp;#39;ll want to build it with the &lt;code&gt;--standalone {name}&lt;/code&gt; option. This will add code to automatically require the component when it loads.&lt;/p&gt;
-
-&lt;h2&gt;Consistency&lt;/h2&gt;
-
-&lt;p&gt;Why mess with grunt, gulp, etc... to manage building your dependencies? component(1) offers the simplest and most effective route to organizing assets for the client-side.&lt;/p&gt;
-
-&lt;p&gt;Above all, the previous example used:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;1 script load&lt;/li&gt;
-&lt;li&gt;0 globals!&lt;/li&gt;
-&lt;li&gt;2 commands&lt;/li&gt;
-&lt;li&gt;0 effort&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Globals are a massive code-smell. It shows you&amp;#39;re not using appropriate tooling to solve the problem. component(1) solves this problem.&lt;/p&gt;
 </content>
  </entry>
  

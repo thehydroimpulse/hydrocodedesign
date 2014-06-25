@@ -3,7 +3,6 @@ article h2, article h3, article h4 {
   margin-bottom: 20px;
   padding-bottom: 5px;
   //border-bottom: 2px dashed #e9e9e9;
-  font-family: 'Libre Baskerville', 'serif';
   color: #444;
   font-weight: 400;
 }
@@ -15,7 +14,7 @@ h2 {
 }
 
 article {
-  font-family: 'Libre Baskerville', 'serif';
+  font-family: Palatino, 'Libre Baskerville', 'serif';
 }
 
 article img.poster {
@@ -37,8 +36,6 @@ article .post-content {
   font-size: 1rem;
 
   p {
-    //font-family: 'open-sans', 'Brandon Grotesque', Arial, sans-serif;
-    font-family: 'Libre Baskerville', 'serif';
     line-height: 1.8rem;
     //margin-bottom: 2rem;
     color: #555;
@@ -125,14 +122,12 @@ article {
 
 .post-date {
   color: #c8c8c8;
-  font-family: 'Libre Baskerville', 'serif';
   font-weight: 300;
   font-size: 0.8rem;
 }
 
 .posts .post-title {
   font-weight: normal;
-  font-family: 'jaf-facitweb', 'serif';
   color: #444;
   padding-bottom: 3px;
   margin-bottom: 0px;

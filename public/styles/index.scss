@@ -1,0 +1,178 @@
+@import "code";
+@import "header";
+
+/**
+ * Top elements.
+ */
+
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Palatino, Helvetica;
+  font-size: 17px;
+  color: #333;
+  line-height: 1.75em;
+  min-width: 900px;
+}
+
+hr {
+  border: 2px solid #eee;
+  margin: 40px 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+a {
+  transition: 250ms ease-out;
+  transition-property: border-color, color;
+  border-bottom: 2px solid #EDEDED;
+  color: #DB4E44;
+  cursor: pointer;
+  text-decoration: none;
+
+
+  &:active, &:hover {
+    color: #DF0000;
+  }
+
+  &:-webkit-any-link {
+    cursor: auto;
+  }
+}
+
+@font-face {
+    font-family: 'Mono Social Icons Font';
+    src: url('../fonts/MonoSocialIconsFont-1.10.eot');
+    src: url('../fonts/MonoSocialIconsFont-1.10.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/MonoSocialIconsFont-1.10.woff') format('woff'),
+         url('../fonts/MonoSocialIconsFont-1.10.ttf') format('truetype'),
+         url('../fonts/MonoSocialIconsFont-1.10.svg#MonoSocialIconsFont') format('svg');
+    src: url('../fonts/MonoSocialIconsFont-1.10.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.symbol, a.symbol:before {
+    font-family: 'Mono Social Icons Font';
+    -webkit-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    -ms-text-rendering: optimizeLegibility;
+    -o-text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+
+a.symbol:before {
+    content: attr(title);
+    margin-right: 0.3em;
+    font-size: 130%;
+}
+
+.topbar {
+  z-index: 99;
+  position: fixed;
+  width: 100%;
+  background: #e15e5e;
+  height: 5px;
+  top: 0px;
+  left: 0px;
+}
+
+.wrapper {
+  margin-top: 50px;
+}
+
+section {
+  min-width: 300px;
+  max-width: 850px;
+  padding-bottom: 40px;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+section#aboutme {}
+
+section.posts article.post span.date {
+  float: left;
+  display: inline-block;
+  width: 120px;
+}
+
+section.posts article.post h1.title {
+
+  a {
+    color: #5d87e5;
+  }
+
+  a:hover {
+    color: #333;
+  }
+}
+
+section.single article.post h1.title {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.5rem;
+  margin-bottom: 0px;
+}
+
+section.single article.post span.date {
+  font-size: 1rem;
+  color: #999;
+}
+
+section.single article.post h1, .single .post h2, .single .post h3 {
+  margin: 30px 0;
+  margin-top: 50px;
+  color: #555;
+}
+
+section.single .series {
+  margin: 20px 0;
+
+  span {
+    font-style: italic;
+    font-size: 1.4rem;
+    display: block;
+    margin: 13px 0;
+  }
+
+  ul {
+    margin: 0 0;
+  }
+}
+
+.post p, .post ul, .post ol {
+  margin: 1em 0;
+}
+
+.post ul li {
+  position: relative;
+  line-height: 1.9;
+}
+
+.post ul li:before {
+  color: #93A1A1;
+  content: '*';
+  left: -1.5rem;
+  position: absolute;
+  top: 4px;
+}
+
+.post p + .post p {
+  padding-top: 12px;
+}
+
+section.comments {
+  margin-top: 50px;
+}

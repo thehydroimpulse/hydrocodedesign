@@ -1,0 +1,20 @@
+{
+  "name": "hydrocodedesign",
+  "version": "0.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@heroku.com:hydrocodedesign.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.2",
+    "gulp-concat": "^2.2.0",
+    "gulp-es6-module-transpiler": "^0.1.2"
+  }
+}

@@ -2,6 +2,7 @@
 markdown:         redcarpet
 pygments:         true
 gems:             ['jekyll-sass']
+ignore: ['node_modules', 'gulpfile.js', 'src']
 
 # Permalinks
 permalink:        pretty

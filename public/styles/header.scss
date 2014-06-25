@@ -3,7 +3,8 @@ header {
   height: 80px;
   line-height: 80px;
   position: relative;
-  background: #df6663;
+  background: #eee;
+  color: #333;
   padding: 0px 20px;
   min-width: 800px;
 }
@@ -30,7 +31,7 @@ header nav {
 }
 
 .nav a {
-  color: #fff;
+  color: #333;
 }
 
 .nav ul, .nav ul li {
@@ -58,7 +59,7 @@ header .icons {
 }
 
 .icons span {
-  color: #fff;
+  color: #888;
 }
 
 .icons span:hover {

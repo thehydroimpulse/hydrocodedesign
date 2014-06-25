@@ -4,8 +4,8 @@ published: true
 title: "Practicality With Rust: Setting Up A Project"
 ---
 
-<div>
-    The Series:
+<div class="series">
+    <span>The Series:</span>
     <ul>
         <li>
             Setting Up A Project

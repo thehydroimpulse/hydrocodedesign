@@ -4,8 +4,8 @@ published: true
 layout: post
 ---
 
-<div>
-    The Series:
+<div class="series">
+    <span>The Series:</span>
     <ul>
         <li>
             <a href="../../../../2014/04/24/practicality-with-rust/">Setting Up A Project</a>

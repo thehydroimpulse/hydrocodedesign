@@ -1,7 +1,7 @@
 ---
 layout: post
 published: true
-title: A Just-in-time Compiler In Rust
+title: "A Just-in-time Compiler In Rust"
 ---
 
 Today, we're going to build a simple, very simple, JIT compiler in [Rust](http://rust-lang.org). Rust is a safe, concurrent, and practical language that aims at replacing C++ and become a better systems language.
