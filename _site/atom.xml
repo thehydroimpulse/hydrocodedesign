@@ -4,39 +4,13 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-06-25T11:42:18-06:00</updated>
+ <updated>2014-06-30T15:34:29-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
    <email></email>
  </author>
 
- 
- <entry>
-   <title>Understanding The Understandable: Lifetimes in Rust</title>
-   <link href="http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust/"/>
-   <updated>2014-06-20T00:00:00-06:00</updated>
-   <id>http://hydrocodedesign.com/2014/06/20/understanding-the-understandable-lifetimes-rust</id>
-   <content type="html">&lt;p&gt;Foobar&lt;/p&gt;
-
-&lt;div id=&quot;introduction&quot;&gt;&lt;/div&gt;
-
-&lt;script src=&quot;http://fb.me/react-with-addons-0.10.0.js&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;http://requirejs.org/docs/release/2.1.14/minified/require.js&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;/public/dist/app.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-  require([&#39;app&#39;])
-&lt;/script&gt;
-
-&lt;hr&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;rustc -v
-rustc 0.11.0-pre-nightly &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;feb294c 2014-06-17 08:16:27 +0000&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-host: x86_64-apple-darwin
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
- </entry>
  
  <entry>
    <title>Practicality With Rust: Error Handling</title>

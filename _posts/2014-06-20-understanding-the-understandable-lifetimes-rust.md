@@ -1,6 +1,6 @@
 ---
 title: "Understanding The Understandable: Lifetimes in Rust"
-published: true
+published: false
 layout: post
 ---
 
