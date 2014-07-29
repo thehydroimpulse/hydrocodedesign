@@ -15,7 +15,7 @@ html, body {
 body {
   position: relative;
   font-family: Palatino, Helvetica;
-  font-size: 17px;
+  font-size: 18px;
   color: #333;
   line-height: 1.75em;
   min-width: 900px;
@@ -26,8 +26,16 @@ hr {
   margin: 40px 0;
 }
 
-ol, ul {
+ul {
   list-style: none;
+}
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+  margin: 25px 0;
+  margin-left: 20px;
 }
 
 a {
@@ -40,7 +48,7 @@ a {
 
 
   &:active, &:hover {
-    color: #DF0000;
+    color: #096bd9;
   }
 
   &:-webkit-any-link {
@@ -84,7 +92,7 @@ a.symbol:before {
   z-index: 99;
   position: fixed;
   width: 100%;
-  background: #e15e5e;
+  background: #DEA584;
   height: 5px;
   top: 0px;
   left: 0px;
@@ -95,6 +103,7 @@ a.symbol:before {
 }
 
 section {
+  margin: 0 auto;
   min-width: 300px;
   max-width: 850px;
   padding-bottom: 40px;
@@ -112,12 +121,8 @@ section.posts article.post span.date {
 
 section.posts article.post h1.title {
 
-  a {
-    color: #5d87e5;
-  }
-
   a:hover {
-    color: #333;
+    color: #5d87e5;
   }
 }
 
@@ -136,7 +141,17 @@ section.single article.post span.date {
 section.single article.post h1, .single .post h2, .single .post h3 {
   margin: 30px 0;
   margin-top: 50px;
-  color: #555;
+  color: #333;
+  font-weight: 500;
+}
+
+section.posts h1 {
+  font-weight: 400;
+}
+
+section.single article.post h1 {
+  font-weight: normal;
+  color: #000;
 }
 
 section.single .series {

@@ -36,6 +36,24 @@ pre code {
 .highlight pre {
   //border-bottom: 3px solid #746cbd;
   margin-bottom: 0;
+  border-left: 2px solid #EEE;
+}
+
+.math, .MathJax_Display {
+  color: #171e22 !important;
+}
+
+.MathJax_Display {
+  margin: 2em 0em !important;
+  position: relative;
+  display: block!important;
+  font-size: 23px;
+  text-indent: 0;
+  max-width: none;
+  max-height: none;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
 }
 
 .hll { background-color: #ffffcc }
@@ -43,15 +61,16 @@ pre code {
 .c { color: #999; } /* Comment */
 .err { color: #AA0000; background-color: #FFAAAA } /* Error */
 .k { // Keyword
-  color: #4972ad;
+  color: #373737;
   font-weight: bold;
 }
 .o { color: #555555 } /* Operator */
-.n { color: #6c6c6c;} /* Variable */
+.n { color: #4067D2;} /* Variable */
 .cm { color: #8f5902; } /* Comment.Multiline */
-.cp { color: #e1775e; } /* Comment.Preproc */
+.cp { color: #F94A21; } /* Comment.Preproc */
 .c1 { color: #999; } /* Comment.Single */
 .cs { color: #999; } /* Comment.Special */
+.p { color: #333; }
 .gd { background-color: #FFCCCC; border: 1px solid #CC0000 } /* Generic.Deleted */
 .ge { font-style: italic } /* Generic.Emph */
 .gr { color: #FF0000 } /* Generic.Error */
@@ -68,8 +87,8 @@ pre code {
 .kp { color: #006699 } /* Keyword.Pseudo */
 .kr { color: #006699; } /* Keyword.Reserved */
 .kt { color: #204a87; } /* Keyword.Type */
-.m { color: #CF3535 } /* Literal.Number */
-.s { color: #4e9a06; } /* Literal.String */
+.m { color: #FF4B00 } /* Literal.Number */
+.s { color: #E46236; } /* Literal.String */
 .na { color: #4f9fcf } /* Name.Attribute */
 .nb { color: #336666 } /* Name.Builtin */
 .nc { color: #00AA88; } /* Name.Class */
@@ -86,8 +105,8 @@ pre code {
 .w { color: #bbbbbb } /* Text.Whitespace */
 .mf { color: #FF6600 } /* Literal.Number.Float */
 .mh { color: #FF6600 } /* Literal.Number.Hex */
-.mi { color: #ca6161 } /* Literal.Number.Integer */
-.mo { color: #FF6600 } /* Literal.Number.Oct */
+.mi { color: #171E22 } /* Literal.Number.Integer */
+.mo { color: #171E22; } /* Literal.Number.Oct */
 .sb { color: #CC3300 } /* Literal.String.Backtick */
 .sc { color: #CC3300 } /* Literal.String.Char */
 .sd { color: #CC3300; font-style: italic } /* Literal.String.Doc */
