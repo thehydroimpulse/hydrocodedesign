@@ -4,9 +4,9 @@ layout: post
 published: false
 ---
 
-After I had posted the first article on [higher-kinded polymorphism](/2014/04/02/higher-kinded-types/), it seems people are particularly intrigued by them within the [Rust](http://rust-lang.org) community &mdash; The [#rust IRC channel](https://botbot.me/mozilla/rust/) gets the question *"Does Rust have HKTs?"* fairly often.
+After I had posted the first article on [higher-kinded polymorphism](/2014/04/02/higher-kinded-types/), it seems people are particularly intrigued by them within the [Rust](http://rust-lang.org) community &mdash; The [#rust IRC channel](https://botbot.me/mozilla/rust/) gets the question *"Does Rust have HKTs?"*, or a conversation about HKTs fairly often.
 
-I didn't really have any particular goals before writing that last article. It simply came out randomly. Obviously, that resulted in many things being missed or not really explaining the effects of such a concept. Maybe I explained *what* they are, but you really need to get the full picture. Otherwise, you start questioning it's validity, or worse, that "it's just for academia and not useful elsewhere". Rust has showed us that learning from the programming language theory community is a *good idea*, not a bad one.
+I didn't really have any particular goals before writing that last article. It simply came out randomly. Obviously that resulted in many things being missed or not really explaining the effects of such a concept. Maybe I explained *what* they are, but you really need to get the full picture. Otherwise, you start questioning it's validity, or worse, that "it's just for academia and not useful elsewhere". Rust has showed us that learning from the programming language theory community is a *good idea*, not a bad one.
 
 Rust has decided to lean towards a stronger type system to provide some of it's guarantees. Ownership, and optional types are examples. However, not only is `Option` hard to work with (and very verbose at times), the implementation for `Result` and `Option`, even though they share a good set of functionality, have been duplicated. That's not good.
 
@@ -18,27 +18,52 @@ What other options do we have then? We'll, we really only have one option, and t
 
 ## Introduction to Higher-Kinded Types
 
-Let's dive right into how we can abstract over more than a proper type. Let's define a simple `Monad` type that works on type-constructors like `Option`, etc...
+Let's dive right into how we can abstract over more than proper types. Let's define a simple `Simple` type that works on type-constructors like `Option`, `Vec`, etc...
 
 ```rust
-trait Monad {
-    fn bind<A, B>(&mut self, f: |A| -> Self<B>) -> Self<B>;
+trait Simple<A> {
+    fn something<B>(&mut self, f: |A| -> Self<B>) -> Self<B>;
 }
 ```
 
-As you can see, `Self` is a type constructor. It accepts it's own type parameter. `M` could be an `Option`, `Vec`, etc... (ignoring the laws of monads for an instance).
+As you can see, `Self` is a type constructor. It accepts it's own type parameter. `Self` could be an `Option`, `Vec`, etc...
 
-Moreover, kinds are completely inferred by the compiler, just like in Haskell; however, there is no kind syntax to accompany the inference (like in Scala).
+---
+I'll side-step just a little bit here. Often times when we're talking about higher-kinded types, we talk about *kinds* instead of simply types. I'm proposing the compiler would do kind-inference globally, yet disallow kind syntax. This is basically what Scala does, however, Scala has limited inference capabilities, so the inference would be inlined with Haskell, but without explicit syntax for it.
+
+I'll be following up with a lot more detail on the inner workings of the inference and how that would effect everything else. It's simply out of scope for this article.
+
+---
+
+
+Given our previous `Simple` type, we can easily implement this:
 
 ```rust
-impl<T> Monad for Option<T> {
-    fn bind<A, B>(&mut self, f: |A| -> Option<B>) -> Option<B> {
+impl<A> Simple<A> for Vec<A> {
+    fn something<B>(&mut self, f: |A| -> Vec<B>) -> Vec<B> {
         // ...
     }
 }
 ```
 
-This is quite a brief introduction to my proposed syntax (i.e., syntax hasn't really changed). I'll be going further into a more formalized version in the future.
+Again, the syntax is extremely minimal. The significant change would be within the compiler for it to understand *kinds* and infer it across types. This simplifies the user's workload in that it's dead simple to work with.
+
+## Mappings
+
+Let's talk about a fairly easy concept. Traditionally with lists, we have a standard function for mapping over each element `map`. However, are lists really the only type that can be mapped over? Can `Option` be mapped over?
+
+Yes, yes it can. In fact, any container of sorts can be mapped over, even empty lists!
+
+We can define a universal method for mapping over types: `fmap`.
+
+```rust
+// ...
+fn fmap<A, B>(&self, f: |A| -> B) -> Self<B>;
+// ...
+```
+
+`fmap` takes a closure that takes a value of type `A` and returns a value of type `B`. `fmap` then returns a `Self<B>`, which `B` is the same type returned by the closure.
+
 
 ## Option
 

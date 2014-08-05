@@ -4,13 +4,122 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-07-29T14:43:09-06:00</updated>
+ <updated>2014-08-05T16:45:21-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Building a Gimbal in Rust: An Introduction</title>
+   <link href="http://hydrocodedesign.com/2014/08/05/building-a-gimbal-in-rust-introduction/"/>
+   <updated>2014-08-05T00:00:00-06:00</updated>
+   <id>http://hydrocodedesign.com/2014/08/05/building-a-gimbal-in-rust-introduction</id>
+   <content type="html">&lt;p&gt;&lt;img width=&quot;900&quot; src=&quot;/public/img/gimbal.jpg&quot; class=&quot;poster&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;m currently spending a few hours on the weekends building a side-project with my brother. We&amp;#39;re attempting to build a fully functioning gimbal for two DSLRs (they&amp;#39;re two different sizes). And yes, we&amp;#39;re currently writing the software to operate the machine in Rust.&lt;/p&gt;
+
+&lt;h1&gt;What&amp;#39;s a Gimbal?&lt;/h1&gt;
+
+&lt;p&gt;A gimbal is a pivoted support that allows the rotation of an object around a single axis. They are used everywhere, from rocket engines, to missiles, to photography and film. It also touches on several areas of computing and engineering and requires a collection of devices to operate correctly.&lt;/p&gt;
+
+&lt;p&gt;It just seemed logical to try and build it. I&amp;#39;ll, once again, inadequately use the word &amp;quot;simple&amp;quot; in &amp;quot;it&amp;#39;ll be pretty simple to build&amp;quot;. I say that for everything, so I&amp;#39;m probably using it wrong. I was also pretty big into film and directing a while back, but I just never had the proper equipment to actually create my visions.&lt;/p&gt;
+
+&lt;p&gt;I should also mention that gimbals come in all shape, sizes, and with a ton of different functionality. The image above isn&amp;#39;t the type of gimbal we&amp;#39;re building, ours is a 3-axis gimbal focused for film and photography not missiles, so you can essentially run, dance, do whatever and the camera will always be stabilized. We&amp;#39;re not at the stage of building out the material for it yet, we&amp;#39;re working in the prototyping phase right now.&lt;/p&gt;
+
+&lt;h1&gt;Why Rust&lt;/h1&gt;
+
+&lt;p&gt;Rust is new (for programming languages), not 1.0 and is targeting itself as a system programming language &amp;amp;mdash &amp;mdash; even though that has no concrete definition. We all know what kind of system Rust targets to be good at writing software for: writing browser engines, low-level systems, embedded devices, kernels, etc... All these have hard requirements and very little room to move in. The chip I&amp;#39;m using for the brains of the gimbal has a 100Mhz processor, and 32KB of RAM. And it&amp;#39;s not the smallest chip available by far. So having a garbage collector is just not possible with those specs. Moreover, at this level of abstraction (i.e., very little), we need to be able to access the registers and what not of the chip. This is a must. To enable the ADC (Analog-to-digital converter), you need to set the 12th bit of the PCONP register to 1 (that&amp;#39;s actually only the first step to enable it). It&amp;#39;s that specific.&lt;/p&gt;
+
+&lt;p&gt;Another reason for choosing Rust was because Mbed by default as an &lt;strong&gt;online compiler&lt;/strong&gt; for programming in it. Yes, you heard that correctly. An online compiler for doing &lt;em&gt;embedded development&lt;/em&gt;. I wasn&amp;#39;t too happy with that. Not to mention that their SDK is a piece of shit C and C++ mixture. I&amp;#39;d much rather it be &lt;strong&gt;one&lt;/strong&gt; of them, not both. I went ahead and searched the interwebs for a normal C library and linker for that chip. I managed to get it working, somewhat, but again, the library was a complete mess. Horribly written, static variables coming out everyone&amp;#39;s ears.&lt;/p&gt;
+
+&lt;p&gt;So fuck it. I didn&amp;#39;t want to use shitty mbed libraries. I had been following &lt;a href=&quot;https://github.com/hackndev/zinc&quot;&gt;Zinc.rs&lt;/a&gt; which attempts to be a bare metal stack for Rust. I got the LEDs blinking in under 5 minutes. Zinc is still really early, but it has a lot of promise!&lt;/p&gt;
+
+&lt;h1&gt;Components&lt;/h1&gt;
+
+&lt;p&gt;The first task we had was to outline exactly what we needed in terms of components. What kind of chip did we want/need? How many gyroscopes, accelerometers, and motors did we need? What kind of motor? Analog vs I2C? What was our power requirements? How many and what kind of resisters did we need?&lt;/p&gt;
+
+&lt;p&gt;These were all questions we needed to answer first.&lt;/p&gt;
+
+&lt;h3&gt;Board&lt;/h3&gt;
+
+&lt;p&gt;We chose the &lt;a href=&quot;https://mbed.org/platforms/mbed-LPC1768/&quot;&gt;LPC1768&lt;/a&gt; ARM chip. This is one of the boards currently supported by Zinc. It doesn&amp;#39;t have the best ADC, in-fact, it can be kinda wonky at times, but it works. There&amp;#39;s also a lot of noise that interferes with the readings, so you have to work around it. However, it&amp;#39;s a good little board. The software side of things are shitty, like the online compiler.&lt;/p&gt;
+
+&lt;h3&gt;Accelerometer&lt;/h3&gt;
+
+&lt;p&gt;Because our gimbal doesn&amp;#39;t receive heavy inputs in terms of g-force, we needed something fairly accurate. One that can detect &amp;plusmn;200g wasn&amp;#39;t very useful to us. So we went with the &lt;a href=&quot;https://www.sparkfun.com/products/9652&quot;&gt;MMA7361&lt;/a&gt; triple axis accelerometer that has a g-select (two different detection levels of &amp;plusmn;1.5g and &amp;plusmn;6g), low power consumption, a perfect voltage rating of 2.2V - 3.3V (which is what our board is powered at with the USB). We just got a battery holder that can support higher volts so we&amp;#39;ll need to further protect the accelerometer by only giving it 3.3V.&lt;/p&gt;
+
+&lt;p&gt;The gimbal we&amp;#39;re building has a top bar with the ends bent (in-wards) for the handles. One holds the gimbal by holding those handles. When we start running, or moving the gimbal side-by-side, we don&amp;#39;t want the whole thing to be static, yet we want it stabilized. This is where the accelerometer comes into play. The accelerometer sits somewhere in the middle of that bar. We can now detect the movement on the 3-axis and further position the camera with motors &lt;em&gt;in a steady motion&lt;/em&gt; and at a slightly delayed timing. This ensures that the camera is extremely stable.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Right now, we&amp;#39;re just working with the board and accelerometer before moving onto the other components.&lt;/p&gt;
+
+&lt;h3&gt;Diving into Software&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;#39;s get into the software side of things for a bit. As of this writing, We have finished writing a device driver for the MMA7361 accelerometer within Zinc that can output millivolts, volts, and g-force. This was pretty tedious because of the ADC. Powering it on looked something like:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Flip the 12th bit on the PCONP register to enable the ADC.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PCONP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PCONP&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Set the AD0CR to 1, set the clock divider to&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// /4/2 and enable the 21st bit (PDN, 1 = operational, 0 = power-down mode).&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AD0CR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;21&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That doesn&amp;#39;t include setting up the pins to operate in the alternative function 1 space. By default, pins are operating in the &lt;a href=&quot;http://en.wikipedia.org/wiki/General-purpose_input/output&quot;&gt;GPIO&lt;/a&gt; (General-purpose input/output) space.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Enable pin 15 (physical) to use the ADC alternative function meaning it&amp;#39;ll be&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// AD0.0 (Port 0 Pin 0)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Note: PINSEL1 controls the upperhalf of Port 0, so since our physical pin is Port 0 Pin&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//       15, we need the upperhalf.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PINSEL1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PINSEL1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mh&quot;&gt;0x3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mh&quot;&gt;0x1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now that the ADC is successfully turned on for &lt;em&gt;that single pin&lt;/em&gt;, we can now use it to convert an analog signal. Remember, analog signals are in terms of volts coming in. The lpc1768 outputs integers 0 to 4096 from the analog readings. 0 = 0V and 4096 = 3.3V. One can then use those numbers and convert them to a g-force reading, which is also useful and more understandable at times.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// The 24th bit (START) on the AD0CR (A/D Control Register 0x40034000) needs to be&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// set to 1 to start a conversion.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AD0CR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AD0CR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;24&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now, ADC conversions take time (not a lot of time, but time nonetheless.). It&amp;#39;s currently operating at ~12.5Mhz (the chip is running at 100Mhz for perspective) because 13Mhz is the maximum, so we use the system clock to divide it by 4, then 2, to get 12.5.&lt;/p&gt;
+
+&lt;p&gt;The next step is to employ a while loop to wait until the sampling is done. Per the user manual, the DONE bit on the AD0CR register is the 31st bit. So it&amp;#39;s pretty easy to wait until it&amp;#39;s set to 1.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Loop until the DONE bit (31) is set to 1.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ADDR0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Finally! We can &lt;strong&gt;actually&lt;/strong&gt; start reading some data, some true values. We can read the result bits of that same register which is from bit 4 and 15.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;text language-text&quot; data-lang=&quot;text&quot;&gt;(reg::ADDR0.value() &amp;gt;&amp;gt; 4) &amp;amp; 0xfff
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We&amp;#39;re just bit shifting by 4 and masking the value. At this level, we have to get used to these types of operations. They&amp;#39;re everywhere!&lt;/p&gt;
+
+&lt;h3&gt;User Manual&lt;/h3&gt;
+
+&lt;p&gt;If you ever want to tinker with these type of things, always consult the user manual and data sheet. &lt;strong&gt;They&amp;#39;re invaluable information&lt;/strong&gt; about all the details needed to make it functional. For example, Zinc only had a small number of registers defined. Those didn&amp;#39;t include all the ADC and PCONP registers. We had to define them ourselves. So we consulted the documentation, got the memory address and voila! Zinc also made it pretty easy to define the registers in the linker and in Rust code. They&amp;#39;re also working on improving the register situation.&lt;/p&gt;
+
+&lt;h3&gt;Volts, Millivolts, and G-Force&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;But what if I want to read volts or g-forces and not some arbitrary range of integers?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It&amp;#39;s proportional. For the LPC1768 (Remember, consult the manual to be sure), it&amp;#39;s 800mV/g and you can get the millivolts by multiplying the raw analog reading with 0.80566.&lt;/p&gt;
+
+&lt;h3&gt;Driver&lt;/h3&gt;
+
+&lt;p&gt;We&amp;#39;re cleaning up the driver and the ADC implementation and I&amp;#39;ll be sending a pull request to the Zinc project with it. So people can easily pick up the same parts and start right away! We&amp;#39;ll be doing the same for each and every other component we work with.&lt;/p&gt;
+
+&lt;h3&gt;Development Environment&lt;/h3&gt;
+
+&lt;p&gt;Since I sold my last PC a couple months ago, I&amp;#39;ve been a full-time Mac user. That&amp;#39;s great, but when you&amp;#39;re working with cross-compilers and such, Linux is so much easier. So I got a vagrant box setup with Zinc, Rust, and GCC all cross-compiling to ARM. And then I use the mac to interact with uploading the final &lt;code&gt;.bin&lt;/code&gt; to the board (it&amp;#39;s a simple &lt;code&gt;cp&lt;/code&gt; command to &lt;code&gt;/Volumes/MBED&lt;/code&gt;). I haven&amp;#39;t tried getting everything working on the mac since my last failed attempt. I&amp;#39;m just gonna stick with this setup for now.&lt;/p&gt;
+
+&lt;h3&gt;Take away&lt;/h3&gt;
+
+&lt;p&gt;Embedded development is really awesome! You get to work in a very different environment, with new tools, techniques and a new layer to think about (hardware). There was a lot of debugging to get the ADC to work and a lot of various trials and errors.&lt;/p&gt;
+
+&lt;h1&gt;Next Step&lt;/h1&gt;
+
+&lt;p&gt;The next step is moving onto the next parts, writing drivers for them, connecting them up and then starting to piece them together. We&amp;#39;re going to be prototyping with the body once we get the motors and stuff, and I&amp;#39;ll be writing every step of the way.&lt;/p&gt;
+
+&lt;p&gt;P.S. I&amp;#39;ll take some pictures of our breadboard when I can.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Practicality With Rust: Error Handling</title>

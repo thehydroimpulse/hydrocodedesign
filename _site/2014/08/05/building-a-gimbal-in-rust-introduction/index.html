@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="//use.typekit.net/yov8luh.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <link href='http://fonts.googleapis.com/css?family=Radley' rel='stylesheet' type='text/css'>
+  <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <title>
+    
+      Building a Gimbal in Rust: An Introduction &middot; HydroCode Design
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/public/styles/index.css">
+
+  <!-- Google Analytics -->
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34047874-1', 'auto');
+  ga('send', 'pageview');
+
+  </script>
+  <!-- End Google Analytics -->
+
+  <!-- Icons -->
+  <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">-->
+  <!--<link rel="shortcut icon" href="/public/favicon.ico">-->
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+  <body>
+    <div class="topbar"></div>
+    <header>
+      <div class="container">
+        <nav class="nav">
+          <ul>
+            <li>
+              <a id="nav-home" href="/" title="Home">HydroCode Design</a>
+            </li>
+          </ul>
+        </nav>
+
+        <ul class="icons">
+          <li>
+            <a href="https://twitter.com/TheHydroImpulse" title="Twitter">
+              <span class='symbol'>circletwitterbird</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/TheHydroImpulse" title="Github">
+              <span class='symbol'>circlegithubalt</span>
+            </a>
+          </li>
+          <li>
+            <a href="http://www.linkedin.com/pub/daniel-fagnan/17/807/335" title="Linkedin">
+              <span class='symbol'>circlelinkedin</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:dnfagnan@gmail.com" title="Email">
+              <span class='symbol'>circleemail</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <div class="wrapper">
+        <section class="single">
+  <article class="post">
+    <h1 class="title">Building a Gimbal in Rust: An Introduction</h1>
+    <span class="date">05 Aug 2014</span>
+    <div class="content">
+      <p><img width="900" src="/public/img/gimbal.jpg" class="poster" /></p>
+
+<p>I&#39;m currently spending a few hours on the weekends building a side-project with my brother. We&#39;re attempting to build a fully functioning gimbal for two DSLRs (they&#39;re two different sizes). And yes, we&#39;re currently writing the software to operate the machine in Rust.</p>
+
+<h1>What&#39;s a Gimbal?</h1>
+
+<p>A gimbal is a pivoted support that allows the rotation of an object around a single axis. They are used everywhere, from rocket engines, to missiles, to photography and film. It also touches on several areas of computing and engineering and requires a collection of devices to operate correctly.</p>
+
+<p>It just seemed logical to try and build it. I&#39;ll, once again, inadequately use the word &quot;simple&quot; in &quot;it&#39;ll be pretty simple to build&quot;. I say that for everything, so I&#39;m probably using it wrong. I was also pretty big into film and directing a while back, but I just never had the proper equipment to actually create my visions.</p>
+
+<p>I should also mention that gimbals come in all shape, sizes, and with a ton of different functionality. The image above isn&#39;t the type of gimbal we&#39;re building, ours is a 3-axis gimbal focused for film and photography not missiles, so you can essentially run, dance, do whatever and the camera will always be stabilized. We&#39;re not at the stage of building out the material for it yet, we&#39;re working in the prototyping phase right now.</p>
+
+<h1>Why Rust</h1>
+
+<p>Rust is new (for programming languages), not 1.0 and is targeting itself as a system programming language &amp;mdash &mdash; even though that has no concrete definition. We all know what kind of system Rust targets to be good at writing software for: writing browser engines, low-level systems, embedded devices, kernels, etc... All these have hard requirements and very little room to move in. The chip I&#39;m using for the brains of the gimbal has a 100Mhz processor, and 32KB of RAM. And it&#39;s not the smallest chip available by far. So having a garbage collector is just not possible with those specs. Moreover, at this level of abstraction (i.e., very little), we need to be able to access the registers and what not of the chip. This is a must. To enable the ADC (Analog-to-digital converter), you need to set the 12th bit of the PCONP register to 1 (that&#39;s actually only the first step to enable it). It&#39;s that specific.</p>
+
+<p>Another reason for choosing Rust was because Mbed by default as an <strong>online compiler</strong> for programming in it. Yes, you heard that correctly. An online compiler for doing <em>embedded development</em>. I wasn&#39;t too happy with that. Not to mention that their SDK is a piece of shit C and C++ mixture. I&#39;d much rather it be <strong>one</strong> of them, not both. I went ahead and searched the interwebs for a normal C library and linker for that chip. I managed to get it working, somewhat, but again, the library was a complete mess. Horribly written, static variables coming out everyone&#39;s ears.</p>
+
+<p>So fuck it. I didn&#39;t want to use shitty mbed libraries. I had been following <a href="https://github.com/hackndev/zinc">Zinc.rs</a> which attempts to be a bare metal stack for Rust. I got the LEDs blinking in under 5 minutes. Zinc is still really early, but it has a lot of promise!</p>
+
+<h1>Components</h1>
+
+<p>The first task we had was to outline exactly what we needed in terms of components. What kind of chip did we want/need? How many gyroscopes, accelerometers, and motors did we need? What kind of motor? Analog vs I2C? What was our power requirements? How many and what kind of resisters did we need?</p>
+
+<p>These were all questions we needed to answer first.</p>
+
+<h3>Board</h3>
+
+<p>We chose the <a href="https://mbed.org/platforms/mbed-LPC1768/">LPC1768</a> ARM chip. This is one of the boards currently supported by Zinc. It doesn&#39;t have the best ADC, in-fact, it can be kinda wonky at times, but it works. There&#39;s also a lot of noise that interferes with the readings, so you have to work around it. However, it&#39;s a good little board. The software side of things are shitty, like the online compiler.</p>
+
+<h3>Accelerometer</h3>
+
+<p>Because our gimbal doesn&#39;t receive heavy inputs in terms of g-force, we needed something fairly accurate. One that can detect &plusmn;200g wasn&#39;t very useful to us. So we went with the <a href="https://www.sparkfun.com/products/9652">MMA7361</a> triple axis accelerometer that has a g-select (two different detection levels of &plusmn;1.5g and &plusmn;6g), low power consumption, a perfect voltage rating of 2.2V - 3.3V (which is what our board is powered at with the USB). We just got a battery holder that can support higher volts so we&#39;ll need to further protect the accelerometer by only giving it 3.3V.</p>
+
+<p>The gimbal we&#39;re building has a top bar with the ends bent (in-wards) for the handles. One holds the gimbal by holding those handles. When we start running, or moving the gimbal side-by-side, we don&#39;t want the whole thing to be static, yet we want it stabilized. This is where the accelerometer comes into play. The accelerometer sits somewhere in the middle of that bar. We can now detect the movement on the 3-axis and further position the camera with motors <em>in a steady motion</em> and at a slightly delayed timing. This ensures that the camera is extremely stable.</p>
+
+<hr>
+
+<p>Right now, we&#39;re just working with the board and accelerometer before moving onto the other components.</p>
+
+<h3>Diving into Software</h3>
+
+<p>Let&#39;s get into the software side of things for a bit. As of this writing, We have finished writing a device driver for the MMA7361 accelerometer within Zinc that can output millivolts, volts, and g-force. This was pretty tedious because of the ADC. Powering it on looked something like:</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// Flip the 12th bit on the PCONP register to enable the ADC.</span>
+<span class="n">reg</span><span class="o">::</span><span class="n">PCONP</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">reg</span><span class="o">::</span><span class="n">PCONP</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">12</span><span class="p">));</span>
+<span class="c1">// Set the AD0CR to 1, set the clock divider to</span>
+<span class="c1">// /4/2 and enable the 21st bit (PDN, 1 = operational, 0 = power-down mode).</span>
+<span class="n">reg</span><span class="o">::</span><span class="n">AD0CR</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="m">1</span> <span class="o">|</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">8</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">21</span><span class="p">));</span>
+</code></pre></div>
+<p>That doesn&#39;t include setting up the pins to operate in the alternative function 1 space. By default, pins are operating in the <a href="http://en.wikipedia.org/wiki/General-purpose_input/output">GPIO</a> (General-purpose input/output) space.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// Enable pin 15 (physical) to use the ADC alternative function meaning it&#39;ll be</span>
+<span class="c1">// AD0.0 (Port 0 Pin 0)</span>
+<span class="c1">// Note: PINSEL1 controls the upperhalf of Port 0, so since our physical pin is Port 0 Pin</span>
+<span class="c1">//       15, we need the upperhalf.</span>
+<span class="n">reg</span><span class="o">::</span><span class="n">PINSEL1</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">reg</span><span class="o">::</span><span class="n">PINSEL1</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&amp;</span> <span class="o">!</span><span class="p">(</span><span class="mh">0x3</span> <span class="o">&lt;&lt;</span> <span class="m">14</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mh">0x1</span> <span class="o">&lt;&lt;</span> <span class="m">14</span><span class="p">));</span>
+</code></pre></div>
+<p>Now that the ADC is successfully turned on for <em>that single pin</em>, we can now use it to convert an analog signal. Remember, analog signals are in terms of volts coming in. The lpc1768 outputs integers 0 to 4096 from the analog readings. 0 = 0V and 4096 = 3.3V. One can then use those numbers and convert them to a g-force reading, which is also useful and more understandable at times.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// The 24th bit (START) on the AD0CR (A/D Control Register 0x40034000) needs to be</span>
+<span class="c1">// set to 1 to start a conversion.</span>
+<span class="n">reg</span><span class="o">::</span><span class="n">AD0CR</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">reg</span><span class="o">::</span><span class="n">AD0CR</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">|</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">24</span><span class="p">));</span>
+</code></pre></div>
+<p>Now, ADC conversions take time (not a lot of time, but time nonetheless.). It&#39;s currently operating at ~12.5Mhz (the chip is running at 100Mhz for perspective) because 13Mhz is the maximum, so we use the system clock to divide it by 4, then 2, to get 12.5.</p>
+
+<p>The next step is to employ a while loop to wait until the sampling is done. Per the user manual, the DONE bit on the AD0CR register is the 31st bit. So it&#39;s pretty easy to wait until it&#39;s set to 1.</p>
+<div class="highlight"><pre><code class="rust language-rust" data-lang="rust"><span class="c1">// Loop until the DONE bit (31) is set to 1.</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">reg</span><span class="o">::</span><span class="n">ADDR0</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="m">1</span> <span class="o">&lt;&lt;</span> <span class="m">31</span><span class="p">))</span> <span class="o">==</span> <span class="m">0</span> <span class="p">{}</span>
+</code></pre></div>
+<p>Finally! We can <strong>actually</strong> start reading some data, some true values. We can read the result bits of that same register which is from bit 4 and 15.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">(reg::ADDR0.value() &gt;&gt; 4) &amp; 0xfff
+</code></pre></div>
+<p>We&#39;re just bit shifting by 4 and masking the value. At this level, we have to get used to these types of operations. They&#39;re everywhere!</p>
+
+<h3>User Manual</h3>
+
+<p>If you ever want to tinker with these type of things, always consult the user manual and data sheet. <strong>They&#39;re invaluable information</strong> about all the details needed to make it functional. For example, Zinc only had a small number of registers defined. Those didn&#39;t include all the ADC and PCONP registers. We had to define them ourselves. So we consulted the documentation, got the memory address and voila! Zinc also made it pretty easy to define the registers in the linker and in Rust code. They&#39;re also working on improving the register situation.</p>
+
+<h3>Volts, Millivolts, and G-Force</h3>
+
+<blockquote>
+<p>But what if I want to read volts or g-forces and not some arbitrary range of integers?</p>
+</blockquote>
+
+<p>It&#39;s proportional. For the LPC1768 (Remember, consult the manual to be sure), it&#39;s 800mV/g and you can get the millivolts by multiplying the raw analog reading with 0.80566.</p>
+
+<h3>Driver</h3>
+
+<p>We&#39;re cleaning up the driver and the ADC implementation and I&#39;ll be sending a pull request to the Zinc project with it. So people can easily pick up the same parts and start right away! We&#39;ll be doing the same for each and every other component we work with.</p>
+
+<h3>Development Environment</h3>
+
+<p>Since I sold my last PC a couple months ago, I&#39;ve been a full-time Mac user. That&#39;s great, but when you&#39;re working with cross-compilers and such, Linux is so much easier. So I got a vagrant box setup with Zinc, Rust, and GCC all cross-compiling to ARM. And then I use the mac to interact with uploading the final <code>.bin</code> to the board (it&#39;s a simple <code>cp</code> command to <code>/Volumes/MBED</code>). I haven&#39;t tried getting everything working on the mac since my last failed attempt. I&#39;m just gonna stick with this setup for now.</p>
+
+<h3>Take away</h3>
+
+<p>Embedded development is really awesome! You get to work in a very different environment, with new tools, techniques and a new layer to think about (hardware). There was a lot of debugging to get the ADC to work and a lot of various trials and errors.</p>
+
+<h1>Next Step</h1>
+
+<p>The next step is moving onto the next parts, writing drivers for them, connecting them up and then starting to piece them together. We&#39;re going to be prototyping with the body once we get the motors and stuff, and I&#39;ll be writing every step of the way.</p>
+
+<p>P.S. I&#39;ll take some pictures of our breadboard when I can.</p>
+
+    </div>
+  </article>
+</section>
+
+<section class="comments">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'hydrocodedesign'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+    </div>
+  </body>
+</html>
