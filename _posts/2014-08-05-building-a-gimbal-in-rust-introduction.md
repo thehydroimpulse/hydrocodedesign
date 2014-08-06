@@ -126,5 +126,6 @@ P.S. I'll take some pictures of our breadboard when I can.
 
 You can also discuss in the comment section or take it over to Reddit:
 
+* [Hacker News](https://news.ycombinator.com/item?id=8140121)
 * [r/rust](http://www.reddit.com/r/rust/comments/2cqexr/building_a_gimbal_in_rust_an_introduction/)
 * [r/programming](http://www.reddit.com/r/programming/comments/2cqnz4/building_a_gimbal_in_rust_an_introduction/)
