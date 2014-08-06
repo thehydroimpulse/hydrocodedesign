@@ -123,3 +123,8 @@ The next step is moving onto the next parts, writing drivers for them, connectin
 
 
 P.S. I'll take some pictures of our breadboard when I can.
+
+You can also discuss in the comment section or take it over to Reddit:
+
+* [r/rust](http://www.reddit.com/r/rust/comments/2cqexr/building_a_gimbal_in_rust_an_introduction/)
+* [r/programming](http://www.reddit.com/r/programming/comments/2cqnz4/building_a_gimbal_in_rust_an_introduction/)

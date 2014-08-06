@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-08-05T16:45:21-06:00</updated>
+ <updated>2014-08-05T21:24:25-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -118,6 +118,13 @@
 &lt;p&gt;The next step is moving onto the next parts, writing drivers for them, connecting them up and then starting to piece them together. We&amp;#39;re going to be prototyping with the body once we get the motors and stuff, and I&amp;#39;ll be writing every step of the way.&lt;/p&gt;
 
 &lt;p&gt;P.S. I&amp;#39;ll take some pictures of our breadboard when I can.&lt;/p&gt;
+
+&lt;p&gt;You can also discuss in the comment section or take it over to Reddit:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.reddit.com/r/rust/comments/2cqexr/building_a_gimbal_in_rust_an_introduction/&quot;&gt;r/rust&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.reddit.com/r/programming/comments/2cqnz4/building_a_gimbal_in_rust_an_introduction/&quot;&gt;r/programming&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </content>
  </entry>
  
