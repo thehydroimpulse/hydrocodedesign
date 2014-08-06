@@ -4,7 +4,7 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-08-05T21:27:48-06:00</updated>
+ <updated>2014-08-05T21:45:19-06:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
@@ -31,7 +31,7 @@
 
 &lt;h1&gt;Why Rust&lt;/h1&gt;
 
-&lt;p&gt;Rust is new (for programming languages), not 1.0 and is targeting itself as a system programming language &amp;amp;mdash &amp;mdash; even though that has no concrete definition. We all know what kind of system Rust targets to be good at writing software for: writing browser engines, low-level systems, embedded devices, kernels, etc... All these have hard requirements and very little room to move in. The chip I&amp;#39;m using for the brains of the gimbal has a 100Mhz processor, and 32KB of RAM. And it&amp;#39;s not the smallest chip available by far. So having a garbage collector is just not possible with those specs. Moreover, at this level of abstraction (i.e., very little), we need to be able to access the registers and what not of the chip. This is a must. To enable the ADC (Analog-to-digital converter), you need to set the 12th bit of the PCONP register to 1 (that&amp;#39;s actually only the first step to enable it). It&amp;#39;s that specific.&lt;/p&gt;
+&lt;p&gt;Rust is new (for programming languages), not 1.0 and is targeting itself as a system programming language &amp;mdash; even though that has no concrete definition. We all know what kind of system Rust targets to be good at writing software for: writing browser engines, low-level systems, embedded devices, kernels, etc... All these have hard requirements and very little room to move in. The chip I&amp;#39;m using for the brains of the gimbal has a 100Mhz processor, and 32KB of RAM. And it&amp;#39;s not the smallest chip available by far. So having a garbage collector is just not possible with those specs. Moreover, at this level of abstraction (i.e., very little), we need to be able to access the registers and what not of the chip. This is a must. To enable the ADC (Analog-to-digital converter), you need to set the 12th bit of the PCONP register to 1 (that&amp;#39;s actually only the first step to enable it). It&amp;#39;s that specific.&lt;/p&gt;
 
 &lt;p&gt;Another reason for choosing Rust was because Mbed by default as an &lt;strong&gt;online compiler&lt;/strong&gt; for programming in it. Yes, you heard that correctly. An online compiler for doing &lt;em&gt;embedded development&lt;/em&gt;. I wasn&amp;#39;t too happy with that. Not to mention that their SDK is a piece of shit C and C++ mixture. I&amp;#39;d much rather it be &lt;strong&gt;one&lt;/strong&gt; of them, not both. I went ahead and searched the interwebs for a normal C library and linker for that chip. I managed to get it working, somewhat, but again, the library was a complete mess. Horribly written, static variables coming out everyone&amp;#39;s ears.&lt;/p&gt;
 
