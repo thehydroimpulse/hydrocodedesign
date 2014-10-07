@@ -6,32 +6,29 @@ published: false
 
 After I had posted the first article on [higher-kinded polymorphism](/2014/04/02/higher-kinded-types/), it seems people are particularly intrigued by them within the [Rust](http://rust-lang.org) community &mdash; The [#rust IRC channel](https://botbot.me/mozilla/rust/) gets the question *"Does Rust have HKTs?"*, or a conversation about HKTs fairly often.
 
-I didn't really have any particular goals before writing that last article. It simply came out randomly. Obviously that resulted in many things being missed or not really explaining the effects of such a concept. Maybe I explained *what* they are, but you really need to get the full picture. Otherwise, you start questioning it's validity, or worse, that "it's just for academia and not useful elsewhere". Rust has showed us that learning from the programming language theory community is a *good idea*, not a bad one.
+I didn't really have any particular goals before writing that last article. It simply came out randomly (and at 5am without sleeping for 24 hours). Obviously that resulted in many things being missed and not really explaining the effects of such a concept. Maybe I explained *what* they are, but you really need to get the full picture. Otherwise, you start questioning it's validity, or worse, that "it's just for academia and not useful elsewhere". Rust has showed us that learning from the programming language theory community is a *good idea*, not a bad one.
 
-Rust has decided to lean towards a stronger type system to provide some of it's guarantees. Ownership, and optional types are examples. However, not only is `Option` hard to work with (and very verbose at times), the implementation for `Result` and `Option`, even though they share a good set of functionality, have been duplicated. That's not good.
+Rust has decided to lean towards a stronger type system to provide some of it's guarantees and semantics. Ownership, and optional types are examples. However, we still have limitations in the type system that impede API design and often results in lots of duplication.
 
-To handle the first case, where working with `Option` can be a pain, you could go with the Swift route and simply add some syntax sugar. This is fine, but once again, it's just sugar. The worst part of all? It's only for *that* type &mdash; hard-coded into the compiler. That's not really cool, especially for Rust where extensibility is a corner-stone of the language. You might be able to give sugar to one idiom, but what about everything else?
 
-What other options do we have then? We'll, we really only have one option, and that requires us to introduce higher-kinded polymorphism.
-
-**tl;dr**: Abstracting over proper types like `int`, `String`, etc... are standard in most statically-typed programming languages in the form of generics. However, they present the limitation of only being able to abstract over those simple, proper types. What if we wanted to abstract over `Vec<T>`? For all `T`s? We can't currently do that in Rust, but that's what higher-kinded types support.
+**tl;dr**: Abstracting over proper types like `int`, `String`, etc... are standard in *most* statically-typed programming languages in the form of generics. However, they present the limitation of only being able to abstract over those simple, proper types. What if we wanted to abstract over `Vec<T>`? For all `T`s? We can't currently do that in Rust, but that's what higher-kinded polymorphism provides.
 
 ## Introduction to Higher-Kinded Types
 
-Let's dive right into how we can abstract over more than proper types. Let's define a simple `Simple` type that works on type-constructors like `Option`, `Vec`, etc...
+**Warning:** I need to mention that this does **not** currently exist in Rust. These are possibilities and what I propose.
+
+Let's dive right into how we can abstract over more than proper types. Let's define a `Simple` type that works on type-constructors like `Option`, `Vec`, etc...
 
 ```rust
 trait Simple<A> {
-    fn something<B>(&mut self, f: |A| -> Self<B>) -> Self<B>;
+    fn something<B>(&self, f: |A| -> Self<B>) -> Self<B>;
 }
 ```
 
 As you can see, `Self` is a type constructor. It accepts it's own type parameter. `Self` could be an `Option`, `Vec`, etc...
 
 ---
-I'll side-step just a little bit here. Often times when we're talking about higher-kinded types, we talk about *kinds* instead of simply types. I'm proposing the compiler would do kind-inference globally, yet disallow kind syntax. This is basically what Scala does, however, Scala has limited inference capabilities, so the inference would be inlined with Haskell, but without explicit syntax for it.
-
-I'll be following up with a lot more detail on the inner workings of the inference and how that would effect everything else. It's simply out of scope for this article.
+I'll side-step just a little bit here. Often times when we're talking about higher-kinded types, we talk about *kinds* instead of simply types. I'm proposing the compiler would do kind-inference globally and wouldn't have a *kind syntax*. The reasoning is related to complexity. Introducing kind syntax can be quite complex on the user-side and proposal-side of things. Instead, there would be global kind-inference that does inference based on the behaviour of the types and it's supported kinds (I'll get to this in a bit).
 
 ---
 
@@ -40,13 +37,42 @@ Given our previous `Simple` type, we can easily implement this:
 
 ```rust
 impl<A> Simple<A> for Vec<A> {
-    fn something<B>(&mut self, f: |A| -> Vec<B>) -> Vec<B> {
+    fn something<B>(&self, f: |A| -> Vec<B>) -> Vec<B> {
         // ...
     }
 }
 ```
 
-Again, the syntax is extremely minimal. The significant change would be within the compiler for it to understand *kinds* and infer it across types. This simplifies the user's workload in that it's dead simple to work with.
+Again, the syntax is extremely minimal. The significant change would be within the compiler for it to understand *kinds* and infer it across types. Currently, the Rust compiler does local *type* inference, not global. Now this is fine, but it might require adding another pass and some extra meta-data for each definition.
+
+## Kind Inference
+
+Let's take a look at an example and manually analyze it's kind:
+
+```rust
+// Metadata:
+// `T` = $0
+// `Foo` = $0 -> *(Foo, U)
+struct Foo<T> {
+    // ...
+}
+```
+
+The form `*(Foo, U)` is of `*(Lower bound, Upper bound)`. However, we can often leave off the specifics if we hit `Any` or `None`, or if the lower-bound is `int`, we can leave it off; resulting in `*(U)` because nothing can be lower than a primitive like `int`.
+
+Right now, we don't have enough information to infer it's kind. `T` could be anything and we don't have any use of `T` to infer anything.
+
+Later in the program, we might find an `impl` of `Foo`.
+
+```rust
+impl<T> Foo<T> {
+  pub fn something<A>(&self) -> T<A> {
+      // ...
+  }
+}
+```
+
+Given the function definition of `Foo::something`, we can see that `T` is now abstracting over `A`, we can start to assume that `T` is **not** a proper kind, so we can give it our initial guess: `
 
 ## Mappings
 
