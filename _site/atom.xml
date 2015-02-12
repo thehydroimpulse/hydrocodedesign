@@ -4,13 +4,92 @@
  <title>HydroCode Design</title>
  <link href="http://hydrocodedesign.com/atom.xml" rel="self"/>
  <link href="http://hydrocodedesign.com/"/>
- <updated>2014-10-07T12:21:58-06:00</updated>
+ <updated>2015-02-10T16:35:20-07:00</updated>
  <id>http://hydrocodedesign.com</id>
  <author>
    <name>Daniel Fagnan</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Coreclr.rs - Rust built for FFI</title>
+   <link href="http://hydrocodedesign.com/2015/02/10/coreclr-rust-interop/"/>
+   <updated>2015-02-10T00:00:00-07:00</updated>
+   <id>http://hydrocodedesign.com/2015/02/10/coreclr-rust-interop</id>
+   <content type="html"></content>
+ </entry>
+ 
+ <entry>
+   <title>Writting PostgreSQL Extensions in Rust</title>
+   <link href="http://hydrocodedesign.com/2014/10/31/postgres-extensions-in-rust/"/>
+   <updated>2014-10-31T00:00:00-06:00</updated>
+   <id>http://hydrocodedesign.com/2014/10/31/postgres-extensions-in-rust</id>
+   <content type="html">&lt;p&gt;&lt;img width=&quot;300&quot; style=&quot;display: block; margin: 0 auto&quot; src=&quot;/public/img/postgres.png&quot; class=&quot;poster&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Recently, I&amp;#39;ve been focusing a lot of effort in lower-level areas in using Rust such as embedded systems, device drivers, C FFI, etc... After I read a post in which someone wrote a &lt;a href=&quot;https://github.com/citusdata/postgres_vectorization_test&quot;&gt;Postgres extension to improve performance by vectorizing the execution&lt;/a&gt;, it lead me to wonder &amp;quot;How well could Rust do this?&amp;quot;. After looking at the code for the extension, which is written in C, I noticed how ad-hoc the API was. Allocations were somewhat different from traditional &lt;code&gt;malloc/free&lt;/code&gt;, a slew of ad-hoc macros for doing mostly everything (from argument handling to return types) and a completely different data model to work with &amp;mdash; a datum what?&lt;/p&gt;
+
+&lt;p&gt;So I went ahead a released a Rust library &lt;a href=&quot;https://github.com/thehydroimpulse/postgres-extension.rs&quot;&gt;postgres-extension.rs&lt;/a&gt; that aims at allowing one to build something like the vectorization extension in Rust. The applications and advantages are real and previous examples of how &lt;a href=&quot;https://blog.mozilla.org/research/2014/08/26/javascript-servos-only-garbage-collector/&quot;&gt;Rust&amp;#39;s lifetimes are able to solve previous problems&lt;/a&gt; that were impossible in C++.&lt;/p&gt;
+
+&lt;h2&gt;Memory Regions&lt;/h2&gt;
+
+&lt;p&gt;Postgres has a slew of different data types, some taken by value, others by reference, etc... Postgres also has it&amp;#39;s own memory allocator &lt;code&gt;pg_malloc&lt;/code&gt; and &lt;code&gt;pg_free&lt;/code&gt;. Why not use &lt;code&gt;malloc&lt;/code&gt; and &lt;code&gt;free&lt;/code&gt;? Well, a database by nature has to be long-living. Having a single memory leak in a production database is pretty serious. When using &lt;code&gt;malloc&lt;/code&gt; and &lt;code&gt;free&lt;/code&gt;, you inherently enter a contract on how you&amp;#39;re supposed to go about using that memory and cleaning it up. This leaves the task of cleanup up to the programmer, and we all know where this leads to. Postgres instead tries to solve this issue by using a region allocator &amp;mdash; something akin to Rust&amp;#39;s lifetimes.&lt;/p&gt;
+
+&lt;p&gt;Before each invocation of procedures, a call to &lt;code&gt;SPI_connect&lt;/code&gt; is made that establishes a new region, or a new &lt;em&gt;lifetime&lt;/em&gt;. At the end, the opposite call to &lt;code&gt;SPI_finish&lt;/code&gt; is made, cleaning up the memory that was allocated within that region. Any calls to &lt;code&gt;pg_malloc&lt;/code&gt; is done in the &lt;em&gt;current&lt;/em&gt; region.&lt;/p&gt;
+
+&lt;p&gt;The only exception to this case of allocating into the current region is when you want to return values from the procedure. If you just allocate memory with the regular &lt;code&gt;pg_malloc&lt;/code&gt;, the region will be invalidated when anything tries to read the return value, resulting in memory safety issues. The solution is to allocate to the direct parent region using &lt;code&gt;SPI_palloc&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Well that&amp;#39;s an extremely clever solution and matches with Rust&amp;#39;s semantics pretty well, so let&amp;#39;s try and map this out in Rust.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;/// A pointer to an object in heap-allocated memory with a specific&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;/// lifetime of &amp;#39;a that correspond to the current region &amp;#39;a such that a `Ref&amp;lt;&amp;#39;b&amp;gt;` &amp;lt;: `Ref&amp;lt;&amp;#39;a&amp;gt;`&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;/// which means that the lifetime of &amp;#39;b is a subtype of that of lifetime of &amp;#39;a and can be&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;/// used interchangeably.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Ref&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Let&amp;#39;s illustrate an example of how this could be used effectively:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Note: This isn&amp;#39;t Rust code, it&amp;#39;s just pseudo code.&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Establish a new region for the lifetime of &amp;#39;a&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPI_connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Here&amp;#39;s our proceedure boundary that has the lifetime of &amp;#39;a&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// This allocation is only valid for the lifetime of the region, which is &amp;#39;a.&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Ref&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;foobar&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Destroy the region for lifetime of &amp;#39;a&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SPI_finish&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This is really powerful. But, we need a way to tie the phantom &lt;code&gt;Region&lt;/code&gt; type to an actual allocation. So we&amp;#39;ll create a new &lt;code&gt;PgPtr&lt;/code&gt; type:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;rust language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PgPtr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;/// Enforce the proper region that has a lifetime of &amp;#39;a&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;region&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Region&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;/// The raw unsafe pointer that has the lifetime of &amp;#39;a&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UnsafeCell&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;impl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PgPtr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;/// Allocate a new PgPtr&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size_of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unsafe&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;palloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;u64&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// Do something here...&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;unsafe&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;copy_memory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transmute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;PgPtr&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;region&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Region&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ContravariantLifetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UnsafeCell&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
+ </entry>
  
  <entry>
    <title>Building a Gimbal in Rust: An Introduction</title>
